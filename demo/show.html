@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+	<title>Threejs展示1</title>
+	<script src="../js/lib/three.min.js"></script>
+    <style type="text/css">
+        div#canvas-frame{
+            border: none;
+            cursor: move;
+            width: 1400px;
+            height: 600px;
+            background-color: #EEEEEE;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+</body>
+</html>
+<script>
+
+    var camera, scene, renderer;
+    var geometry, material, mesh;
+
+    init();
+    animate();
+
+    function init() {
+
+        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+        camera.position.z = 1000;
+
+        scene = new THREE.Scene();
+
+        // load a texture, set wrap mode to repeat
+        var texture = THREE.ImageUtils.loadTexture( "img/flower.jpg" );
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set( 1,1);
+
+        geometry = new THREE.CubeGeometry( 200, 400, 20 );
+        material = new THREE.MeshBasicMaterial( { color: 0x932626, wireframe: true, map: texture } );
+
+
+        mesh = new THREE.Mesh( geometry, material );
+        scene.add( mesh );
+
+        renderer = new THREE.CanvasRenderer();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+
+        document.body.appendChild( renderer.domElement );
+
+    }
+
+    function animate() {
+
+        // note: three.js includes requestAnimationFrame shim
+        requestAnimationFrame( animate );
+
+        mesh.rotation.x = 0.5;
+        mesh.rotation.y += 0.02;
+        // console.log(mesh.rotation.x ,mesh.rotation.y )
+        renderer.render( scene, camera );
+
+    }
+
+</script>

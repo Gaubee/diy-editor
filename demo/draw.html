@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+	<title>Canvas绘画1</title>
+    <style type="text/css">
+        body{
+            -moz-user-select: none; 
+            -khtml-user-select: none; 
+            -webkit-user-select: none; 
+            -o-user-select: none; 
+        } 
+        #canvas{
+          border: 2px solid #666666;
+          background-color: #EEEEEE;
+        }
+    </style>
+</head>
+<body>
+    <canvas width="800" height="600" id="canvas"></canvas>
+</body>
+</html>
+<script>
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext("2d");
+    var starPoint = {
+        x:undefined,
+        y:undefined
+    }
+    var endPoint = {
+        x:undefined,
+        y:undefined
+    }
+    var draw;
+    var nofun = function(){};
+    function drawLine (e) {
+        // console.log(e);
+        context.beginPath(); 
+        starPoint.x = e.x;
+        starPoint.y = e.y;
+        context.moveTo(e.x,e.y); 
+        return function(e){
+            // console.log(e)
+            context.lineTo(e.x,e.y);
+            context.stroke();
+        }
+    }
+    draw = drawLine;
+    
+    context.fillStyle='rgba(255,0,0,1)';
+    context.fillRect (10, 10, 50, 50); 
+    context.fillStyle = "rgba(0, 255, 0, 0.5)";  
+    context.fillRect (30, 30, 50, 50);  
+    context.fillStyle = "rgba(0, 0, 255, 0.5)";  
+    context.fillRect (50, 50, 50, 50); 
+
+    canvas.onmousedown = function beginDraw(e){
+        canvas.onmousemove = draw(e);
+    }
+    canvas.onmouseup = function endDraw(e){
+        canvas.onmousemove = nofun;
+    }
+</script>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+	<title>Canvas绘画1+Threejs展示1</title>
+    <script src="../js/lib/three.min.js"></script>
+    <style type="text/css">
+        body{
+            -moz-user-select: none; 
+            -khtml-user-select: none; 
+            -webkit-user-select: none; 
+            -o-user-select: none; 
+        } 
+        #canvas{
+          border: 2px solid #666666;
+          background-color: rgba( 90 , 90 , 90 , 0.25 );
+          position: absolute;
+          top: 5px;
+          left: 5px;
+        }
+        div#canvas-frame{
+            border: none;
+            cursor: move;
+            width: 1400px;
+            height: 600px;
+            background-color: #EEEEEE;
+        }
+    </style>
+</head>
+<body>
+    <canvas width="800" height="600" id="canvas"></canvas>
+    <div id="container"></div>
+</body>
+</html>
+<script>
+    var img = document.createElement("img");
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext("2d");
+    var starPoint = {
+        x:undefined,
+        y:undefined
+    }
+    var endPoint = {
+        x:undefined,
+        y:undefined
+    }
+    var draw;
+    var nofun = function(){};
+    function drawLine (e) {
+        // console.log(e);
+        context.beginPath(); 
+        starPoint.x = e.x;
+        starPoint.y = e.y;
+        context.moveTo(e.x,e.y); 
+        return function(e){
+            // console.log(e)
+            context.lineTo(e.x,e.y);
+            context.stroke();
+        }
+    }
+    draw = drawLine;
+
+    context.fillStyle='rgba(255,0,0,0.5)';
+    context.fillRect (0, 0, 50, 50); 
+    context.fillStyle = "rgba(0, 255, 0, 0.5)";  
+    context.fillRect (750, 550, 800, 600);  
+    context.fillStyle = "rgba(0, 0, 255, 0.5)";  
+    context.fillRect (750, 0, 800, 50); 
+    context.fillStyle = "rgba(0, 255, 255, 0.5)";  
+    context.fillRect (0, 550, 50 , 600); 
+
+    canvas.onmousedown = function beginDraw(e){
+        canvas.onmousemove = draw(e);
+    }
+    canvas.onmouseup = function endDraw(e){
+        canvas.onmousemove = nofun;
+        img.src = canvas.toDataURL();
+        updateTexture(img);
+    }
+</script>
+<script>
+
+    var camera, scene, renderer;
+    var texture,geometry, material, mesh;
+
+    init();
+    animate();
+
+    function init() {
+
+        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+        camera.position.z = 1000;
+
+        scene = new THREE.Scene();
+
+        // load a texture, set wrap mode to repeat
+        texture = THREE.ImageUtils.loadTexture( "img/flower.jpg" );
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set( 1,1);
+
+        geometry = new THREE.CubeGeometry( 400, 800, 40 );
+        material = new THREE.MeshBasicMaterial( { color: 0x932626, wireframe: true, map: texture } );
+
+
+        mesh = new THREE.Mesh( geometry, material );
+        scene.add( mesh );
+
+        mesh.position.x = 400;
+        mesh.position.y = 200;
+
+        renderer = new THREE.CanvasRenderer();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+
+        document.body.appendChild( renderer.domElement );
+
+    }
+
+    function animate() {
+
+        // note: three.js includes requestAnimationFrame shim
+        requestAnimationFrame( animate );
+
+        mesh.rotation.x = 0.5;
+        mesh.rotation.y += 0.02;
+        // console.log(mesh.rotation.x ,mesh.rotation.y )
+        renderer.render( scene, camera );
+
+    }
+
+    function updateTexture(newImg){
+        texture = new THREE.Texture( newImg );
+        newImg.onload = function(){
+            texture.needsUpdate = true;
+        }
+        material.map = texture;
+    }
+</script>
