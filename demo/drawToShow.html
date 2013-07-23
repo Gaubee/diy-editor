@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
 	<title>Canvas绘画1+Threejs展示1</title>
+    <!--[if IE]><script type="text/javascript" src="../js/lib/excanvas.compiled.js"></script><![endif]-->
     <script src="../js/lib/three.min.js"></script>
     <style type="text/css">
         body{
@@ -48,6 +49,7 @@
     var nofun = function(){};
     function drawLine (e) {
         // console.log(e);
+        e = e||window.event;
         context.beginPath(); 
         starPoint.x = e.x;
         starPoint.y = e.y;

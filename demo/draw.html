@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
 	<title>Canvas绘画1</title>
+    <!--[if IE]><script type="text/javascript" src="../js/lib/excanvas.compiled.js"></script><![endif]-->
     <style type="text/css">
         body{
             -moz-user-select: none; 
@@ -21,6 +22,7 @@
 </body>
 </html>
 <script>
+    window.onload = function(){
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext("2d");
     var starPoint = {
@@ -35,12 +37,14 @@
     var nofun = function(){};
     function drawLine (e) {
         // console.log(e);
+        e = e||window.event;
         context.beginPath(); 
         starPoint.x = e.x;
         starPoint.y = e.y;
         context.moveTo(e.x,e.y); 
         return function(e){
             // console.log(e)
+            e = e||window.event;
             context.lineTo(e.x,e.y);
             context.stroke();
         }
@@ -59,5 +63,6 @@
     }
     canvas.onmouseup = function endDraw(e){
         canvas.onmousemove = nofun;
+    }
     }
 </script>
