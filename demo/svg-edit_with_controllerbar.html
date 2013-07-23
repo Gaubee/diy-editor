@@ -54,6 +54,7 @@
             y:80,
             cacheX:0,
             cacheY:0,
+            rotate:0,
             active:false,
             checkAttribute:function checkAttribute(){
                 if (imgOpction.width<0) {
@@ -315,21 +316,19 @@
                 width:imgOpction.width,
                 height:imgOpction.height,
                 x:imgOpction.x,
-                y:imgOpction.y
+                y:imgOpction.y,
+                transform:"r"+imgOpction.rotate
             });
         }
 
 
         img.drag(function onmove(dx,dy,x,y,e){
             // console.log("onmove",dx,dy,x,y,e);
-            img.attr({
-                x:dx-imgOpction.cacheX+imgOpction.x,
-                y:dy-imgOpction.cacheY+imgOpction.y
-            });
+            imgOpction.x = dx-imgOpction.cacheX+imgOpction.x;
+            imgOpction.y = dy-imgOpction.cacheY+imgOpction.y;
             imgOpction.cacheX = dx;
             imgOpction.cacheY = dy;
-            imgOpction.x = img.attr("x");
-            imgOpction.y = img.attr("y");
+            
             imgControllerSet.reInit();
         },function onstart(x,y,e){
             // console.log("onstart",x,y,e);
