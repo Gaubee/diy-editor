@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+	<title>Svg draw1</title>
+    <script type="text/javascript" src="../js/lib/raphael-min.js"></script>
+    <!--<script type="text/javascript" src="../js/lib/jquery-2.0.3.min.js"></script>-->
+    <style type="text/css">
+        body{
+            -moz-user-select: none; 
+            -khtml-user-select: none; 
+            -webkit-user-select: none; 
+            -o-user-select: none; 
+        } 
+        .canvas{
+            border: 2px solid #666666;
+            background-color: #EEEEEE;
+            width: 50%;
+            float: left;
+        }
+        #toolbar{
+            width: 180px;
+            border: 2px solid #666666;
+            background-color: #EEEEEE;
+            text-align: center;
+            float: left;
+        }
+        #toolbar img{
+            width: 80%;
+            margin: 8px auto;
+        }
+        .over {
+            border:2px dashed #000;
+        }
+    </style>
+</head>
+<body>
+    <div id="toolbar">
+        <img src="img/earth.png" draggable="true">
+        <img src="img/flower.jpg" draggable="true">
+    </div>
+    <div id="svgcanvas" class="canvas"></div>
+</body>
+</html>
+<script>
+    function $(selector){
+        return document.querySelectorAll(selector);
+    };
+    var paper = Raphael("svgcanvas", 640, 480);
+
+    paper.circle(320, 240, 60).animate({
+        fill: "#223fa3",
+        stroke: "#000",
+        "stroke-width": 80,
+        "stroke-opacity": 0.5
+     }, 2000);
+
+    paper.imgFormDrag = function imgFormDrag(){
+        for(var i = 0,fileItem;fileItem = session.files[i];i+=1){
+            paper.image(fileItem.src,
+                session.point.end.x-svgcanvas.offsetLeft-(session.point.start.x-fileItem.offsetLeft),
+                session.point.end.y-svgcanvas.offsetTop-(session.point.start.y-fileItem.offsetTop),
+                fileItem.width,
+                fileItem.height);
+        }
+    }
+
+    var session = {
+        dragPropagation:function(num){
+            if (num) {
+                session.propagation += Number(num);
+                if (session.propagation === 0) {
+                    session.toSvg = false;
+                }else{
+                    session.toSvg = true;
+                }
+            }else{
+                session.propagation = 0;
+                session.toSvg = false;
+            }
+        },
+        propagation:0,
+        toSvg:false,
+        files:[],
+        point:{
+            start:{x:0,y:0},
+            end:{x:0,y:0}
+        }
+    };
+
+    var svgcanvas = $('#svgcanvas')[0];
+    svgcanvas.addEventListener("dragenter",function handleDragEnter(e){
+        console.log("dragenter!");
+        session.dragPropagation(1);
+    },false);
+    svgcanvas.addEventListener("dragleave",function handleDragLeave(e){
+        console.log("dragleave!");
+        session.dragPropagation(-1);
+    },false);
+    svgcanvas.addEventListener("dragover",function handleDragOver(e){
+        // console.log("dragover!");
+        if (e.preventDefault) {
+            e.preventDefault(); // Necessary. Allows us to drop.
+        }
+        e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
+        return false;
+    },false);
+    // svgcanvas.on("dragenter",function (evnet) {
+    //     console.log("???dragenter")
+    //       session.canDragToSvg = true;
+    // }).on("dragleave",function(evnet){
+    //     console.log("???dragleave")
+    //       session.canDragToSvg = false;
+    // })
+    var toolbarItems = $("#toolbar img");
+
+    function handleDragStart(e) {
+        this.classList.add('over');  // this / e.target is the source node.
+        session.files.push(this);
+        session.point.start = {
+            x:e.x,
+            y:e.y
+        };
+    };
+    function handleDragEnd(e) {
+        [].forEach.call(toolbarItems, function (item) {
+            item.classList.remove('over');
+        });
+        if (session.toSvg) {
+            console.log("create img!!");
+            session.point.end = {
+                x:e.x,
+                y:e.y
+            };
+            paper.imgFormDrag();
+            session.dragPropagation();
+        }
+        session.files.pop();
+    };
+    function handleDrop(e) {
+        // console.log("draging!");
+        // this / e.target is current target element.
+        if (e.stopPropagation) {
+            e.stopPropagation(); // stops the browser from redirecting.
+        }
+        // See the section on the DataTransfer object.
+        return false;
+    };
+    [].forEach.call(toolbarItems,function(item){
+        item.addEventListener('dragstart', handleDragStart, false);
+        item.addEventListener('dragend', handleDragEnd, false);
+        item.addEventListener('drag', handleDrop, false);
+    })
+</script>

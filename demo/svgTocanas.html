@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+	<title>Svg draw1</title>
+    <script type="text/javascript" src="../js/lib/raphael-min.js"></script>
+    <script type="text/javascript" src="../js/lib/canvg.js"></script>
+    <script type="text/javascript" src="../js/lib/rgbcolor.js"></script>
+    <style type="text/css">
+        body{
+            -moz-user-select: none; 
+            -khtml-user-select: none; 
+            -webkit-user-select: none; 
+            -o-user-select: none; 
+            margin: 0px;
+            padding: 0px;
+        } 
+        .canvas{
+            margin: 0px;
+            border: 2px solid #666666;
+            background-color: #EEEEEE;
+            width: 49%;
+            min-height: 480px;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+    <div id="svgcanvas" class="canvas"></div>
+    <canvas id="canvas" class="canvas"></canvas>
+    <hr />
+    <input id="toCanvas" type="button" value="toCanvas">
+</body>
+</html>
+<script>
+    var paper = Raphael("svgcanvas", 640, 480);
+
+    paper.circle(320, 240, 60).animate({
+        fill: "#223fa3",
+        stroke: "#000",
+        "stroke-width": 80,
+        "stroke-opacity": 0.5
+     }, 2000);
+
+    var toCanvas = document.getElementById('toCanvas');
+    var svgcanvas = document.getElementById('svgcanvas');
+    var canvas = document.getElementById('canvas');
+    toCanvas.onclick = function svgToCanvas() {
+        canvg(canvas,svgcanvas.innerHTML,{ ignoreMouse: true, ignoreAnimation: true });
+    }
+</script>
