@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-	<title>Svg draw3</title>
+    <title>Svg draw3</title>
     <script type="text/javascript" src="../js/lib/raphael-min.js"></script>
     <!--<script type="text/javascript" src="../js/lib/jquery-2.0.3.min.js"></script>-->
     <style type="text/css">
@@ -274,6 +274,23 @@
                     item.attr({
                         cursor : "url('img/rotate.png') 12 12",
                     });
+                    item.drag(function onmove(dx,dy,x,y,e){
+                        console.log("onmove")
+                        var centerX = imgOpction.x+imgOpction.width/2;
+                        var centerY = imgOpction.y+imgOpction.height/2;
+                        var asinxValue = (centerY-y)/Math.sqrt(Math.pow(x - centerX,2)+Math.pow(y - centerY,2));
+                        imgOpction.rotate = 90-Math.asin(asinxValue)/Math.PI*180;
+                        console.log(asinxValue,imgOpction.rotate);
+                        if ((x-centerX)<0) {
+                            imgOpction.rotate = 360-imgOpction.rotate;
+                        }
+                        imgControllerSet.reInit();
+                    },function onstart(x,y,e){
+                        console.log("onstart")
+                    },function onend(e){
+                        console.log("onend")
+                        imgControllerSet.reInit();
+                    });
                     break;
                 }
             }
@@ -312,12 +329,15 @@
 
                 j+=1;
             }
+            imgControllerSet.attr({
+                transform:["r"+imgOpction.rotate,imgOpction.x+imgOpction.width/2,imgOpction.y+imgOpction.height/2]
+            })
             img.attr({
                 width:imgOpction.width,
                 height:imgOpction.height,
                 x:imgOpction.x,
                 y:imgOpction.y,
-                transform:"r"+imgOpction.rotate
+                transform:["r"+imgOpction.rotate,imgOpction.x+imgOpction.width/2,imgOpction.y+imgOpction.height/2]
             });
         }
 
