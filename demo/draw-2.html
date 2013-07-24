@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+	<title>Canvas绘画2</title>
+    <!--[if IE]><script type="text/javascript" src="../js/lib/excanvas.compiled.js"></script><![endif]-->
+    <style type="text/css">
+        body{
+            -moz-user-select: none; 
+            -khtml-user-select: none; 
+            -webkit-user-select: none; 
+            -o-user-select: none; 
+        } 
+        #canvas{
+          border: 2px solid #666666;
+          background-color: #EEEEEE;
+        }
+    </style>
+</head>
+<body>
+    <canvas width="32" height="32" title="size_all.png" id="size_all"></canvas>
+    <canvas width="32" height="32" title="size_bdiag.png" id="size_bdiag"></canvas>
+    <canvas width="32" height="32" title="size_fdiag.png" id="size_fdiag"></canvas>
+    <canvas width="32" height="32" title="size_hor.png" id="size_hor"></canvas>
+    <canvas width="32" height="32" title="up_arrow.png" id="up_arrow"></canvas>
+</body>
+</html>
+<script>
+    allCanvas = [];
+    allContext = [];
+    allImage = [];
+    var TO_RADIANS = Math.PI / 180;
+    function cursorTransform (canvas) {
+        var context = canvas.getContext("2d");
+        var img = new Image();
+        img.src = "img/cursor/"+canvas.title.trim();
+        var deg = (new Date).valueOf();
+        
+        function drawRotatedImage(image, x, y, angle) {
+
+            // save the current co-ordinate system 
+            // before we screw with it
+            context.save();
+
+            // move to the middle of where we want to draw our image
+            context.translate(x, y);
+
+            // rotate around that point, converting our 
+            // angle from degrees to radians 
+            context.rotate(angle * TO_RADIANS);
+
+            // draw it up and to the left by half the width
+            // and height of the image 
+            context.drawImage(image, -(image.width / 2), -(image.height / 2));
+
+            // and restore the co-ords to how they were when we began
+            context.restore();
+        }
+        img.addEventListener('load',function eventLoaded(){
+            // context.drawImage(img,0,0,32,32);
+            var counter = 0;
+            setInterval(function loop(){
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                console.log("???")
+                drawRotatedImage(img, 16, 16, counter);
+                counter += 2;
+            }, 1000/30);
+        } , false);
+
+
+        allCanvas.push(canvas);
+        allContext.push(context);
+        allImage.push(img);
+    };
+    (function(){
+        var canvases = document.getElementsByTagName('canvas');
+        [].forEach.call(canvases,function(canvas){
+            cursorTransform(canvas);
+        })
+    }());
+</script>

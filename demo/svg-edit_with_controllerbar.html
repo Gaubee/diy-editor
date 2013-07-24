@@ -23,13 +23,59 @@
 </head>
 <body>
     <div id="svgcanvas" class="canvas"></div>
+    <hr/>
     <input type="button" value="add img" onclick="paper.imgFormDrag();" />
+    <div id="cursor" style="display:none;">
+        <canvas width="32" height="32" title="size_all.png" id="size_all"></canvas>
+        <canvas width="32" height="32" title="size_bdiag.png" id="size_bdiag"></canvas>
+        <canvas width="32" height="32" title="size_fdiag.png" id="size_fdiag"></canvas>
+        <canvas width="32" height="32" title="size_hor.png" id="size_hor"></canvas>
+        <canvas width="32" height="32" title="up_arrow.png" id="up_arrow"></canvas>
+    </div>
 </body>
 </html>
-<script>
+<script type="text/javascript">
     function $(selector){
         return document.querySelectorAll(selector);
     };
+</script>
+<script type="text/javascript">
+    var TO_RADIANS = Math.PI / 180;
+    var cursor = {};
+    function cursorTransform (canvas) {
+        var context = canvas.getContext("2d");
+        var img = new Image();
+        img.src = "img/cursor/"+canvas.title.trim();
+        var x = 16,
+            y = 16,
+            bak = canvas;
+        cursor[canvas.id] = function getRotatedCursor(angle) {
+            // console.log(context.canvas)
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.save();
+
+            context.translate(x, y);
+            context.rotate(angle * TO_RADIANS);
+            context.drawImage(img, -(img.width / 2), -(img.height / 2));
+            var result = canvas.toDataURL();
+            context.restore();
+            return result;
+        }
+        cursor[canvas.id](0);
+    };
+    (function(){
+        var canvases = $("#cursor canvas");
+        [].forEach.call(canvases,function(canvas){
+            cursorTransform(canvas);
+        })
+    }());
+    cursor["n-resize"] = cursor["s-resize"] = cursor["up_arrow"];
+    cursor["w-resize"] = cursor["e-resize"] = cursor["size_hor"];
+    cursor["ne-resize"] = cursor["sw-resize"] = cursor["size_bdiag"];
+    cursor["nw-resize"] = cursor["se-resize"] = cursor["size_fdiag"];
+    cursor["move"] = cursor["size_all"];
+</script>
+<script>
     var paper = Raphael("svgcanvas", 640, 480);
     var svgcanvas = $("#svgcanvas");
     paper.container = {
@@ -133,9 +179,7 @@
                 });
                 switch(i){
                     case "edge-top":
-                    item.attr({
-                        cursor : "n-resize",
-                    });
+                    item.data("cursor" , "n-resize");
                     item.drag(function onmove(dx,dy,x,y,e){
                         imgOpction.height -= (dy - imgOpction.cacheH);
                         imgOpction.y += (dy - imgOpction.cacheH);
@@ -149,9 +193,7 @@
                     });
                     break;
                     case "edge-left":
-                    item.attr({
-                        cursor : "w-resize",
-                    });
+                    item.data("cursor" , "w-resize");
                     item.drag(function onmove(dx,dy,x,y,e){
                         imgOpction.width -= (dx - imgOpction.cacheW);
                         imgOpction.x += (dx - imgOpction.cacheW);
@@ -165,9 +207,7 @@
                     });
                     break;
                     case "edge-bottom":
-                    item.attr({
-                        cursor : "s-resize",
-                    });
+                    item.data("cursor" , "s-resize");
                     item.drag(function onmove(dx,dy,x,y,e){
                         imgOpction.height += (dy - imgOpction.cacheH);
                         imgOpction.cacheH = dy;
@@ -180,9 +220,7 @@
                     });
                     break;
                     case "edge-right":
-                    item.attr({
-                        cursor : "e-resize",
-                    });
+                    item.data("cursor" , "e-resize");
                     item.drag(function onmove(dx,dy,x,y,e){
                         imgOpction.width += (dx - imgOpction.cacheW);
                         imgOpction.cacheW = dx;
@@ -195,9 +233,7 @@
                     });
                     break;
                     case "handle-left-top":
-                    item.attr({
-                        cursor : "nw-resize",
-                    });
+                    item.data("cursor" , "nw-resize");
                     item.drag(function onmove(dx,dy,x,y,e){
                         imgOpction.width -= (dx - imgOpction.cacheW);
                         imgOpction.x += (dx - imgOpction.cacheW);
@@ -215,9 +251,7 @@
                     });
                     break;
                     case "handle-left-bottom":
-                    item.attr({
-                        cursor : "sw-resize",
-                    });
+                    item.data("cursor" , "sw-resize");
                     item.drag(function onmove(dx,dy,x,y,e){
                         imgOpction.width -= (dx - imgOpction.cacheW);
                         imgOpction.x += (dx - imgOpction.cacheW);
@@ -234,9 +268,7 @@
                     });
                     break;
                     case "handle-right-bottom":
-                    item.attr({
-                        cursor : "se-resize",
-                    });
+                    item.data("cursor" , "se-resize");
                     item.drag(function onmove(dx,dy,x,y,e){
                         imgOpction.width += (dx - imgOpction.cacheW);
                         imgOpction.cacheW = dx;
@@ -252,9 +284,7 @@
                     });
                     break;
                     case "handle-right-top":
-                    item.attr({
-                        cursor : "ne-resize",
-                    });
+                    item.data("cursor" , "ne-resize");
                     item.drag(function onmove(dx,dy,x,y,e){
                         imgOpction.width += (dx - imgOpction.cacheW);
                         imgOpction.cacheW = dx;
@@ -271,24 +301,22 @@
                     });
                     break;
                     case "handle-ball":
-                    item.attr({
-                        cursor : "url('img/rotate.png') 12 12",
-                    });
+                    item.data("cursor" , "move");
                     item.drag(function onmove(dx,dy,x,y,e){
-                        console.log("onmove")
+                        // console.log("onmove")
                         var centerX = imgOpction.x+imgOpction.width/2;
                         var centerY = imgOpction.y+imgOpction.height/2;
                         var asinxValue = (centerY-y)/Math.sqrt(Math.pow(x - centerX,2)+Math.pow(y - centerY,2));
                         imgOpction.rotate = 90-Math.asin(asinxValue)/Math.PI*180;
-                        console.log(asinxValue,imgOpction.rotate);
+                        // console.log(asinxValue,imgOpction.rotate);
                         if ((x-centerX)<0) {
                             imgOpction.rotate = 360-imgOpction.rotate;
                         }
                         imgControllerSet.reInit();
                     },function onstart(x,y,e){
-                        console.log("onstart")
+                        // console.log("onstart")
                     },function onend(e){
-                        console.log("onend")
+                        // console.log("onend")
                         imgControllerSet.reInit();
                     });
                     break;
@@ -303,6 +331,20 @@
                 opacity:0
             },200);
 
+            imgControllerSet.forEach(function(item){
+                if (item.data("cursor")) {
+                    item.hover(function f_in(){
+                        // console.log(this.data("cursorData"),item.data("cursor"))
+                        if (!this.data("cursorData")) {
+                            var cursorData = cursor[item.data("cursor")](imgOpction.rotate);
+                            this.data("cursorData",cursorData);
+                            this.attr({
+                                cursor:"url("+cursorData+") 16 16"
+                            })
+                        }
+                    },function f_out(){});
+                }
+            });
         }());
         imgControllerSet.reInit = function reInit(){
             imgOpction.checkAttribute();
@@ -326,7 +368,7 @@
                         })
                     break;
                 }
-
+                item.data("cursorData",null);
                 j+=1;
             }
             imgControllerSet.attr({
