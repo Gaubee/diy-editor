@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Svg draw3</title>
+    <script type="text/javascript" src="../js/lib/raphael-min.js"></script>
+    <!--<script type="text/javascript" src="../js/lib/jquery-2.0.3.min.js"></script>-->
+    <style type="text/css">
+        body{
+            -moz-user-select: none; 
+            -khtml-user-select: none; 
+            -webkit-user-select: none; 
+            -o-user-select: none; 
+        } 
+        .canvas{
+            border: 2px solid #666666;
+            background-color: #EEEEEE;
+            width: 50%;
+            float: left;
+            min-width: 640px;
+        }
+    </style>
+</head>
+<body>
+    <div id="svgcanvas" class="canvas"></div>
+    <hr/>
+    <input type="button" value="add img" onclick="paper.imgFormDrag();" />
+    <div id="cursor"> style="display:none;"
+        <canvas width="32" height="32" title="size_all.png" id="size_all"></canvas>
+        <canvas width="32" height="32" title="size_bdiag.png" id="size_bdiag"></canvas>
+        <canvas width="32" height="32" title="size_fdiag.png" id="size_fdiag"></canvas>
+        <canvas width="32" height="32" title="size_hor.png" id="size_hor"></canvas>
+        <canvas width="32" height="32" title="up_arrow.png" id="up_arrow"></canvas>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    function $(selector){
+        return document.querySelectorAll(selector);
+    };
+</script>
+<script type="text/javascript">
+    var TO_RADIANS = Math.PI / 180;
+    var cursor = {};
+    function cursorTransform (canvas) {
+        var context = canvas.getContext("2d");
+        var img = new Image();
+        img.src = "img/cursor/"+canvas.title.trim();
+        var deg = (new Date).valueOf();
+        var x,y;
+        x=y=16;
+        cursor[canvas.id] = function getRotatedCursor(angle) {
+
+            context.save();
+
+            context.translate(x, y);
+            context.rotate(angle * TO_RADIANS);
+            context.drawImage(img, -(img.width / 2), -(img.height / 2));
+
+            context.restore();
+
+            return canvas.toDataURL();
+        }
+
+    };
+    (function(){
+        var canvases = $("#cursor canvas");
+        [].forEach.call(canvases,function(canvas){
+            cursorTransform(canvas);
+        })
+    }());
+    cursor["n-resize"] = cursor["s-resize"] = cursor["up_arrow"];
+    cursor["w-resize"] = cursor["e-resize"] = cursor["size_hor"];
+    cursor["ne-resize"] = cursor["sw-resize"] = cursor["size_bdiag"];
+    cursor["nw-resize"] = cursor["se-resize"] = cursor["size_fdiag"];
+    cursor["move"] = cursor["size_all"];
+</script>
+<script>
+    var paper = Raphael("svgcanvas", 640, 480);
+    var svgcanvas = $("#svgcanvas");
+    paper.container = {
+        img:[],
+        imgOpction:[],
+        imgControllerSet:[]
+    }
+    paper.circle(320, 240, 60).animate({
+        fill: "#223fa3",
+        stroke: "#000",
+        "stroke-width": 80,
+        "stroke-opacity": 0.5
+     }, 2000);
+
+    paper.imgFormDrag = function imgFormDrag(){
+        var imgOpction = {
+            width:144,
+            height:96,
+            cacheW:0,
+            cacheH:0,
+            x:20,
+            y:80,
+            cacheX:0,
+            cacheY:0,
+            rotate:0,
+            active:false,
+            checkAttribute:function checkAttribute(){
+                if (imgOpction.width<0) {
+                    imgOpction.width = 0
+                }
+                if (imgOpction.height<0) {
+                    imgOpction.height = 0
+                }
+                if (imgOpction.x<0) {
+                    imgOpction.x = 0
+                }
+                if (imgOpction.y<0) {
+                    imgOpction.y = 0
+                }
+            }
+        }
+        var handleOpction = {
+            length:12,
+            circleR:4,
+            concerR:3
+        }
+        var img = paper.image("img/flower.jpg", imgOpction.x, imgOpction.y, imgOpction.width, imgOpction.height); 
+        var imgController = {
+            "edge-top":function path(){//top
+                return [["M",imgOpction.x,imgOpction.y,"L",imgOpction.x+imgOpction.width,imgOpction.y]];
+            },
+            "edge-left":function path(){//left
+                return [["M",imgOpction.x,imgOpction.y,"L",imgOpction.x,imgOpction.y+imgOpction.height]];
+            },
+            "edge-bottom":function path(){//bottom
+                return [["M",imgOpction.x,imgOpction.y+imgOpction.height,"L",imgOpction.x+imgOpction.width,imgOpction.y+imgOpction.height]];
+            },
+            "edge-right":function path(){//right
+                return [["M",imgOpction.x+imgOpction.width,imgOpction.y,"L",imgOpction.x+imgOpction.width,imgOpction.y+imgOpction.height]];
+            },
+
+            "handle-stick":function path(){
+                return [["M",imgOpction.x+imgOpction.width/2,imgOpction.y,imgOpction.x+imgOpction.width/2,imgOpction.y-handleOpction.length]];
+            },
+            "handle-ball":function circle(){
+                return [imgOpction.x+imgOpction.width/2,imgOpction.y-handleOpction.length-handleOpction.circleR,handleOpction.circleR];
+            },
+            "handle-left-top":function circle(){//left-top
+                return [imgOpction.x,imgOpction.y,handleOpction.concerR];
+            },
+            "handle-left-bottom":function circle(){//left-bottom
+                return [imgOpction.x,imgOpction.y+imgOpction.height,handleOpction.concerR];
+            },
+            "handle-right-bottom":function circle(){//right-bottom
+                return [imgOpction.x+imgOpction.width,imgOpction.y+imgOpction.height,handleOpction.concerR];
+            },
+            "handle-right-top":function circle(){//right-top
+                return [imgOpction.x+imgOpction.width,imgOpction.y,handleOpction.concerR];
+            }
+        }
+        var imgControllerSet = paper.set();
+        (function(){
+            
+            for(var i in imgController){
+                var item = imgController[i];
+                // console.log(item.name,typeof paper[item.name],item())
+                item = paper[item.name].apply(paper,item());
+                // console.log(item)
+                imgControllerSet.push(item);
+
+                item.hover(function f_in(){
+                    // console.log("hover_in",this)
+                    this.attr({
+                        fill:"#276419",
+                        "fill-opacity":0.8
+                    })
+                },function f_out(){
+                    this.attr({
+                        "fill-opacity":0
+                    })
+                });
+                switch(i){
+                    case "edge-top":
+                    item.data("cursor" , "n-resize");
+                    item.drag(function onmove(dx,dy,x,y,e){
+                        imgOpction.height -= (dy - imgOpction.cacheH);
+                        imgOpction.y += (dy - imgOpction.cacheH);
+                        imgOpction.cacheH = dy;
+                        imgControllerSet.reInit();
+                    },function onstart(x,y,e){
+                        
+                    },function onend(e){
+                        imgOpction.cacheH = 0;
+                        imgControllerSet.reInit();
+                    });
+                    break;
+                    case "edge-left":
+                    item.data("cursor" , "w-resize");
+                    item.drag(function onmove(dx,dy,x,y,e){
+                        imgOpction.width -= (dx - imgOpction.cacheW);
+                        imgOpction.x += (dx - imgOpction.cacheW);
+                        imgOpction.cacheW = dx;
+                        imgControllerSet.reInit();
+                    },function onstart(x,y,e){
+                        
+                    },function onend(e){
+                        imgOpction.cacheW = 0;
+                        imgControllerSet.reInit();
+                    });
+                    break;
+                    case "edge-bottom":
+                    item.data("cursor" , "s-resize");
+                    item.drag(function onmove(dx,dy,x,y,e){
+                        imgOpction.height += (dy - imgOpction.cacheH);
+                        imgOpction.cacheH = dy;
+                        imgControllerSet.reInit();
+                    },function onstart(x,y,e){
+                        
+                    },function onend(e){
+                        imgOpction.cacheH = 0;
+                        imgControllerSet.reInit();
+                    });
+                    break;
+                    case "edge-right":
+                    item.data("cursor" , "e-resize");
+                    item.drag(function onmove(dx,dy,x,y,e){
+                        imgOpction.width += (dx - imgOpction.cacheW);
+                        imgOpction.cacheW = dx;
+                        imgControllerSet.reInit();
+                    },function onstart(x,y,e){
+                        
+                    },function onend(e){
+                        imgOpction.cacheW = 0;
+                        imgControllerSet.reInit();
+                    });
+                    break;
+                    case "handle-left-top":
+                    item.data("cursor" , "nw-resize");
+                    item.drag(function onmove(dx,dy,x,y,e){
+                        imgOpction.width -= (dx - imgOpction.cacheW);
+                        imgOpction.x += (dx - imgOpction.cacheW);
+                        imgOpction.cacheW = dx;
+                        imgOpction.height -= (dy - imgOpction.cacheH);
+                        imgOpction.y += (dy - imgOpction.cacheH);
+                        imgOpction.cacheH = dy;
+                        imgControllerSet.reInit();
+                    },function onstart(x,y,e){
+                        
+                    },function onend(e){
+                        imgOpction.cacheW = 0;
+                        imgOpction.cacheH = 0;
+                        imgControllerSet.reInit();
+                    });
+                    break;
+                    case "handle-left-bottom":
+                    item.data("cursor" , "sw-resize");
+                    item.drag(function onmove(dx,dy,x,y,e){
+                        imgOpction.width -= (dx - imgOpction.cacheW);
+                        imgOpction.x += (dx - imgOpction.cacheW);
+                        imgOpction.cacheW = dx;
+                        imgOpction.height += (dy - imgOpction.cacheH);
+                        imgOpction.cacheH = dy;
+                        imgControllerSet.reInit();
+                    },function onstart(x,y,e){
+                        
+                    },function onend(e){
+                        imgOpction.cacheW = 0;
+                        imgOpction.cacheH = 0;
+                        imgControllerSet.reInit();
+                    });
+                    break;
+                    case "handle-right-bottom":
+                    item.data("cursor" , "se-resize");
+                    item.drag(function onmove(dx,dy,x,y,e){
+                        imgOpction.width += (dx - imgOpction.cacheW);
+                        imgOpction.cacheW = dx;
+                        imgOpction.height += (dy - imgOpction.cacheH);
+                        imgOpction.cacheH = dy;
+                        imgControllerSet.reInit();
+                    },function onstart(x,y,e){
+                        
+                    },function onend(e){
+                        imgOpction.cacheW = 0;
+                        imgOpction.cacheH = 0;
+                        imgControllerSet.reInit();
+                    });
+                    break;
+                    case "handle-right-top":
+                    item.data("cursor" , "ne-resize");
+                    item.drag(function onmove(dx,dy,x,y,e){
+                        imgOpction.width += (dx - imgOpction.cacheW);
+                        imgOpction.cacheW = dx;
+                        imgOpction.height -= (dy - imgOpction.cacheH);
+                        imgOpction.y += (dy - imgOpction.cacheH);
+                        imgOpction.cacheH = dy;
+                        imgControllerSet.reInit();
+                    },function onstart(x,y,e){
+                        
+                    },function onend(e){
+                        imgOpction.cacheW = 0;
+                        imgOpction.cacheH = 0;
+                        imgControllerSet.reInit();
+                    });
+                    break;
+                    case "handle-ball":
+                    item.data("cursor" , "move");
+                    item.drag(function onmove(dx,dy,x,y,e){
+                        console.log("onmove")
+                        var centerX = imgOpction.x+imgOpction.width/2;
+                        var centerY = imgOpction.y+imgOpction.height/2;
+                        var asinxValue = (centerY-y)/Math.sqrt(Math.pow(x - centerX,2)+Math.pow(y - centerY,2));
+                        imgOpction.rotate = 90-Math.asin(asinxValue)/Math.PI*180;
+                        console.log(asinxValue,imgOpction.rotate);
+                        if ((x-centerX)<0) {
+                            imgOpction.rotate = 360-imgOpction.rotate;
+                        }
+                        imgControllerSet.reInit();
+                    },function onstart(x,y,e){
+                        console.log("onstart")
+                    },function onend(e){
+                        console.log("onend")
+                        imgControllerSet.reInit();
+                    });
+                    break;
+                }
+            }
+            imgControllerSet.attr({
+                "stroke":"#276419",
+                "stroke-opacity":0.8,
+                "stroke-width":5
+            });
+            imgControllerSet.animate({
+                opacity:0
+            },200);
+
+        }());
+        imgControllerSet.reInit = function reInit(){
+            imgOpction.checkAttribute();
+            var j = 0;
+            for(var i in imgController){
+                var initFn = imgController[i];
+                var item = imgControllerSet[j]
+                switch(initFn.name){
+                    case "path":
+                        var path = initFn();
+                        item.attr({
+                            path:path+""
+                        })
+                    break;
+                    case "circle":
+                        var circle = initFn()
+                        item.attr({
+                            cx:circle[0],
+                            cy:circle[1],
+                            r:circle[2]
+                        })
+                    break;
+                }
+                item.data("cursorData",null);
+                item.hover(function f_in(){
+                    if (!this.data("cursorData")) {
+                        var cursorData = cursor[item.data("cursor")](imgOpction.rotate);
+                        this.attr({
+                            cursor:cursor[item.data("cursor")](imgOpction.rotate)
+                        })
+                    }
+                },function f_out(){});
+                j+=1;
+            }
+            imgControllerSet.attr({
+                transform:["r"+imgOpction.rotate,imgOpction.x+imgOpction.width/2,imgOpction.y+imgOpction.height/2]
+            })
+            img.attr({
+                width:imgOpction.width,
+                height:imgOpction.height,
+                x:imgOpction.x,
+                y:imgOpction.y,
+                transform:["r"+imgOpction.rotate,imgOpction.x+imgOpction.width/2,imgOpction.y+imgOpction.height/2]
+            });
+        }
+
+
+        img.drag(function onmove(dx,dy,x,y,e){
+            // console.log("onmove",dx,dy,x,y,e);
+            imgOpction.x = dx-imgOpction.cacheX+imgOpction.x;
+            imgOpction.y = dy-imgOpction.cacheY+imgOpction.y;
+            imgOpction.cacheX = dx;
+            imgOpction.cacheY = dy;
+            
+            imgControllerSet.reInit();
+        },function onstart(x,y,e){
+            // console.log("onstart",x,y,e);
+            imgControllerSet.animate({
+                opacity:0
+            },200)
+        },function onend(e){
+            // console.log("onend",e);
+            imgOpction.cacheX = 0;
+            imgOpction.cacheY = 0;
+            imgOpction.x = img.attr("x");
+            imgOpction.y = img.attr("y");
+            imgControllerSet.animate({
+                opacity:1
+            },200);
+            imgControllerSet.reInit();
+        });
+        img.mousedown(function mousedown(e){
+            var con = paper.container;
+            con.imgControllerSet.forEach(function(imgControllerSet){
+                imgControllerSet.animate({
+                    opacity:0
+                },200);
+            })
+            imgControllerSet.animate({
+                opacity:1
+            },200);
+        });
+        (function(con){
+            var i = con.img.length;
+            con.img[i] = img;
+            con.imgOpction[i] = imgOpction;
+            con.imgControllerSet[i] = imgControllerSet;
+        }(paper.container));
+
+    }
+    paper.imgFormDrag();
+
+</script>
