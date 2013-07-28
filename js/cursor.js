@@ -31,13 +31,14 @@ define("cursor", [], function(require, exports, module) {
 		defaultCursor.forEach(function(canvasType) {
 			canvas = document.createElement("canvas");
 			canvas.id = canvasType;
+			canvas.width = canvas.height = 32;
 			cursorTransform(canvas,baseUrl+canvasType+".png");
 		});
 	}());
-	cursor["n-resize"] = cursor["s-resize"] = cursor["lr"];
-	cursor["w-resize"] = cursor["e-resize"] = cursor["tb"];
-	cursor["ne-resize"] = cursor["sw-resize"] = cursor["lt_rb"];
-	cursor["nw-resize"] = cursor["se-resize"] = cursor["lb_rt"];
+	cursor["n-resize"] = cursor["s-resize"] = cursor["tb"];
+	cursor["w-resize"] = cursor["e-resize"] = cursor["lr"];
+	cursor["ne-resize"] = cursor["sw-resize"] = cursor["lb_rt"];
+	cursor["nw-resize"] = cursor["se-resize"] = cursor["lt_rb"];
 	cursor["move"] = cursor["move"];
 
 	module.exports = cursor;

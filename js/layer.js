@@ -282,7 +282,7 @@ define("layer", ["cursor","layerManage"], function(require, exports, module) {
 			layerControllerSet.attr({
 				"stroke": "#276419",
 				"stroke-opacity": 0.8,
-				"stroke-width": 5
+				"stroke-width": 3
 			});
 			layerControllerSet.animate({
 				opacity: 0
@@ -291,7 +291,7 @@ define("layer", ["cursor","layerManage"], function(require, exports, module) {
 			layerControllerSet.forEach(function(item) {
 				if (item.data("cursor")) {
 					item.hover(function f_in() {
-						// console.log(this.data("cursorData"),item.data("cursor"))
+						console.log(this.data("cursorData"),item.data("cursor"))
 						if (!this.data("cursorData")) {
 							var cursorData = cursor[item.data("cursor")](layerAttribute.rotate);
 							this.data("cursorData", cursorData);
