@@ -1,15 +1,19 @@
-define("sketchpad", ["layer"], function(require, exports, module) {
-	var Layer = require("layer");
+define("sketchpad", ["layerManage","eventStackManage","Raphael"], function(require, exports, module) {
+	var layerManage = require("layerManage");
+	var eventStack = require("eventStackManage");
 	// console.log(Layer);
 	// var Raphael = require("Raphael");
 	var SketchpadPrototype = {
 		createLayer: {
 			value: function(){
-				return Layer(this)
+				return layerManage.create(this);
 			}
+		},
+		eventStack:{
+			value:eventStack.create(eventStack.instances.length)
 		}
 	};
-	exports.Sketchpad = function Sketchpad(newSketchpad_id, width, height) {
+	function Sketchpad(newSketchpad_id, width, height) {
 		var newSketchpad = Object.create(Raphael(newSketchpad_id, width, height), SketchpadPrototype);
 
 			// newSketchpad.desc.title = newSketchpad_id;
@@ -17,4 +21,5 @@ define("sketchpad", ["layer"], function(require, exports, module) {
 
 		return newSketchpad;
 	};
+	return Sketchpad;
 });

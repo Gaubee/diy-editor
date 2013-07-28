@@ -1,6 +1,6 @@
-define("layer", ["cursor","layerManage"], function(require, exports, module) {
+define("Layer", ["cursor"], function(require, exports, module) {
 	var cursor = require("cursor");
-	var layerManage = require("layerManage");
+	// var layerManage = require("layerManage");
 	var handleOpction = {
 		length: 12,
 		circleR: 4,
@@ -222,25 +222,37 @@ define("layer", ["cursor","layerManage"], function(require, exports, module) {
 			});
 		}
 	};
+	var layerInterface = {//will binding in each Layer
+		move:function(x,y){
 
-	function checkAttribute(layer) {
-		if (layer.width < 0) {
-			layer.width = 0
+		},
+		resize:function(width,height){
+
+		},
+		rotate:function(deg){
+
 		}
-		if (layer.height < 0) {
-			layer.height = 0
+	}
+	function checkAttribute(layerAttribute) {
+		if (layerAttribute.width < 0) {
+			layerAttribute.width = 0
 		}
-		if (layer.x < 0) {
-			layer.x = 0
+		if (layerAttribute.height < 0) {
+			layerAttribute.height = 0
 		}
-		if (layer.y < 0) {
-			layer.y = 0
+		if (layerAttribute.x < 0) {
+			layerAttribute.x = 0
+		}
+		if (layerAttribute.y < 0) {
+			layerAttribute.y = 0
 		}
 	};
 
 	function Layer(paper, layerConfig) {
-
-		var layerAttribute = {
+		if (!(this instanceof Layer)) {
+			return new Layer(paper,layerConfig);
+		}
+		var layerAttribute = this.layerAttribute = {
 			width: 144,
 			height: 96,
 			cacheW: 0,
@@ -251,11 +263,16 @@ define("layer", ["cursor","layerManage"], function(require, exports, module) {
 			cacheY: 0,
 			rotate: 0,
 			active: false,
+			cacheActive: false,
+			handleActive: false,
+			cacheHandleActive: false,
+			activeStatus:0,
+			keepActive:false
 		}
-		var img = paper.image("../demo/img/flower.jpg", layerAttribute.x, layerAttribute.y, layerAttribute.width, layerAttribute.height);
+		var img = this.img = paper.image("../demo/img/flower.jpg", layerAttribute.x, layerAttribute.y, layerAttribute.width, layerAttribute.height);
 
-		var layerControllerSet = paper.set();
-		(function() {
+		var layerControllerSet = this.layerControllerSet = paper.set();
+		(function() {//init hanlder
 
 			for (var i in layerController) {
 				var item = layerController[i];
@@ -291,7 +308,7 @@ define("layer", ["cursor","layerManage"], function(require, exports, module) {
 			layerControllerSet.forEach(function(item) {
 				if (item.data("cursor")) {
 					item.hover(function f_in() {
-						console.log(this.data("cursorData"),item.data("cursor"))
+						// console.log(this.data("cursorData"),item.data("cursor"))
 						if (!this.data("cursorData")) {
 							var cursorData = cursor[item.data("cursor")](layerAttribute.rotate);
 							this.data("cursorData", cursorData);
@@ -299,7 +316,12 @@ define("layer", ["cursor","layerManage"], function(require, exports, module) {
 								cursor: "url(" + cursorData + ") 16 16"
 							})
 						}
-					}, function f_out() {});
+						layerAttribute.handleActive = true;
+						layerControllerSet.delayReInit();
+					}, function f_out() {
+						layerAttribute.handleActive = false;
+						layerControllerSet.delayReInit();
+					});
 				}
 			});
 		}());
@@ -338,7 +360,23 @@ define("layer", ["cursor","layerManage"], function(require, exports, module) {
 				y: layerAttribute.y,
 				transform: ["r" + layerAttribute.rotate, layerAttribute.x + layerAttribute.width / 2, layerAttribute.y + layerAttribute.height / 2]
 			});
+			if (!layerAttribute.keepActive) {
+				if (!(layerAttribute.cacheActive === layerAttribute.active)||!(layerAttribute.cacheHandleActive === layerAttribute.handleActive)) {
+					layerAttribute.activeStatus = (layerAttribute.active||layerAttribute.handleActive?1:0);
+					layerControllerSet.animate({
+						opacity: layerAttribute.activeStatus
+					},200);
+					layerAttribute.cacheActive = layerAttribute.active;
+					layerAttribute.cacheHandleActive = layerAttribute.handleActive;
+				}
+			}
 		}
+
+		layerControllerSet.delayReInit = function delayReInit(delayTime){
+			clearTimeout(layerControllerSet.delayReInit.activeTime);
+			layerControllerSet.delayReInit.activeTime = setTimeout(layerControllerSet.reInit,delayTime||60);
+		}
+		layerControllerSet.delayReInit.activeTime;
 
 
 		img.drag(function onmove(dx, dy, x, y, e) {
@@ -365,24 +403,28 @@ define("layer", ["cursor","layerManage"], function(require, exports, module) {
 			}, 200);
 			layerControllerSet.reInit();
 		});
-		img.mousedown(function mousedown(e) {
-			var con = layerManage.instances;
-			con.layerControllerSet.forEach(function(layerControllerSet) {
-				layerControllerSet.animate({
-					opacity: 0
-				}, 200);
-			})
-			layerControllerSet.animate({
-				opacity: 1
-			}, 200);
+
+		img.mouseover(function mouseover(e){
+			layerAttribute.active = true;
+			layerControllerSet.delayReInit();
+			// layerControllerSet.reInit();
+		}).mouseout(function mouseout(e){
+			layerAttribute.active = false;
+			layerControllerSet.delayReInit();
+			// layerControllerSet.reInit();
 		});
-		(function(container) {
-			var i = container.img.length;
-			container.img[i] = img;
-			container.layer[i] = img;
-			container.layerAttribute[i] = layerAttribute;
-			container.layerControllerSet[i] = layerControllerSet;
-		}(require("layerManage").instances));
+		// img.mousedown(function mousedown(e) {
+		// 	// var con = layerManage.instances;
+		// 	con.layerControllerSet.forEach(function(layerControllerSet) {
+		// 		layerControllerSet.animate({
+		// 			opacity: 0
+		// 		}, 200);
+		// 	})
+		// 	layerControllerSet.animate({
+		// 		opacity: 1
+		// 	}, 200);
+		// });
+
 	};
 	// module.exports = {
 	// 	Layer: Layer
