@@ -10,22 +10,33 @@ define("cursor", [], function(require, exports, module) {
 		var context = canvas.getContext("2d");
 		var img = new Image();
 		img.src = cursorUrl;
+		var loaded = false;
+		img.onload = function(){loaded = true}
 		var x = 16,
 			y = 16,
 			bak = canvas;
+		var cache;
 		cursor[canvas.id] = function getRotatedCursor(angle) {
 			// console.log(context.canvas)
+			angle = parseInt(angle);
+			if (cache[angle]) {
+				console.log("get cache")
+				return cache[angle];
+			}
 			context.clearRect(0, 0, canvas.width, canvas.height);
 			context.save();
 
 			context.translate(x, y);
 			context.rotate(angle * TO_RADIANS);
 			context.drawImage(img, -(img.width / 2), -(img.height / 2));
+			console.log("save cache")
 			var result = canvas.toDataURL();
+			if (loaded) {cache[angle] = result}
 			context.restore();
 			return result;
 		}
-		cursor[canvas.id](0);
+		cache = cursor[canvas.id].cache = {};
+		// cursor[canvas.id](0);
 	};
 	(function() {
 		defaultCursor.forEach(function(canvasType) {
