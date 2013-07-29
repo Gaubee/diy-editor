@@ -71,65 +71,80 @@ define("Layer", ["cursor"], function(require, exports, module) {
 		}
 	};
 	var layerHandler = {
-		"edge-top": function(handle, layerAttribute,layerControllerSet) {
+		"edge-top": function(handle) {
+			var _self = this,
+				layerAttribute = _self.layerAttribute,
+				layerControllerSet = _self.layerControllerSet;
 			handle.data("cursor", "n-resize");
 			handle.drag(function onmove(dx, dy, x, y, e) {
 				layerAttribute.height -= (dy - layerAttribute.cacheH);
 				layerAttribute.y += (dy - layerAttribute.cacheH);
 				layerAttribute.cacheH = dy;
-				layerControllerSet.reInit();
+				_self.reInit();
 			}, function onstart(x, y, e) {
 
 			}, function onend(e) {
 				layerAttribute.cacheH = 0;
-				layerControllerSet.reInit();
+				_self.reInit();
 			});
 		},
 
-		"edge-left": function(handle, layerAttribute,layerControllerSet) {
+		"edge-left": function(handle) {
+			var _self = this,
+				layerAttribute = _self.layerAttribute,
+				layerControllerSet = _self.layerControllerSet;
 			handle.data("cursor", "w-resize");
 			handle.drag(function onmove(dx, dy, x, y, e) {
 				layerAttribute.width -= (dx - layerAttribute.cacheW);
 				layerAttribute.x += (dx - layerAttribute.cacheW);
 				layerAttribute.cacheW = dx;
-				layerControllerSet.reInit();
+				_self.reInit();
 			}, function onstart(x, y, e) {
 
 			}, function onend(e) {
 				layerAttribute.cacheW = 0;
-				layerControllerSet.reInit();
+				_self.reInit();
 			});
 		},
 
-		"edge-bottom": function(handle, layerAttribute,layerControllerSet) {
+		"edge-bottom": function(handle) {
+			var _self = this,
+				layerAttribute = _self.layerAttribute,
+				layerControllerSet = _self.layerControllerSet;
 			handle.data("cursor", "s-resize");
 			handle.drag(function onmove(dx, dy, x, y, e) {
 				layerAttribute.height += (dy - layerAttribute.cacheH);
 				layerAttribute.cacheH = dy;
-				layerControllerSet.reInit();
+				_self.reInit();
 			}, function onstart(x, y, e) {
 
 			}, function onend(e) {
 				layerAttribute.cacheH = 0;
-				layerControllerSet.reInit();
+				_self.reInit();
 			});
 		},
 
-		"edge-right": function(handle, layerAttribute,layerControllerSet) {
+		"edge-right": function(handle) {
+			var _self = this,
+				layerAttribute = _self.layerAttribute,
+				layerControllerSet = _self.layerControllerSet;
 			handle.data("cursor", "e-resize");
 			handle.drag(function onmove(dx, dy, x, y, e) {
 				layerAttribute.width += (dx - layerAttribute.cacheW);
 				layerAttribute.cacheW = dx;
-				layerControllerSet.reInit();
+				_self.reInit();
 			}, function onstart(x, y, e) {
 
 			}, function onend(e) {
 				layerAttribute.cacheW = 0;
-				layerControllerSet.reInit();
+				_self.reInit();
 			});
 		},
 
-		"handle-left-top": function(handle, layerAttribute,layerControllerSet) {
+		"handle-left-top": function(handle) {
+			var _self = this,
+				layerAttribute = _self.layerAttribute,
+				layerControllerSet = _self.layerControllerSet;
 			handle.data("cursor", "nw-resize");
 			handle.drag(function onmove(dx, dy, x, y, e) {
 				layerAttribute.width -= (dx - layerAttribute.cacheW);
@@ -138,17 +153,20 @@ define("Layer", ["cursor"], function(require, exports, module) {
 				layerAttribute.height -= (dy - layerAttribute.cacheH);
 				layerAttribute.y += (dy - layerAttribute.cacheH);
 				layerAttribute.cacheH = dy;
-				layerControllerSet.reInit();
+				_self.reInit();
 			}, function onstart(x, y, e) {
 
 			}, function onend(e) {
 				layerAttribute.cacheW = 0;
 				layerAttribute.cacheH = 0;
-				layerControllerSet.reInit();
+				_self.reInit();
 			});
 		},
 
-		"handle-left-bottom": function(handle, layerAttribute,layerControllerSet) {
+		"handle-left-bottom": function(handle) {
+			var _self = this,
+				layerAttribute = _self.layerAttribute,
+				layerControllerSet = _self.layerControllerSet;
 			handle.data("cursor", "sw-resize");
 			handle.drag(function onmove(dx, dy, x, y, e) {
 				layerAttribute.width -= (dx - layerAttribute.cacheW);
@@ -156,34 +174,40 @@ define("Layer", ["cursor"], function(require, exports, module) {
 				layerAttribute.cacheW = dx;
 				layerAttribute.height += (dy - layerAttribute.cacheH);
 				layerAttribute.cacheH = dy;
-				layerControllerSet.reInit();
+				_self.reInit();
 			}, function onstart(x, y, e) {
 
 			}, function onend(e) {
 				layerAttribute.cacheW = 0;
 				layerAttribute.cacheH = 0;
-				layerControllerSet.reInit();
+				_self.reInit();
 			});
 		},
 
-		"handle-right-bottom": function(handle, layerAttribute,layerControllerSet) {
+		"handle-right-bottom": function(handle) {
+			var _self = this,
+				layerAttribute = _self.layerAttribute,
+				layerControllerSet = _self.layerControllerSet;
 			handle.data("cursor", "se-resize");
 			handle.drag(function onmove(dx, dy, x, y, e) {
 				layerAttribute.width += (dx - layerAttribute.cacheW);
 				layerAttribute.cacheW = dx;
 				layerAttribute.height += (dy - layerAttribute.cacheH);
 				layerAttribute.cacheH = dy;
-				layerControllerSet.reInit();
+				_self.reInit();
 			}, function onstart(x, y, e) {
 
 			}, function onend(e) {
 				layerAttribute.cacheW = 0;
 				layerAttribute.cacheH = 0;
-				layerControllerSet.reInit();
+				_self.reInit();
 			});
 		},
 
-		"handle-right-top": function(handle, layerAttribute,layerControllerSet) {
+		"handle-right-top": function(handle) {
+			var _self = this,
+				layerAttribute = _self.layerAttribute,
+				layerControllerSet = _self.layerControllerSet;
 			handle.data("cursor", "ne-resize");
 			handle.drag(function onmove(dx, dy, x, y, e) {
 				layerAttribute.width += (dx - layerAttribute.cacheW);
@@ -191,17 +215,20 @@ define("Layer", ["cursor"], function(require, exports, module) {
 				layerAttribute.height -= (dy - layerAttribute.cacheH);
 				layerAttribute.y += (dy - layerAttribute.cacheH);
 				layerAttribute.cacheH = dy;
-				layerControllerSet.reInit();
+				_self.reInit();
 			}, function onstart(x, y, e) {
 
 			}, function onend(e) {
 				layerAttribute.cacheW = 0;
 				layerAttribute.cacheH = 0;
-				layerControllerSet.reInit();
+				_self.reInit();
 			});
 		},
 
-		"handle-ball": function(handle, layerAttribute,layerControllerSet) {
+		"handle-ball": function(handle) {
+			var _self = this,
+				layerAttribute = _self.layerAttribute,
+				layerControllerSet = _self.layerControllerSet;
 			handle.data("cursor", "move");
 			handle.drag(function onmove(dx, dy, x, y, e) {
 				// console.log("onmove")
@@ -213,12 +240,12 @@ define("Layer", ["cursor"], function(require, exports, module) {
 				if ((x - centerX) < 0) {
 					layerAttribute.rotate = 360 - layerAttribute.rotate;
 				}
-				layerControllerSet.reInit();
+				_self.reInit();
 			}, function onstart(x, y, e) {
 				// console.log("onstart")
 			}, function onend(e) {
 				// console.log("onend")
-				layerControllerSet.reInit();
+				_self.reInit();
 			});
 		}
 	};
@@ -232,69 +259,57 @@ define("Layer", ["cursor"], function(require, exports, module) {
 		rotate:function(deg){
 
 		}
-	}
-	function checkAttribute(layerAttribute) {
-		if (layerAttribute.width < 0) {
-			layerAttribute.width = 0
+	};
+	var layerDefaultAttribute = function layerDefaultAttribute(layerAttribute){
+		if (!(this instanceof layerDefaultAttribute)) {
+			return new layerDefaultAttribute(layerAttribute)
 		}
-		if (layerAttribute.height < 0) {
-			layerAttribute.height = 0
-		}
-		if (layerAttribute.x < 0) {
-			layerAttribute.x = 0
-		}
-		if (layerAttribute.y < 0) {
-			layerAttribute.y = 0
+		for(var i in layerAttribute){
+			this[i] = layerAttribute[i];
 		}
 	};
+	layerDefaultAttribute.prototype = {
+		width: 144,
+		height: 96,
+		cacheW: 0,
+		cacheH: 0,
+		x: 20,
+		y: 80,
+		cacheX: 0,
+		cacheY: 0,
+		rotate: 0,
+		active: false,
+		cacheActive: false,
+		handleActive: false,
+		cacheHandleActive: false,
+		activeStatus:0,
+		keepActive:false
+	};
+
 
 	function Layer(paper, layerConfig) {
-		if (!(this instanceof Layer)) {
+		var _self = this;
+		if (!(_self instanceof Layer)) {
 			return new Layer(paper,layerConfig);
 		}
-		var layerAttribute = this.layerAttribute = {
-			width: 144,
-			height: 96,
-			cacheW: 0,
-			cacheH: 0,
-			x: 20,
-			y: 80,
-			cacheX: 0,
-			cacheY: 0,
-			rotate: 0,
-			active: false,
-			cacheActive: false,
-			handleActive: false,
-			cacheHandleActive: false,
-			activeStatus:0,
-			keepActive:false
-		}
-		var img = this.img = paper.image("../demo/img/flower.jpg", layerAttribute.x, layerAttribute.y, layerAttribute.width, layerAttribute.height);
+		console.log(window.L = _self);
+		_self.skechpad = paper;
+		var layerAttribute = _self.layerAttribute = layerDefaultAttribute();
 
-		var layerControllerSet = this.layerControllerSet = paper.set();
+		var img = _self.img = paper.image("../demo/img/flower.jpg", layerAttribute.x, layerAttribute.y, layerAttribute.width, layerAttribute.height);
+
+		var layerControllerSet = _self.layerControllerSet = paper.set();
+
 		(function() {//init hanlder
 
 			for (var i in layerController) {
 				var item = layerController[i];
 				// console.log(item.name,typeof paper[item.name],item())
 				item = paper[item.type].apply(paper, item.arguments(layerAttribute));
-				// console.log(item)
 				layerControllerSet.push(item);
-
 				if (i in layerHandler) {
-					layerHandler[i](item, layerAttribute, layerControllerSet);
+					layerHandler[i].call(_self,item);
 				}
-				// item.hover(function f_in() {
-				// 	// console.log("hover_in",this)
-				// 	this.attr({
-				// 		fill: "#276419",
-				// 		"fill-opacity": 0.8
-				// 	})
-				// }, function f_out() {
-				// 	this.attr({
-				// 		"fill-opacity": 0
-				// 	})
-				// });
 			}
 			layerControllerSet.attr({
 				"stroke": "#276419",
@@ -317,81 +332,29 @@ define("Layer", ["cursor"], function(require, exports, module) {
 							})
 						}
 						layerAttribute.handleActive = true;
-						layerControllerSet.delayReInit();
+						_self.delayReInit();
 					}, function f_out() {
 						layerAttribute.handleActive = false;
-						layerControllerSet.delayReInit();
+						_self.delayReInit();
 					});
 				}
 			});
 		}());
-		layerControllerSet.reInit = function reInit() {
-			checkAttribute(layerAttribute);
-			var j = 0;
-			for (var i in layerController) {
-				var initFn = layerController[i];
-				var item = layerControllerSet[j]
-				switch (initFn.type) {
-					case "path":
-						var path = initFn.arguments(layerAttribute);
-						item.attr({
-							path: path + ""
-						})
-						break;
-					case "circle":
-						var circle = initFn.arguments(layerAttribute);
-						item.attr({
-							cx: circle[0],
-							cy: circle[1],
-							r: circle[2]
-						})
-						break;
-				}
-				item.data("cursorData", null);
-				j += 1;
-			}
-			layerControllerSet.attr({
-				transform: ["r" + layerAttribute.rotate, layerAttribute.x + layerAttribute.width / 2, layerAttribute.y + layerAttribute.height / 2]
-			})
-			img.attr({
-				width: layerAttribute.width,
-				height: layerAttribute.height,
-				x: layerAttribute.x,
-				y: layerAttribute.y,
-				transform: ["r" + layerAttribute.rotate, layerAttribute.x + layerAttribute.width / 2, layerAttribute.y + layerAttribute.height / 2]
-			});
-			if (!layerAttribute.keepActive) {
-				if (!(layerAttribute.cacheActive === layerAttribute.active)||!(layerAttribute.cacheHandleActive === layerAttribute.handleActive)) {
-					layerAttribute.activeStatus = (layerAttribute.active||layerAttribute.handleActive?1:0);
-					layerControllerSet.animate({
-						opacity: layerAttribute.activeStatus
-					},200);
-					layerAttribute.cacheActive = layerAttribute.active;
-					layerAttribute.cacheHandleActive = layerAttribute.handleActive;
-				}
-			}
-		}
-
-		layerControllerSet.delayReInit = function delayReInit(delayTime){
-			clearTimeout(layerControllerSet.delayReInit.activeTime);
-			layerControllerSet.delayReInit.activeTime = setTimeout(layerControllerSet.reInit,delayTime||60);
-		}
-		layerControllerSet.delayReInit.activeTime;
 
 
-		img.drag(function onmove(dx, dy, x, y, e) {
+		img.drag(function onmove(dx, dy, x, y, e) {//init img
 			// console.log("onmove",dx,dy,x,y,e);
 			layerAttribute.x = dx - layerAttribute.cacheX + layerAttribute.x;
 			layerAttribute.y = dy - layerAttribute.cacheY + layerAttribute.y;
 			layerAttribute.cacheX = dx;
 			layerAttribute.cacheY = dy;
 
-			layerControllerSet.reInit();
+			_self.reInit();
 		}, function onstart(x, y, e) {
 			// console.log("onstart",x,y,e);
 			layerControllerSet.animate({
 				opacity: 0
-			}, 200)
+			}, 200);
 		}, function onend(e) {
 			// console.log("onend",e);
 			layerAttribute.cacheX = 0;
@@ -401,34 +364,86 @@ define("Layer", ["cursor"], function(require, exports, module) {
 			layerControllerSet.animate({
 				opacity: 1
 			}, 200);
-			layerControllerSet.reInit();
-		});
-
-		img.mouseover(function mouseover(e){
+			_self.reInit();
+		}).mouseover(function mouseover(e){
 			layerAttribute.active = true;
-			layerControllerSet.delayReInit();
-			// layerControllerSet.reInit();
+			_self.delayReInit();
 		}).mouseout(function mouseout(e){
 			layerAttribute.active = false;
-			layerControllerSet.delayReInit();
-			// layerControllerSet.reInit();
+			_self.delayReInit();
 		});
-		// img.mousedown(function mousedown(e) {
-		// 	// var con = layerManage.instances;
-		// 	con.layerControllerSet.forEach(function(layerControllerSet) {
-		// 		layerControllerSet.animate({
-		// 			opacity: 0
-		// 		}, 200);
-		// 	})
-		// 	layerControllerSet.animate({
-		// 		opacity: 1
-		// 	}, 200);
-		// });
 
 	};
-	// module.exports = {
-	// 	Layer: Layer
-	// };
-	// exports.Layer = Layer;
+	Layer.prototype.checkAttribute = function checkAttribute() {
+		var layerAttribute = this.layerAttribute;
+		if (layerAttribute.width < 0) {
+			layerAttribute.width = 0
+		}
+		if (layerAttribute.height < 0) {
+			layerAttribute.height = 0
+		}
+		if (layerAttribute.x < 0) {
+			layerAttribute.x = 0
+		}
+		if (layerAttribute.y < 0) {
+			layerAttribute.y = 0
+		}
+	};
+	Layer.prototype.reInit = function reInit() {
+		var _self = this,
+			img = _self.img,
+			layerAttribute = _self.layerAttribute,
+			layerControllerSet = _self.layerControllerSet;
+		_self.checkAttribute();
+		var j = 0;
+		for (var i in layerController) {
+			var initFn = layerController[i];
+			var item = layerControllerSet[j]
+			switch (initFn.type) {
+				case "path":
+					var path = initFn.arguments(layerAttribute);
+					item.attr({
+						path: path + ""
+					})
+					break;
+				case "circle":
+					var circle = initFn.arguments(layerAttribute);
+					item.attr({
+						cx: circle[0],
+						cy: circle[1],
+						r: circle[2]
+					})
+					break;
+			}
+			item.data("cursorData", null);
+			j += 1;
+		}
+		layerControllerSet.attr({
+			transform: ["r" + layerAttribute.rotate, layerAttribute.x + layerAttribute.width / 2, layerAttribute.y + layerAttribute.height / 2]
+		})
+		img.attr({
+			width: layerAttribute.width,
+			height: layerAttribute.height,
+			x: layerAttribute.x,
+			y: layerAttribute.y,
+			transform: ["r" + layerAttribute.rotate, layerAttribute.x + layerAttribute.width / 2, layerAttribute.y + layerAttribute.height / 2]
+		});
+		if (!layerAttribute.keepActive) {
+			if (!(layerAttribute.cacheActive === layerAttribute.active)||!(layerAttribute.cacheHandleActive === layerAttribute.handleActive)) {
+				layerAttribute.activeStatus = (layerAttribute.active||layerAttribute.handleActive?1:0);
+				layerControllerSet.animate({
+					opacity: layerAttribute.activeStatus
+				},200);
+				layerAttribute.cacheActive = layerAttribute.active;
+				layerAttribute.cacheHandleActive = layerAttribute.handleActive;
+			}
+		}
+	}
+	Layer.prototype.delayReInit = function delayReInit(delayTime){
+		var _self = this;
+		clearTimeout(_self.delayReInit['activeTime']);
+		_self.delayReInit['activeTime'] = setTimeout(function(){_self.reInit.call(_self)},delayTime||60);
+	}
+
 	return Layer;
 });

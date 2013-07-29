@@ -1,18 +1,18 @@
 define("layerManage", ["Layer"],function(require, exports, module) {
 	var Layer = require("Layer");
-	var container = {
-		img: [],
-		layer: [],
-		layerAttribute: [],
-		layerControllerSet: []
-	}
+	var container = [];
+	container.img= [];
+	container.sketchpad= [];
+	container.layerAttribute= [];
+	container.layerControllerSet= [];
 	module.exports = {
 		instances: container,
 		create: function createLayer(sketchpad){
 			var newLayer = Layer(sketchpad);
-			var i = container.img.length;
+			var i = container.length;
+			container.push(newLayer);
 			container.img[i] = newLayer.img;
-			container.layer[i] = newLayer.img;
+			container.sketchpad[i] = newLayer.sketchpad;
 			container.layerAttribute[i] = newLayer.layerAttribute;
 			container.layerControllerSet[i] = newLayer.layerControllerSet;
 			return newLayer;
