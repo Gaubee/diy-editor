@@ -292,55 +292,28 @@ define("Layer", ["cursor"], function(require, exports, module) {
 		if (!(_self instanceof Layer)) {
 			return new Layer(paper,layerConfig);
 		}
-		console.log(window.L = _self);
+		//---------------
+
 		_self.skechpad = paper;
-		var layerAttribute = _self.layerAttribute = layerDefaultAttribute();
 
-		var img = _self.img = paper.image("../demo/img/flower.jpg", layerAttribute.x, layerAttribute.y, layerAttribute.width, layerAttribute.height);
+		//format layerConfig to layerAttribute
+		var layerAttribute = _self.layerAttribute = layerDefaultAttribute(layerConfig);
+		//a panel -- name as 'img'
+		var img = paper.image("../demo/img/flower.jpg", layerAttribute.x, layerAttribute.y, layerAttribute.width, layerAttribute.height);
 
-		var layerControllerSet = _self.layerControllerSet = paper.set();
+		this.initHanlder();
 
-		(function() {//init hanlder
+		this.initImg(img);
 
-			for (var i in layerController) {
-				var item = layerController[i];
-				// console.log(item.name,typeof paper[item.name],item())
-				item = paper[item.type].apply(paper, item.arguments(layerAttribute));
-				layerControllerSet.push(item);
-				if (i in layerHandler) {
-					layerHandler[i].call(_self,item);
-				}
-			}
-			layerControllerSet.attr({
-				"stroke": "#276419",
-				"stroke-opacity": 0.8,
-				"stroke-width": 3
-			});
-			layerControllerSet.animate({
-				opacity: 0
-			}, 200);
-
-			layerControllerSet.forEach(function(item) {
-				if (item.data("cursor")) {
-					item.hover(function f_in() {
-						// console.log(this.data("cursorData"),item.data("cursor"))
-						if (!this.data("cursorData")) {
-							var cursorData = cursor[item.data("cursor")](layerAttribute.rotate);
-							this.data("cursorData", cursorData);
-							this.attr({
-								cursor: "url(" + cursorData + ") 16 16"
-							})
-						}
-						layerAttribute.handleActive = true;
-						_self.delayReInit();
-					}, function f_out() {
-						layerAttribute.handleActive = false;
-						_self.delayReInit();
-					});
-				}
-			});
-		}());
-
+	};
+	Layer.prototype.initImg = function initImg(img){
+		var _self = this,
+			layerAttribute = _self.layerAttribute,
+			layerControllerSet = _self.layerControllerSet;
+		if (typeof img === "string") {
+			img = _self.skechpad.image(img, layerAttribute.x, layerAttribute.y, layerAttribute.width, layerAttribute.height);
+		}
+		_self.img = img;
 
 		img.drag(function onmove(dx, dy, x, y, e) {//init img
 			// console.log("onmove",dx,dy,x,y,e);
@@ -372,8 +345,53 @@ define("Layer", ["cursor"], function(require, exports, module) {
 			layerAttribute.active = false;
 			_self.delayReInit();
 		});
-
 	};
+	Layer.prototype.initHanlder = function initHanlder(){
+		var _self = this,
+			paper = _self.skechpad,
+			layerAttribute = _self.layerAttribute,
+			layerControllerSet;
+		_self.layerControllerSet&&_self.layerControllerSet.clear();
+		layerControllerSet = _self.layerControllerSet = _self.skechpad.set();
+
+		for (var i in layerController) {
+			var item = layerController[i];
+			// console.log(item.name,typeof paper[item.name],item())
+			item = paper[item.type].apply(paper, item.arguments(layerAttribute));
+			layerControllerSet.push(item);
+			if (i in layerHandler) {
+				layerHandler[i].call(_self,item);
+			}
+		}
+		layerControllerSet.attr({
+			"stroke": "#276419",
+			"stroke-opacity": 0.8,
+			"stroke-width": 3
+		});
+		layerControllerSet.animate({
+			opacity: 0
+		}, 200);
+
+		layerControllerSet.forEach(function(item) {
+			if (item.data("cursor")) {
+				item.hover(function f_in() {
+					// console.log(this.data("cursorData"),item.data("cursor"))
+					if (!this.data("cursorData")) {
+						var cursorData = cursor[item.data("cursor")](layerAttribute.rotate);
+						this.data("cursorData", cursorData);
+						this.attr({
+							cursor: "url(" + cursorData + ") 16 16"
+						})
+					}
+					layerAttribute.handleActive = true;
+					_self.delayReInit();
+				}, function f_out() {
+					layerAttribute.handleActive = false;
+					_self.delayReInit();
+				});
+			}
+		});
+	}
 	Layer.prototype.checkAttribute = function checkAttribute() {
 		var layerAttribute = this.layerAttribute;
 		if (layerAttribute.width < 0) {
@@ -444,6 +462,5 @@ define("Layer", ["cursor"], function(require, exports, module) {
 		clearTimeout(_self.delayReInit['activeTime']);
 		_self.delayReInit['activeTime'] = setTimeout(function(){_self.reInit.call(_self)},delayTime||60);
 	}
-
 	return Layer;
 });
