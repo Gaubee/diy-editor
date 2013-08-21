@@ -7,8 +7,8 @@ define("layerManage", ["Layer"],function(require, exports, module) {
 	container.layerControllerSet= [];
 	module.exports = {
 		instances: container,
-		create: function createLayer(sketchpad){
-			var newLayer = Layer(sketchpad);
+		create: function createLayer(sketchpad,layerConfig){
+			var newLayer = Layer(sketchpad,layerConfig);
 			var i = container.length;
 			container.push(newLayer);
 			container.img[i] = newLayer.img;

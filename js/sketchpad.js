@@ -5,8 +5,8 @@ define("sketchpad", ["layerManage","eventStackManage","Raphael"], function(requi
 	// var Raphael = require("Raphael");
 	var SketchpadPrototype = {
 		createLayer: {
-			value: function(){
-				return layerManage.create(this);
+			value: function(layerConfig){
+				return layerManage.create(this,layerConfig);
 			}
 		},
 		eventStack:{

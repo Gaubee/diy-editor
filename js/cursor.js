@@ -20,7 +20,7 @@ define("cursor", [], function(require, exports, module) {
 			// console.log(context.canvas)
 			angle = parseInt(angle);
 			if (cache[angle]) {
-				console.log("get cache")
+				// console.log("get cache")
 				return cache[angle];
 			}
 			context.clearRect(0, 0, canvas.width, canvas.height);
