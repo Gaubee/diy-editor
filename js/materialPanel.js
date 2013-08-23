@@ -1,6 +1,5 @@
 define("materialPanel", [], function(require, exports, module) {
 
-
 	var session = {
 		TEMP:{},
 		endpointEvent:function(){},

@@ -38,8 +38,8 @@ define("sketchpadManage", ["sketchpad", "materialPanel"], function(require, expo
 					}
 				}
 			});
-
-			document.body.appendChild(sketchpadContainer);
+			(opction.container||$("body")).append(sketchpadContainer)
+			// document.body.appendChild(sketchpadContainer);
 			var newSketchpad = Sketchpad(newSketchpad_id, opction.width, opction.height);
 			sketchpads.push(newSketchpad);
 			sketchpads[newSketchpad_id] = newSketchpad;
@@ -80,7 +80,8 @@ define("sketchpadManage", ["sketchpad", "materialPanel"], function(require, expo
 				});
 			});
 			// console.log(toolBarElement)
-			document.body.appendChild(toolBarElement);
+			(opction.container||$("body")).append(toolBarElement)
+			// document.body.appendChild(toolBarElement);
 			return materialPanel;
 		},
 		find: function findSketchpad(id_or_num) {
