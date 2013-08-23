@@ -1,4 +1,4 @@
-define("Layer", ["Layer/ControllerSet","Layer/cursor"], function(require, exports, module) {
+define("Layer", ["Layer/AttributePlane","Layer/ControllerSet","Layer/cursor"], function(require, exports, module) {
 
 	var layerInterface = { //will binding in each Layer
 		move: function(x, y) {
@@ -162,5 +162,6 @@ define("Layer", ["Layer/ControllerSet","Layer/cursor"], function(require, export
 	};
 
 	require("ControllerSet")(Layer);
+	require("AttributePlane")(Layer);
 	return Layer;
 });
