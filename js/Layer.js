@@ -1,4 +1,4 @@
-define("Layer", ["Layer/AttributePlane","Layer/ControllerSet","Layer/cursor"], function(require, exports, module) {
+define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"], function(require, exports, module) {
 
 	var layerInterface = { //will binding in each Layer
 		move: function(x, y) {
@@ -37,7 +37,8 @@ define("Layer", ["Layer/AttributePlane","Layer/ControllerSet","Layer/cursor"], f
 		cacheHandleActive: false,
 		activeStatus: 0,
 		keepActive: false,
-		src: ""
+		src: "",
+		zIndex: 0
 	};
 
 
@@ -64,7 +65,7 @@ define("Layer", ["Layer/AttributePlane","Layer/ControllerSet","Layer/cursor"], f
 		handle: function(layerInstance) {
 			var paper = layerInstance.skechpad,
 				layerAttribute = layerInstance.layerAttribute,
-			//a panel -- name as 'img'
+				//a panel -- name as 'img'
 				img = paper.image((layerAttribute.src || "../demo/img/flower.jpg"), layerAttribute.x, layerAttribute.y, layerAttribute.width, layerAttribute.height);
 			layerInstance.initImg(img);
 		}
@@ -109,7 +110,7 @@ define("Layer", ["Layer/AttributePlane","Layer/ControllerSet","Layer/cursor"], f
 			_self.delayReInit();
 		});
 	};
-	
+
 	Layer.prototype.checkAttribute = function checkAttribute() {
 		var layerAttribute = this.layerAttribute;
 		if (layerAttribute.width < 0) {
@@ -160,7 +161,42 @@ define("Layer", ["Layer/AttributePlane","Layer/ControllerSet","Layer/cursor"], f
 			_self.reInit.call(_self)
 		}, delayTime || 60);
 	};
-
+	Layer.prototype.up = function toFront(newIndex) {
+		var _self = this;
+		if (newIndex === undefined) {
+			newIndex = _self.layerAttribute.zIndex;
+		}
+		var _selfIndex = _self.layerAttribute.zIndex = newIndex + 1.5,
+			lis = require("layerManage").instances.slice();
+		lis.sort(function(a, b) {
+			return a.layerAttribute.zIndex - b.layerAttribute.zIndex;
+		});
+		lis.forEach(function(layerInstance, index) {
+			console.log(layerInstance)
+			layerInstance.layerAttribute.zIndex = index
+			console.log(layerInstance.layerAttribute.zIndex);
+			layerInstance.img.toFront();
+			layerInstance.layerControllerSet.toFront();
+		});
+	};
+	Layer.prototype.down = function toBack(newIndex) {
+		var _self = this;
+		if (newIndex === undefined) {
+			newIndex = _self.layerAttribute.zIndex;
+		}
+		var _selfIndex = _self.layerAttribute.zIndex = newIndex - 1.5,
+			lis = require("layerManage").instances.slice();
+		lis.sort(function(a, b) {
+			return a.layerAttribute.zIndex - b.layerAttribute.zIndex;
+		});
+		lis.forEach(function(layerInstance, index) {
+			console.log(layerInstance)
+			layerInstance.layerAttribute.zIndex = index
+			console.log(layerInstance.layerAttribute.zIndex);
+			layerInstance.img.toFront();
+			layerInstance.layerControllerSet.toFront();
+		});
+	};
 	require("ControllerSet")(Layer);
 	require("AttributePlane")(Layer);
 	return Layer;
