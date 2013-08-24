@@ -41,7 +41,7 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 		zIndex: 0
 	};
 
-
+	var __id = 0;
 	function Layer(paper, layerConfig) {
 		var _self = this;
 		if (!(_self instanceof Layer)) {
@@ -50,7 +50,7 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 		//---------------
 
 		_self.skechpad = paper;
-
+		_self.id = __id++;
 		//format layerConfig to layerAttribute
 		var layerAttribute = _self.layerAttribute = layerDefaultAttribute(layerConfig);
 

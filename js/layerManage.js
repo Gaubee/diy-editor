@@ -17,6 +17,9 @@ define("layerManage", ["Layer"],function(require, exports, module) {
 			container.sketchpad[i] = newLayer.sketchpad;
 			container.layerAttribute[i] = newLayer.layerAttribute;
 			container.layerControllerSet[i] = newLayer.layerControllerSet;
+
+			require("sketchpadManage").createLayerManager()
+			$("#aside").scrollspy('refresh')
 			return newLayer;
 		}
 	}

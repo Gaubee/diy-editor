@@ -68,14 +68,15 @@ define("AttributePlane", [], function(require, exports, module) {
 			elementBingDOM = _self._EBD = [];
 		elementBingDOM._ = {};
 		var imgLayerElement = document.createElement("fieldset");
-		imgLayerElement.className = "layer-attribute-plane row"
+		imgLayerElement.id = "attribute_plane_"+_self.id;
+		imgLayerElement.className = "layer-attribute-plane row";
 		imgLayer.forEach(function(attributeConsole) {
 			var attributeContainerElement = document.createElement("div")
 			titleElement = document.createElement("legend"),
 				titleTextElement = document.createElement("h3"),
 				// contentElement = document.createElement("div"),
 				contentListElement = document.createElement("article");
-			attributeContainerElement.className = "span4";
+			attributeContainerElement.className = "span3";
 			titleElement.className = "title span3";
 			titleTextElement.innerText = attributeConsole.title;
 			// contentElement.className = "content";
@@ -116,7 +117,23 @@ define("AttributePlane", [], function(require, exports, module) {
 				elementBingDOM.push(item.name)
 			});
 		});
-		$("#aside").append(imgLayerElement)
+		var toolButtonGroupHTML = ['<div class="btn-group span8">',
+				  '<button class="btn"><i class="icon-arrow-left"></i><!--Coordinate left--></button>',
+				  '<button class="btn"><i class="icon-arrow-up"></i><!--Coordinate up--></button>',
+				  '<button class="btn"><i class="icon-arrow-down"></i><!--Coordinate down--></button>',
+				  '<button class="btn"><i class="icon-arrow-right"></i><!--Coordinate right--></button>',
+				  '<button class="btn"><i class="icon-repeat"></i><!--Rotate--></button>',
+				  '<button class="btn"><i class="icon-chevron-up"></i><!--Layer Index up--></button>',
+				  '<button class="btn"><i class="icon-chevron-down"></i><!--Layer Index down--></button>',
+				  '<button class="btn"><i class="icon-zoom-out"></i><!--Zoom Out--></button>',
+				  '<button class="btn"><i class="icon-zoom-in"></i><!--Zoom In--></button>',
+				  '<button class="btn"><i class="icon-fullscreen"></i><!--To Background--></button>',
+				  '<button class="btn"><i class="icon-cut"></i><!--Cut out--></button>',
+				  '<button class="btn"><i class="icon-picture"></i><!--Filter--></button>',
+				'</div>']
+		$(imgLayerElement).append(toolButtonGroupHTML.join("\n"))
+		$("#aside").append(imgLayerElement);
+		_self.delayReInit();
 	};
 	return function(LayerConstructor) {
 		LayerConstructor.prototype.initAttributePlane = initAttributePlane;

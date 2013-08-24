@@ -2,13 +2,14 @@ define("sketchpadManage", ["sketchpad", "materialPanel"], function(require, expo
 	var Sketchpad = require("sketchpad");
 	var materialDrag = require("materialPanel");
 	var sketchpads = [];
+	var $layer = $("#layer");
 	module.exports = {
 		instances: sketchpads,
 		create: function createSketchpad(opction) {
 			opction = opction || {};
 			opction.width = opction.width || 640;
 			opction.height = opction.height || 480;
-			opction.className = (opction.className ||"")+ " sketchpad";
+			opction.className = (opction.className || "") + " sketchpad";
 			var newSketchpad_id = "sketchpad_" + sketchpads.length;
 			var sketchpadContainer = document.createElement("div");
 			sketchpadContainer.id = newSketchpad_id;
@@ -26,8 +27,8 @@ define("sketchpadManage", ["sketchpad", "materialPanel"], function(require, expo
 								y: session.point.end.y - sketchpadContainer.offsetTop - (session.point.start.y - fileItem.offsetTop),
 								width: fileItem.width,
 								height: fileItem.height,
-								RC_x:sketchpadContainer.offsetLeft,
-								RC_y:sketchpadContainer.offsetTop
+								RC_x: sketchpadContainer.offsetLeft,
+								RC_y: sketchpadContainer.offsetTop
 							});
 						}
 					}
@@ -38,7 +39,7 @@ define("sketchpadManage", ["sketchpad", "materialPanel"], function(require, expo
 					}
 				}
 			});
-			(opction.container||$("body")).append(sketchpadContainer)
+			(opction.container || $("body")).append(sketchpadContainer)
 			// document.body.appendChild(sketchpadContainer);
 			var newSketchpad = Sketchpad(newSketchpad_id, opction.width, opction.height);
 			sketchpads.push(newSketchpad);
@@ -46,22 +47,23 @@ define("sketchpadManage", ["sketchpad", "materialPanel"], function(require, expo
 			return newSketchpad;
 		},
 		createMaterialPanel: function createMaterialPanel(opction) {
-			var toolBarElement = document.createElement("ul"),//div
+			var toolBarElement = document.createElement("ul"), //div
 				materialPanel = [];
 			materialPanel.content = {};
 			toolBarElement.className = "mterial-panel nav nav-list"
 			opction.tree.title.forEach(function(title) {
 				materialPanel.push(title);
 				var materialContainer = materialPanel.content[title] = [],
-					titleElement = document.createElement("li"),//div
+					titleElement = document.createElement("li"), //div
 					content = opction.tree.content[title],
-					contentElement = document.createElement("li");//div
+					contentElement = document.createElement("li"); //div
 
-				titleElement.className = "nav-header";//"title";
+				titleElement.className = "nav-header"; //"title";
 				titleElement.innerHTML = title;
 				toolBarElement.appendChild(titleElement);
 				contentElement.className = "content";
 				toolBarElement.appendChild(contentElement);
+				toolBarElement.appendChild($('<li class="divider"></li>')[0])
 
 				content.forEach(function(imgSrc) {
 					var newImgElement = new Image();
@@ -80,9 +82,20 @@ define("sketchpadManage", ["sketchpad", "materialPanel"], function(require, expo
 				});
 			});
 			// console.log(toolBarElement)
-			(opction.container||$("body")).append(toolBarElement)
+			(opction.container || $("body")).append(toolBarElement)
 			// document.body.appendChild(toolBarElement);
 			return materialPanel;
+		},
+		createLayerManager: function createLayerManager(opction) {
+			$layer.html("");//清空
+			var lis = require("layerManage").instances.slice();
+			lis.sort(function(a, b) {
+				return a.layerAttribute.zIndex - b.layerAttribute.zIndex;
+			});
+			lis.forEach(function(layerInstance){
+				var li = $('<li><a href="#'+("attribute_plane_"+layerInstance.id)+'"><i class="icon-chevron-right"></i>图层'+layerInstance.id+'</a></li><li class="divider"></li>')
+				$layer.append(li);
+			});
 		},
 		find: function findSketchpad(id_or_num) {
 			if ((typeof id_or_num === "string") && isNaN(parseInt(id_or_num))) { //String
