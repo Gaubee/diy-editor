@@ -51,7 +51,7 @@ module.exports = function(grunt) {
                 files: ['demo/*.html', 'page/**']
             },
             js: {
-                files: ['js/*.js', 'js/lib/*.js']
+                files: ['js/*.js', 'js/lib/*.js', 'js/Layer/*.js']
             },
             html: {
                 files: ["*.html", "tmpl/*.html", "tmpl/*.lbi"]

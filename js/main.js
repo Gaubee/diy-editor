@@ -13,7 +13,7 @@ define("main", ["sketchpadManage"], function(require, exports, module) {
 		tree: {
 			title: ["小配件"],
 			content: {
-				"小配件": ["../img/earth.png", "../img/flower.jpg"]
+				"小配件": ["../img/earth.png", "../img/flower.jpg", "../img/earth.png", "../img/flower.jpg"]
 			}
 		},
 		container: $mterial
