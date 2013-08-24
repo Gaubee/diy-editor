@@ -8,8 +8,10 @@ define("layerManage", ["Layer"],function(require, exports, module) {
 	module.exports = {
 		instances: container,
 		create: function createLayer(sketchpad,layerConfig){
-			var newLayer = Layer(sketchpad,layerConfig);
 			var i = container.length;
+			layerConfig.zIndex = i;
+			console.log(layerConfig)
+			var newLayer = Layer(sketchpad,layerConfig);
 			container.push(newLayer);
 			container.img[i] = newLayer.img;
 			container.sketchpad[i] = newLayer.sketchpad;
