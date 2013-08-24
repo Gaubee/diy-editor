@@ -37,7 +37,19 @@ define("AttributePlane", [], function(require, exports, module) {
 				content: "rotate"
 			}]
 		}
-	},]
+	},];
+	var _canEditAble = function(el,prefix,callback){
+		if (el.childNodes.length===1) {
+			var inputText = el.textContent.replace(prefix,""),
+				inputElement = document.createElement("input");
+				inputElement.value = inputText;
+			el.innerText = prefix;
+			el.appendChild(inputElement);
+			inputElement.addEventListener("change",function(e){
+				callback(this)
+			});
+		}
+	}
 	var initAttributePlane = function(){
 		var _self = this,
 			elementBingDOM = _self._EBD = [];
@@ -68,6 +80,18 @@ define("AttributePlane", [], function(require, exports, module) {
 					op:item,
 					el:liElement
 				};
+				liElement.addEventListener("click",function(e){
+					var _sText = liElement.textContent;
+					_canEditAble(this,item.title,function(inputElement){
+						var value  = parseInt(inputElement.value);
+						if (isNaN(value)) {
+							liElement.innerHTML = _sText;
+						}else{
+							_self.layerAttribute[item.name] = value;
+							_self.reInit();
+						}
+					})
+				});
 				elementBingDOM.push(item.name)
 			})
 		});
@@ -82,8 +106,9 @@ define("AttributePlane", [], function(require, exports, module) {
 				elementBingDOM= _self._EBD;
 			_LayerReInit.call(_self);
 			elementBingDOM.forEach(function(key){
-				var item = elementBingDOM._[key];
-				item.el.innerText = item.op.title+layerAttribute[key];
+				var item = elementBingDOM._[key],
+					element = item.el;
+				element.innerText = item.op.title+layerAttribute[key];
 			});
 		}
 		LayerConstructor.initQueue.push({
@@ -91,6 +116,6 @@ define("AttributePlane", [], function(require, exports, module) {
 			handle: function(layerInstance) {
 				layerInstance.initAttributePlane()
 			}
-		})
+		});
 	};
 })
