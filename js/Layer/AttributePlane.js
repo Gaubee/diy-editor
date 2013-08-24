@@ -6,11 +6,11 @@ define("AttributePlane", [], function(require, exports, module) {
 			items: [{
 				title: "X:",
 				name: "x",
-				content: "x"
+				unit: "px"
 			}, {
 				title: "Y:",
 				name: "y",
-				content: "y"
+				unit: "px"
 			}]
 		}
 	}, {
@@ -20,80 +20,101 @@ define("AttributePlane", [], function(require, exports, module) {
 			items: [{
 				title: "Width:",
 				name: "width",
-				content: "width"
+				unit: "px"
 			}, {
 				title: "Height:",
 				name: "height",
-				content: "width"
+				unit: "px"
 			}]
 		}
-	},{
+	}, {
 		title: "角度-Angle",
 		content: {
 			name: "angle",
 			items: [{
 				title: "Rotate:",
 				name: "rotate",
-				content: "rotate"
+				unit: "deg"
 			}]
 		}
-	},];
-	var _canEditAble = function(el,prefix,callback){
-		if (el.childNodes.length===1) {
-			var inputText = el.textContent.replace(prefix,""),
-				inputElement = document.createElement("input");
-				inputElement.value = inputText;
-			el.innerText = prefix;
-			el.appendChild(inputElement);
-			inputElement.addEventListener("change",function(e){
+	}, ];
+	var _canEditAble = function(el, config, callback) {
+		if (el.childNodes[0].nodeType === 3) {
+			console.log("el.textContent:", el.innerText, "config.title:", config.title)
+			var inputText = el.textContent.replace(config.title, ""),
+				inputElement;
+
+			el.innerHTML = ['<div class="input-prepend input-append">',
+				'<span class="add-on">' + config.title + '</span>',
+				'<input class="span2"  type="text">',
+				'<span class="add-on">' + config.unit + '</span>',
+				'</div>'
+			].join("\n");
+			inputElement = $(el).find("input")[0];
+			inputElement.value = inputText;
+
+			inputElement.addEventListener("change", function(e) {
 				callback(this)
 			});
+			inputElement.addEventListener("keyup", function(e) {
+				if (e.which === 13) {
+					callback(this)
+				}
+			})
 		}
 	}
-	var initAttributePlane = function(){
+	var initAttributePlane = function() {
 		var _self = this,
 			elementBingDOM = _self._EBD = [];
-			elementBingDOM._= {};
-		var imgLayerElement = document.createElement("div");
-		imgLayerElement.className = "layer-attribute-plane"
-		imgLayer.forEach(function(attributeConsole){
-			var titleElement = document.createElement("div"),
-				titleTextElement=document.createElement("span"),
-				contentElement=document.createElement("div"),
-				contentListElement = document.createElement("ul")
-				;
-			titleElement.className = "title";
-			titleTextElement.innerText =attributeConsole.title;
-			contentElement.className = "content";
-			contentListElement.className = attributeConsole.content.name;
+		elementBingDOM._ = {};
+		var imgLayerElement = document.createElement("fieldset");
+		imgLayerElement.className = "layer-attribute-plane row"
+		imgLayer.forEach(function(attributeConsole) {
+			var attributeContainerElement = document.createElement("div")
+			titleElement = document.createElement("legend"),
+				titleTextElement = document.createElement("h3"),
+				// contentElement = document.createElement("div"),
+				contentListElement = document.createElement("article");
+			attributeContainerElement.className = "span4";
+			titleElement.className = "title span3";
+			titleTextElement.innerText = attributeConsole.title;
+			// contentElement.className = "content";
+			contentListElement.className = attributeConsole.content.name + " control-group span3";
+			contentListElement.style.height = 3 * attributeConsole.content.items.length + "em";
 
-			imgLayerElement.appendChild(titleElement);
+			attributeContainerElement.appendChild(titleElement);
 			titleElement.appendChild(titleTextElement);
-			titleElement.appendChild(contentElement);
-			contentElement.appendChild(contentListElement);
+			// attributeContainerElement.appendChild(contentElement);
+			// contentElement.appendChild(contentListElement);
+			attributeContainerElement.appendChild(contentListElement);
+			imgLayerElement.appendChild(attributeContainerElement)
 
-			attributeConsole.content.items.forEach(function(item){
-				var liElement = document.createElement("li");
+			attributeConsole.content.items.forEach(function(item) {
+				var liElement = document.createElement("label");
+				liElement.className = "control-label";
 				liElement.innerText = item.title;
 				contentListElement.appendChild(liElement);
 				elementBingDOM._[item.name] = {
-					op:item,
-					el:liElement
+					op: item,
+					el: liElement
 				};
-				liElement.addEventListener("click",function(e){
-					var _sText = liElement.textContent;
-					_canEditAble(this,item.title,function(inputElement){
-						var value  = parseInt(inputElement.value);
-						if (isNaN(value)) {
-							liElement.innerHTML = _sText;
-						}else{
-							_self.layerAttribute[item.name] = value;
-							_self.reInit();
-						}
-					})
+				liElement.addEventListener("click", function(e) {
+					if (e.target === liElement) {
+						var _sText = liElement.textContent;
+						_canEditAble(this, item, function(inputElement) {
+							var value = parseInt(inputElement.value);
+							if (isNaN(value)) {
+								liElement.innerHTML = _sText;
+							} else {
+								_self.layerAttribute[item.name] = value;
+								_self.reInit();
+							}
+						})
+					}
+					// e.stopPropagation();event.stopPropagation();
 				});
 				elementBingDOM.push(item.name)
-			})
+			});
 		});
 		$("#aside").append(imgLayerElement)
 	};
@@ -103,12 +124,12 @@ define("AttributePlane", [], function(require, exports, module) {
 		LayerConstructor.prototype.reInit = function() {
 			var _self = this,
 				layerAttribute = _self.layerAttribute,
-				elementBingDOM= _self._EBD;
+				elementBingDOM = _self._EBD;
 			_LayerReInit.call(_self);
-			elementBingDOM.forEach(function(key){
+			elementBingDOM.forEach(function(key) {
 				var item = elementBingDOM._[key],
 					element = item.el;
-				element.innerText = item.op.title+layerAttribute[key];
+				element.innerText = item.op.title + layerAttribute[key];
 			});
 		}
 		LayerConstructor.initQueue.push({

@@ -8,7 +8,7 @@ define("sketchpadManage", ["sketchpad", "materialPanel"], function(require, expo
 			opction = opction || {};
 			opction.width = opction.width || 640;
 			opction.height = opction.height || 480;
-			opction.className = opction.className || "sketchpad";
+			opction.className = (opction.className ||"")+ " sketchpad";
 			var newSketchpad_id = "sketchpad_" + sketchpads.length;
 			var sketchpadContainer = document.createElement("div");
 			sketchpadContainer.id = newSketchpad_id;
@@ -46,18 +46,18 @@ define("sketchpadManage", ["sketchpad", "materialPanel"], function(require, expo
 			return newSketchpad;
 		},
 		createMaterialPanel: function createMaterialPanel(opction) {
-			var toolBarElement = document.createElement("div"),
+			var toolBarElement = document.createElement("ul"),//div
 				materialPanel = [];
 			materialPanel.content = {};
-			toolBarElement.className = "mterial-panel"
+			toolBarElement.className = "mterial-panel nav nav-list"
 			opction.tree.title.forEach(function(title) {
 				materialPanel.push(title);
 				var materialContainer = materialPanel.content[title] = [],
-					titleElement = document.createElement("div"),
+					titleElement = document.createElement("li"),//div
 					content = opction.tree.content[title],
-					contentElement = document.createElement("div");
+					contentElement = document.createElement("li");//div
 
-				titleElement.className = "title";
+				titleElement.className = "nav-header";//"title";
 				titleElement.innerHTML = title;
 				toolBarElement.appendChild(titleElement);
 				contentElement.className = "content";

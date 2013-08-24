@@ -11,14 +11,15 @@ define("main", ["sketchpadManage"], function(require, exports, module) {
 
 	var mterialPanel = sketchpadManage.createMaterialPanel({
 		tree: {
-			title: ["BG"],
+			title: ["小配件"],
 			content: {
-				"BG": ["../img/earth.png", "../img/flower.jpg"]
+				"小配件": ["../img/earth.png", "../img/flower.jpg"]
 			}
 		},
 		container: $mterial
 	});
 	var sketchpad = sketchpadManage.create({
+		className:"span9",
 		container: $plane
 	});
 });
