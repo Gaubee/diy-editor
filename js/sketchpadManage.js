@@ -46,13 +46,19 @@ define("sketchpadManage", ["sketchpad", "materialPanel"], function(require, expo
 									break;
 								case "background":
 									newSketchpad.createLayer({
-										src: fileItem.getAttribute("data-src")
+										src: fileItem.getAttribute("data-src"),
+										RC_x: sketchpadContainer.offsetLeft,
+										RC_y: sketchpadContainer.offsetTop
 									}).toMax().lock();
 									break;
 								case "font":
 									newSketchpad.createLayer({
 										type: "font",
-										src: fileItem.getAttribute("data-src")
+										x: session.point.end.x - sketchpadContainer.offsetLeft - (session.point.start.x - fileItem.offsetLeft),
+										y: session.point.end.y - sketchpadContainer.offsetTop - (session.point.start.y - fileItem.offsetTop),
+										text: fileItem.getAttribute("data-src"),
+										RC_x: sketchpadContainer.offsetLeft,
+										RC_y: sketchpadContainer.offsetTop
 									});
 									break;
 							}

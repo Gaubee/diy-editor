@@ -42,9 +42,11 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 		zIndex: 0,
 		lock: false,
 		//font
-		text:"Hello world",
-		color:"#EEEEEE",
-		"font-size":16
+		text: "Hello world",
+		color: "#EEEEEE",
+		"font-size": 16,
+		"font-family": "sans-serif",
+		"font-weight": 200
 	};
 
 	var __id = 0;
@@ -88,8 +90,14 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 				//a panel -- name as 'img'
 				img; //
 			if (layerAttribute.type === "font") {
-				img =paper.text(layerAttribute.x, layerAttribute.y, layerAttribute.src);
+				console.log(layerAttribute.text)
+				img = paper.text(layerAttribute.x, layerAttribute.y, layerAttribute.text);
+				layerInstance._reInit = _reInitFont;
 				layerInstance.initImgHandle(img);
+				setTimeout(function(){
+					layerInstance.reInit();
+					layerInstance.reInit();
+				},0)
 			}
 		}
 	}]
@@ -119,8 +127,8 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 			// console.log("onend",e);
 			layerAttribute.cacheX = 0;
 			layerAttribute.cacheY = 0;
-			layerAttribute.x = img.attr("x");
-			layerAttribute.y = img.attr("y");
+			// layerAttribute.x = img.attr("x");
+			// layerAttribute.y = img.attr("y");
 			// layerControllerSet.animate({
 			// 	opacity: 1
 			// }, 200);
@@ -172,6 +180,61 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 			height: layerAttribute.height,
 			x: layerAttribute.x,
 			y: layerAttribute.y,
+			// transform: ["r" + layerAttribute.rotate, layerAttribute.x + layerAttribute.width / 2, layerAttribute.y + layerAttribute.height / 2]
+			transform: transform_R
+		});
+		if (!layerAttribute.keepActive) {
+			if (!(layerAttribute.cacheActive === layerAttribute.active) || !(layerAttribute.cacheHandleActive === layerAttribute.handleActive)) {
+				layerAttribute.activeStatus = (layerAttribute.active || layerAttribute.handleActive ? 1 : 0);
+				// layerControllerSet.animate({
+				// 	opacity: layerAttribute.activeStatus
+				// }, 200);
+				layerAttribute.cacheActive = layerAttribute.active;
+				layerAttribute.cacheHandleActive = layerAttribute.handleActive;
+			}
+		}
+		return _self;
+	};
+	$("body").append($("<div class='__s__'><span id='__s__'></span></div>"));
+	var __s = $("#__s__");
+
+	function _reInitFont() {
+		var _self = this,
+			img = _self.img,
+			layerAttribute = _self.layerAttribute;
+		_self.checkAttribute();
+		if (layerAttribute.lock) {
+			return;
+		}
+
+		// transform_R = "r" + layerAttribute.rotate, (layerAttribute.x - layerAttribute.RC_x) + layerAttribute.width / 2, (layerAttribute.y - layerAttribute.RC_y) + layerAttribute.height / 2
+		var transform_R = ["r" + layerAttribute.rotate, layerAttribute.x , layerAttribute.y,
+							"T"+layerAttribute.width/2,layerAttribute.height/2]
+		__s.css({
+			"color": layerAttribute.color,
+			"fontSize": layerAttribute["font-size"],
+			"fontFamily": layerAttribute["font-family"],
+			"fontWeight": layerAttribute["font-weight"]
+		});
+		__s.html(layerAttribute.text)
+		var proportion = __s.width()/__s.height();
+		// console.log(proportion)
+		if (layerAttribute.width/proportion>layerAttribute.height) {
+			layerAttribute["font-size"] = layerAttribute.height;
+		}else{
+			layerAttribute["font-size"] = layerAttribute.width/proportion;
+		}
+		// layerAttribute.width = __s.width() + 20;
+		// layerAttribute.height = __s.height() + 10;
+		img.attr({
+			width: layerAttribute.width,
+			height: layerAttribute.height,
+			x: layerAttribute.x,// + layerAttribute.width / 2,
+			y: layerAttribute.y,// + layerAttribute.height/2,
+			"font-family": layerAttribute["font-family"],
+			"font-weight": layerAttribute["font-weight"],
+			"font-size": layerAttribute["font-size"],
+			text:layerAttribute.text,
 			// transform: ["r" + layerAttribute.rotate, layerAttribute.x + layerAttribute.width / 2, layerAttribute.y + layerAttribute.height / 2]
 			transform: transform_R
 		});
