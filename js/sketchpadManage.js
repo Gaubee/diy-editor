@@ -2,8 +2,16 @@ define("sketchpadManage", ["sketchpad", "materialPanel"], function(require, expo
 	var Sketchpad = require("sketchpad");
 	var materialDrag = require("materialPanel");
 	var sketchpads = [];
-	var $layer = $(".layer");
-	$layer.viewInstance= ViewParser.modules["layer"]().append($layer[0]);
+	var $layer = require("layerManage").$layer || $(".layer"),
+		layerOffSet = $layer.offset();
+	$layer.viewInstance = ViewParser.modules["layer"]().append($layer[0]);
+	$layer.on("click", "li", function() {
+		var layerInstances = require("layerManage").instances;
+		layerInstances.forEach(function(layerInstance) {
+			layerInstance.blur();
+		});
+		layerInstances[this.getAttribute("data-index")].focus();
+	});
 	module.exports = {
 		instances: sketchpads,
 		create: function createSketchpad(opction) {
@@ -22,15 +30,32 @@ define("sketchpadManage", ["sketchpad", "materialPanel"], function(require, expo
 
 						for (var i = 0, fileItem; fileItem = session.files[i]; i += 1) {
 							console.log(session.point.start.x, session.point.end.x, fileItem.offsetLeft, sketchpadContainer.offsetLeft)
-							newSketchpad.createLayer({
-								src: fileItem.src,
-								x: session.point.end.x - sketchpadContainer.offsetLeft - (session.point.start.x - fileItem.offsetLeft),
-								y: session.point.end.y - sketchpadContainer.offsetTop - (session.point.start.y - fileItem.offsetTop),
-								width: fileItem.width,
-								height: fileItem.height,
-								RC_x: sketchpadContainer.offsetLeft,
-								RC_y: sketchpadContainer.offsetTop
-							});
+							console.log(fileItem.getAttribute("data-type"))
+							switch (fileItem.getAttribute("data-type")) {
+								case "layer":
+									newSketchpad.createLayer({
+										// src: fileItem.src,
+										src: fileItem.getAttribute("data-src"),
+										x: session.point.end.x - sketchpadContainer.offsetLeft - (session.point.start.x - fileItem.offsetLeft),
+										y: session.point.end.y - sketchpadContainer.offsetTop - (session.point.start.y - fileItem.offsetTop),
+										width: parseInt(fileItem.getAttribute("data-width")) || fileItem.width,
+										height: parseInt(fileItem.getAttribute("data-height")) || fileItem.height,
+										RC_x: sketchpadContainer.offsetLeft,
+										RC_y: sketchpadContainer.offsetTop
+									});
+									break;
+								case "background":
+									newSketchpad.createLayer({
+										src: fileItem.getAttribute("data-src")
+									}).toMax().lock();
+									break;
+								case "font":
+									newSketchpad.createLayer({
+										type: "font",
+										src: fileItem.getAttribute("data-src")
+									});
+									break;
+							}
 						}
 					}
 				},
@@ -65,14 +90,43 @@ define("sketchpadManage", ["sketchpad", "materialPanel"], function(require, expo
 			var lis = require("layerManage").instances.slice(),
 				layersData = [];
 			lis.sort(function(a, b) {
-				return a.layerAttribute.zIndex - b.layerAttribute.zIndex;
+				return b.layerAttribute.zIndex - a.layerAttribute.zIndex;
 			});
 			lis.forEach(function(layerInstance) {
-				layersData.push({
-					id:layerInstance.id
-				})
+				// var active = layerInstance.layerAttribute.active;
+				layersData.push(layerInstance.layerAttribute)
+				// active?layerInstance.focus():ayerInstance.blur();
 			});
-			$layer.viewInstance.set("layers",layersData);
+			$layer.viewInstance.set("layers", layersData);
+			setTimeout(function() {
+				var $layerNode = $("#layer"),
+					$activeNode = $layerNode.find("li[class*='active']"),
+					$aside = $("#aside"),
+					id = $activeNode.find("a").attr("href"),
+					$activeContentNode = $(id);
+
+				$activeNode.length && $layerNode.scrollTop($activeNode.offset().top - $layerNode.offset().top + $layerNode.scrollTop());
+				$aside.scrollTop($activeContentNode.offset().top - $aside.offset().top + $aside.scrollTop())
+			}, 0)
+		},
+		refreshLayerManager: function refreshLayerManager(opction) {
+			var lis = require("layerManage").instances.slice(),
+				layersData = [];
+			lis.sort(function(a, b) {
+				return b.layerAttribute.zIndex - a.layerAttribute.zIndex;
+			});
+			lis.forEach(function(layerInstance) {
+				// var active = layerInstance.layerAttribute.active;
+				layersData.push(layerInstance.layerAttribute)
+				// active?layerInstance.focus():ayerInstance.blur();
+			});
+			$layer.viewInstance.set("layers", layersData);
+			setTimeout(function() {
+				var $layerNode = $("#layer"),
+					$activeNode = $layerNode.find("li[class*='active']");
+
+				$activeNode.length && $layerNode.scrollTop($activeNode.offset().top - $layerNode.offset().top + $layerNode.scrollTop());
+			}, 0)
 		},
 		find: function findSketchpad(id_or_num) {
 			if ((typeof id_or_num === "string") && isNaN(parseInt(id_or_num))) { //String

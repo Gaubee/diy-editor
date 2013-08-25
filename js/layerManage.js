@@ -5,6 +5,7 @@ define("layerManage", ["Layer"],function(require, exports, module) {
 	container.sketchpad= [];
 	container.layerAttribute= [];
 	container.layerControllerSet= [];
+	// var $layer = $(".layer");
 	module.exports = {
 		instances: container,
 		create: function createLayer(sketchpad,layerConfig){
@@ -17,10 +18,29 @@ define("layerManage", ["Layer"],function(require, exports, module) {
 			container.sketchpad[i] = newLayer.sketchpad;
 			container.layerAttribute[i] = newLayer.layerAttribute;
 			container.layerControllerSet[i] = newLayer.layerControllerSet;
-
+			var imgClick = function(){
+				var _self = newLayer;
+				container.forEach(function(layerInstances){
+					layerInstances.blur();
+				});
+				_self.focus();
+				require("sketchpadManage").createLayerManager();
+			};
+			newLayer.img.click(imgClick);
+			imgClick();
 			require("sketchpadManage").createLayerManager()
 			$("#aside").scrollspy('refresh')
+
 			return newLayer;
 		}
+		// ,
+		// $layer:$layer
 	}
+	// Layer.prototype.jointFocus = function(){
+	// 	var _self = this;
+	// 	container.forEach(function(layerInstances){
+	// 		instances.blur();
+	// 	});
+	// 	_self.focus();
+	// }
 });

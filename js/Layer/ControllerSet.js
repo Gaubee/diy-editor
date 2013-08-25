@@ -268,8 +268,10 @@ define("ControllerSet", [], function(require, exports, module) {
 				layerHandler[i].call(_self, item);
 			}
 		}
+		(932906715*Math.random()/1000000).toString(36).substring(2,8)
 		layerControllerSet.attr({
-			"stroke": "#276419",
+			// "stroke": "#276419",
+			"stroke": "#"+(932906715*Math.random()/932906715).toString(16).substring(3,9),
 			"stroke-opacity": 0.8,
 			"stroke-width": 3
 		});
@@ -297,14 +299,35 @@ define("ControllerSet", [], function(require, exports, module) {
 			}
 		});
 	}
+
 	return function(LayerConstructor) {
 		LayerConstructor.prototype.initHanlder = initHanlder;
+		var _focus = LayerConstructor.prototype.focus;
+		LayerConstructor.prototype.focus = function(){
+			var _self = this,
+				layerControllerSet = _self.layerControllerSet;
+				_focus.call(this);
+			layerControllerSet.animate({
+				opacity: 1
+			}, 200);
+		};
+		var _blur =  LayerConstructor.prototype.blur;
+		LayerConstructor.prototype.blur = function(){
+			var _self = this,
+				layerControllerSet = _self.layerControllerSet;
+				_blur.call(this);
+			layerControllerSet.animate({
+				opacity: 0
+			}, 200);
+		};
 		var _LayerReInit = LayerConstructor.prototype.reInit;
 		LayerConstructor.prototype.reInit = function() {
 			var _self = this,
 				layerAttribute = _self.layerAttribute,
 				layerControllerSet = _self.layerControllerSet;
 			_LayerReInit.call(_self);
+			
+			if (layerAttribute.lock) {return;}
 
 			var j = 0;
 			for (var i in layerController) {

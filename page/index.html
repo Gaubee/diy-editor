@@ -75,12 +75,11 @@
 			float: left;
 		}
 		.mterial-panel .title{
-			background-color: #333;
-			color: #E8E8E8;
-			font-size: 24px;
+			font-size: 15px;
+			font-family: '微软雅黑';
 		}
 		.mterial-panel .content{
-			max-height: 369px;
+			max-height: 295px;
 			overflow-y: scroll;
 		}
 		.mterial-panel .content img{
@@ -109,6 +108,7 @@
 			overflow-y:scroll;
 			margin: 10px;
 			position: relative;
+			/*padding-bottom: 16px;*/
 		}
 		#aside h2{
 			/*padding-left: 2em;*/
@@ -121,6 +121,7 @@
 		}
 		.layer-attribute-plane .btn-group{
 			margin-top: 10px;
+			margin-bottom: 10px;
 			text-align: center;
 		}
 	</style>
@@ -136,10 +137,10 @@
 			<script type="text/template" name="mterial">
 				<ul class="mterial-panel nav nav-list">
 					{#each( {(lists)} )}
-					<li class="nav-header">{(title)}</li>
+					<li class="nav-header title">{(title)}</li>
 					<li class="content" style="display: list-item;">
 						{#each( {(mterials)} )}
-						<img src="{(imgSrc)}" draggable="true">
+						<img src="{(imgSrc)}" data-type="{(layerAttr.type)}" data-width="{(layerAttr.width)}" data-height="{(layerAttr.height)}" data-src="{(layerAttr.src)}" draggable="true">
 						{/each()}
 					</li>
 					<li class="divider"></li>
@@ -154,10 +155,10 @@
 			<script type="text/template" name="layer">
 				<ul id="layer" class="nav nav-list">
 					{#each( {(layers)} )}
-					<li>
+					<li data-index="{(id)}" class="{#if({(active)})}active{/if()}">
 						<a href="#attribute_plane_{(id)}">
 							<i class="icon-chevron-right"></i>
-							图层{(id)}
+							{(name)}
 						</a>
 					</li>
 					<li class="divider"></li>
@@ -175,10 +176,10 @@
 							</h3>
 						</legend>
 						<article class="coordinate control-group span3" style="height: 6em;">
-							<label attr-name="X" class="control-label">
+							<label attr-name="x" class="control-label">
 								X:{(x)}
 							</label>
-							<label attr-name="Y" class="control-label">
+							<label attr-name="y" class="control-label">
 								Y:{(y)}
 							</label>
 						</article>
@@ -190,10 +191,10 @@
 							</h3>
 						</legend>
 						<article class="size control-group span3" style="height: 6em;">
-							<label attr-name="WIDTH" class="control-label">
+							<label attr-name="width" class="control-label">
 								Width:{(width)}
 							</label>
-							<label attr-name="HEIGHT" class="control-label">
+							<label attr-name="height" class="control-label">
 								Height:{(height)}
 							</label>
 						</article>
@@ -205,48 +206,57 @@
 							</h3>
 						</legend>
 						<article class="angle control-group span3" style="height: 3em;">
-							<label attr-name="ROTATE" class="control-label">
+							<label attr-name="rotate" class="control-label">
 								Rotate:{(rotate)}
 							</label>
 						</article>
 					</div>
 					<div class="btn-group span8">
-						<button attr-event="left" data-toggle="tooltip" title="Coordinate left" class="btn">
+						<button disabled="{(lock)}" attr-event="left" data-toggle="tooltip" title="Coordinate left" class="btn">
 							<i class="icon-arrow-left"> </i> <!--Coordinate left--> 
 						</button>
-						<button attr-event="up" data-toggle="tooltip" title="Coordinate up" class="btn">
+						<button disabled="{(lock)}" attr-event="up" data-toggle="tooltip" title="Coordinate up" class="btn">
 							<i class="icon-arrow-up"> </i> <!--Coordinate up--> 
 						</button>
-						<button attr-event="down" data-toggle="tooltip" title="Coordinate down" class="btn">
+						<button disabled="{(lock)}" attr-event="down" data-toggle="tooltip" title="Coordinate down" class="btn">
 							<i class="icon-arrow-down"> </i> <!--Coordinate down--> 
 						</button>
-						<button attr-event="right" data-toggle="tooltip" title="Coordinate right" class="btn">
+						<button disabled="{(lock)}" attr-event="right" data-toggle="tooltip" title="Coordinate right" class="btn">
 							<i class="icon-arrow-right"> </i> <!--Coordinate right--> 
 						</button>
-						<button attr-event="rotate" data-toggle="tooltip" title="Rotate" class="btn">
+						<button disabled="{(lock)}" attr-event="rotate" data-toggle="tooltip" title="Rotate" class="btn">
 							<i class="icon-repeat"> </i> <!--Rotate--> 
 						</button>
-						<button attr-event="float" data-toggle="tooltip" title="Layer Index up" class="btn">
+						<button disabled="{(lock)}" attr-event="float" data-toggle="tooltip" title="Layer Index up" class="btn">
 							<i class="icon-chevron-up"> </i> <!--Layer Index up--> 
 						</button>
-						<button attr-event="sink" data-toggle="tooltip" title="Layer Index down" class="btn">
+						<button disabled="{(lock)}" attr-event="sink" data-toggle="tooltip" title="Layer Index down" class="btn">
 							<i class="icon-chevron-down"> </i> <!--Layer Index down--> 
 						</button>
-						<button attr-event="out" data-toggle="tooltip" title="Zoom Out" class="btn">
+						<button disabled="{(lock)}" attr-event="out" data-toggle="tooltip" title="Zoom Out" class="btn">
 							<i class="icon-zoom-out"> </i> <!--Zoom Out--> 
 						</button>
-						<button attr-event="in" data-toggle="tooltip" title="Zoom In" class="btn">
+						<button disabled="{(lock)}" attr-event="in" data-toggle="tooltip" title="Zoom In" class="btn">
 							<i class="icon-zoom-in"> </i> <!--Zoom In--> 
 						</button>
-						<button attr-event="fullscreen" data-toggle="tooltip" title="To Background" class="btn">
+						<button disabled="{(lock)}" attr-event="fullscreen" data-toggle="tooltip" title="To Background" class="btn">
 							<i class="icon-fullscreen"> </i> <!--To Background--> 
 						</button>
-						<button attr-event="cut" data-toggle="tooltip" title="Cut out" class="btn">
+						<button disabled="{(lock)}" attr-event="cut" data-toggle="tooltip" title="Cut out" class="btn">
 							<i class="icon-cut"> </i> <!--Cut out--> 
 						</button>
-						<button attr-event="filter" data-toggle="tooltip" title="Filter" class="btn">
+						<button disabled="{(lock)}" attr-event="filter" data-toggle="tooltip" title="Filter" class="btn">
 							<i class="icon-picture"> </i> <!--Filter--> 
 						</button>
+						{#if({(lock)})}
+						<button attr-event="unlock" data-toggle="tooltip" title="Unlock Layer" class="btn">
+							<i class="icon-unlock"> </i> <!--Unlock Layer--> 
+						</button>
+						{#else()}
+						<button attr-event="lock" data-toggle="tooltip" title="Lock Layer" class="btn">
+							<i class="icon-lock"> </i> <!--Lock Layer--> 
+						</button>
+						{/if()}
 					</div>
 				</fieldset>
 			</script>
@@ -276,5 +286,5 @@
 		})
 		$(this).next().toggle(120);
 	});
-	$('#layer').scrollspy()
+	// $('#layer').scrollspy()
 </script>

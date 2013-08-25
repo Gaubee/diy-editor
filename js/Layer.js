@@ -20,6 +20,7 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 		}
 	};
 	layerDefaultAttribute.prototype = {
+		type: "img",
 		width: 144,
 		height: 96,
 		cacheW: 0,
@@ -31,17 +32,23 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 		cacheX: 0,
 		cacheY: 0,
 		rotate: 0,
-		active: false,
+		active: true,
 		cacheActive: false,
 		handleActive: false,
 		cacheHandleActive: false,
 		activeStatus: 0,
 		keepActive: false,
 		src: "",
-		zIndex: 0
+		zIndex: 0,
+		lock: false,
+		//font
+		text:"Hello world",
+		color:"#EEEEEE",
+		"font-size":16
 	};
 
 	var __id = 0;
+
 	function Layer(paper, layerConfig) {
 		var _self = this;
 		if (!(_self instanceof Layer)) {
@@ -54,6 +61,7 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 		//format layerConfig to layerAttribute
 		var layerAttribute = _self.layerAttribute = layerDefaultAttribute(layerConfig);
 		layerAttribute.id = _self.id;
+		layerAttribute.name = layerAttribute.name || ("图层" + _self.id);
 		Layer.initQueue.forEach(function(initHandler) {
 			console.log("init " + initHandler.name);
 			initHandler.handle(_self);
@@ -66,11 +74,26 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 			var paper = layerInstance.skechpad,
 				layerAttribute = layerInstance.layerAttribute,
 				//a panel -- name as 'img'
+				img; //
+			if (layerAttribute.type === "img") {
 				img = paper.image((layerAttribute.src || "../demo/img/flower.jpg"), layerAttribute.x, layerAttribute.y, layerAttribute.width, layerAttribute.height);
-			layerInstance.initImg(img);
+				layerInstance.initImgHandle(img);
+			}
+		}
+	}, {
+		name: "initFont",
+		handle: function(layerInstance) {
+			var paper = layerInstance.skechpad,
+				layerAttribute = layerInstance.layerAttribute,
+				//a panel -- name as 'img'
+				img; //
+			if (layerAttribute.type === "font") {
+				img =paper.text(layerAttribute.x, layerAttribute.y, layerAttribute.src);
+				layerInstance.initImgHandle(img);
+			}
 		}
 	}]
-	Layer.prototype.initImg = function initImg(img) {
+	Layer.prototype.initImgHandle = function initImgHandle(img) {
 		var _self = this,
 			layerAttribute = _self.layerAttribute,
 			layerControllerSet = _self.layerControllerSet;
@@ -103,16 +126,21 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 			// }, 200);
 			_self.reInit();
 		}).mouseover(function mouseover(e) {
-			layerAttribute.active = true;
+			// layerAttribute.active = true;
 			_self.delayReInit();
 		}).mouseout(function mouseout(e) {
-			layerAttribute.active = false;
+			// layerAttribute.active = false;
 			_self.delayReInit();
 		});
+		// img.click(function(e){
+		// 	_self.focus();
+		// });
+		return _self;
 	};
 
 	Layer.prototype.checkAttribute = function checkAttribute() {
-		var layerAttribute = this.layerAttribute;
+		var _self = this,
+			layerAttribute = _self.layerAttribute;
 		if (layerAttribute.width < 0) {
 			layerAttribute.width = 0
 		}
@@ -125,12 +153,16 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 		// if (layerAttribute.y < 0) {
 		// 	layerAttribute.y = 0
 		// }
+		return _self;
 	};
 	Layer.prototype.reInit = function reInit() {
 		var _self = this,
 			img = _self.img,
 			layerAttribute = _self.layerAttribute;
 		_self.checkAttribute();
+		if (layerAttribute.lock) {
+			return;
+		}
 
 		// transform_R = "r" + layerAttribute.rotate, (layerAttribute.x - layerAttribute.RC_x) + layerAttribute.width / 2, (layerAttribute.y - layerAttribute.RC_y) + layerAttribute.height / 2
 		var transform_R = ["r" + layerAttribute.rotate, layerAttribute.x + layerAttribute.width / 2, layerAttribute.y + layerAttribute.height / 2]
@@ -153,6 +185,7 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 				layerAttribute.cacheHandleActive = layerAttribute.handleActive;
 			}
 		}
+		return _self;
 	}
 	Layer.prototype.delayReInit = function delayReInit(delayTime) {
 		var _self = this;
@@ -160,9 +193,10 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 		_self.delayReInit['activeTime'] = setTimeout(function() {
 			_self.reInit.call(_self)
 		}, delayTime || 60);
+		return _self;
 	};
-	Layer.prototype.layIndex = function toIndex(index){
-		index>0?index+=0.1:index-=0.1;
+	Layer.prototype.layIndex = function toIndex(index) {
+		index > 0 ? index += 0.1 : index -= 0.1;
 		var _self = this;
 		_self.layerAttribute.zIndex += index;
 		var lis = require("layerManage").instances.slice();
@@ -174,16 +208,53 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 			layerInstance.img.toFront();
 			layerInstance.layerControllerSet.toFront();
 		});
-		require("sketchpadManage").createLayerManager();
+		require("sketchpadManage").refreshLayerManager();
+		return _self;
 	};
 	Layer.prototype.up = function toFront() {
 		var _self = this;
 		_self.layIndex(1);
-	
+		return _self;
 	};
 	Layer.prototype.down = function toBack() {
 		var _self = this;
 		_self.layIndex(-1);
+		return _self;
+	};
+	Layer.prototype.focus = function activeLayer() {
+		var _self = this;
+		_self.layerAttribute.active = true;
+		return _self;
+	};
+	Layer.prototype.blur = function leaveLayer() {
+		var _self = this;
+		_self.layerAttribute.active = false;
+		return _self;
+	};
+	Layer.prototype.lock = function lockLayer() {
+		var _self = this;
+		if (!_self.layerAttribute.lock) {
+			_self.layerAttribute.lock = true;
+		}
+		return _self;
+	};
+	Layer.prototype.unlock = function unlockLayer() {
+		var _self = this;
+		if (_self.layerAttribute.lock) {
+			_self.layerAttribute.lock = false;
+		}
+		return _self;
+	};
+	Layer.prototype.toMax = function toBackground() {
+		var _self = this;
+		_self.layerAttribute.width = _self.skechpad.width;
+		_self.layerAttribute.height = _self.skechpad.height;
+		_self.layerAttribute.x = 0;
+		_self.layerAttribute.y = 0;
+		_self.layerAttribute.rotate = 0;
+		_self.reInit()
+		_self.layIndex(-1000);
+		return _self;
 	};
 	require("ControllerSet")(Layer);
 	require("AttributePlane")(Layer);
