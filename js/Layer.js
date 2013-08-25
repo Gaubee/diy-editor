@@ -53,7 +53,7 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 		_self.id = __id++;
 		//format layerConfig to layerAttribute
 		var layerAttribute = _self.layerAttribute = layerDefaultAttribute(layerConfig);
-
+		layerAttribute.id = _self.id;
 		Layer.initQueue.forEach(function(initHandler) {
 			console.log("init " + initHandler.name);
 			initHandler.handle(_self);

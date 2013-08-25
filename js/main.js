@@ -10,18 +10,32 @@ define("main", ["sketchpadManage"], function(require, exports, module) {
 
 
 	var mterialPanel = sketchpadManage.createMaterialPanel({
-		tree: {
-			title: ["小配件","背景"],
-			content: {
-				"小配件": ["../img/earth.png", "../img/flower.jpg", "../img/earth.png", "../img/flower.jpg"],
-				"背景":["../img/flower.jpg", "../img/earth.png"]
-			}
+		data: {
+			lists: [{
+				title: "小配件",
+				mterials: [{
+					imgSrc: "../img/earth.png"
+				}, {
+					imgSrc: "../img/flower.jpg"
+				}, {
+					imgSrc: "../img/earth.png"
+				}, {
+					imgSrc: "../img/flower.jpg"
+				}]
+			}, {
+				title: "背景",
+				mterials: [{
+					imgSrc: "../img/flower.jpg"
+				}, {
+					imgSrc: "../img/earth.png"
+				}]
+			}]
 		},
 		container: $mterial
 	});
 	var sketchpad = sketchpadManage.create({
-		className:"span9",
-		width:700,
+		className: "span9",
+		width: 700,
 		container: $plane
 	});
 });

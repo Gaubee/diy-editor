@@ -2,7 +2,8 @@ define("sketchpadManage", ["sketchpad", "materialPanel"], function(require, expo
 	var Sketchpad = require("sketchpad");
 	var materialDrag = require("materialPanel");
 	var sketchpads = [];
-	var $layer = $("#layer");
+	var $layer = $(".layer");
+	$layer.viewInstance= ViewParser.modules["layer"]().append($layer[0]);
 	module.exports = {
 		instances: sketchpads,
 		create: function createSketchpad(opction) {
@@ -47,55 +48,31 @@ define("sketchpadManage", ["sketchpad", "materialPanel"], function(require, expo
 			return newSketchpad;
 		},
 		createMaterialPanel: function createMaterialPanel(opction) {
-			var toolBarElement = document.createElement("ul"), //div
-				materialPanel = [];
-			materialPanel.content = {};
-			toolBarElement.className = "mterial-panel nav nav-list"
-			opction.tree.title.forEach(function(title) {
-				materialPanel.push(title);
-				var materialContainer = materialPanel.content[title] = [],
-					titleElement = document.createElement("li"), //div
-					content = opction.tree.content[title],
-					contentElement = document.createElement("li"); //div
-
-				titleElement.className = "nav-header"; //"title";
-				titleElement.innerHTML = title;
-				toolBarElement.appendChild(titleElement);
-				contentElement.className = "content";
-				toolBarElement.appendChild(contentElement);
-				toolBarElement.appendChild($('<li class="divider"></li>')[0])
-
-				content.forEach(function(imgSrc) {
-					var newImgElement = new Image();
-					newImgElement.src = imgSrc;
-					newImgElement.draggable = true;
-					materialDrag.registeredStartingpoints(newImgElement, {
-						end: function(session, e) {
-							console.log(session.toSvg)
-							if (session.toSvg) {
-								session.endpointEvent()
-							}
+			var M = ViewParser.modules["mterial"](opction.data);
+			M.append((opction.container || $("body"))[0])
+			Array.prototype.forEach.call($("[draggable='true']"), function(imgElement) {
+				materialDrag.registeredStartingpoints(imgElement, {
+					end: function(session, e) {
+						console.log(session.toSvg)
+						if (session.toSvg) {
+							session.endpointEvent()
 						}
-					})
-					contentElement.appendChild(newImgElement);
-					materialContainer.push(newImgElement);
-				});
+					}
+				})
 			});
-			// console.log(toolBarElement)
-			(opction.container || $("body")).append(toolBarElement)
-			// document.body.appendChild(toolBarElement);
-			return materialPanel;
 		},
 		createLayerManager: function createLayerManager(opction) {
-			$layer.html("");//清空
-			var lis = require("layerManage").instances.slice();
+			var lis = require("layerManage").instances.slice(),
+				layersData = [];
 			lis.sort(function(a, b) {
 				return a.layerAttribute.zIndex - b.layerAttribute.zIndex;
 			});
-			lis.forEach(function(layerInstance){
-				var li = $('<li><a href="#'+("attribute_plane_"+layerInstance.id)+'"><i class="icon-chevron-right"></i>图层'+layerInstance.id+'</a></li><li class="divider"></li>')
-				$layer.append(li);
+			lis.forEach(function(layerInstance) {
+				layersData.push({
+					id:layerInstance.id
+				})
 			});
+			$layer.viewInstance.set("layers",layersData);
 		},
 		find: function findSketchpad(id_or_num) {
 			if ((typeof id_or_num === "string") && isNaN(parseInt(id_or_num))) { //String
