@@ -119,12 +119,12 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 		if (layerAttribute.height < 0) {
 			layerAttribute.height = 0
 		}
-		if (layerAttribute.x < 0) {
-			layerAttribute.x = 0
-		}
-		if (layerAttribute.y < 0) {
-			layerAttribute.y = 0
-		}
+		// if (layerAttribute.x < 0) {
+		// 	layerAttribute.x = 0
+		// }
+		// if (layerAttribute.y < 0) {
+		// 	layerAttribute.y = 0
+		// }
 	};
 	Layer.prototype.reInit = function reInit() {
 		var _self = this,
@@ -161,41 +161,29 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 			_self.reInit.call(_self)
 		}, delayTime || 60);
 	};
-	Layer.prototype.up = function toFront(newIndex) {
+	Layer.prototype.layIndex = function toIndex(index){
+		index>0?index+=0.1:index-=0.1;
 		var _self = this;
-		if (newIndex === undefined) {
-			newIndex = _self.layerAttribute.zIndex;
-		}
-		var _selfIndex = _self.layerAttribute.zIndex = newIndex + 1.5,
-			lis = require("layerManage").instances.slice();
+		_self.layerAttribute.zIndex += index;
+		var lis = require("layerManage").instances.slice();
 		lis.sort(function(a, b) {
 			return a.layerAttribute.zIndex - b.layerAttribute.zIndex;
 		});
 		lis.forEach(function(layerInstance, index) {
-			console.log(layerInstance)
 			layerInstance.layerAttribute.zIndex = index
-			console.log(layerInstance.layerAttribute.zIndex);
 			layerInstance.img.toFront();
 			layerInstance.layerControllerSet.toFront();
 		});
+		require("sketchpadManage").createLayerManager();
 	};
-	Layer.prototype.down = function toBack(newIndex) {
+	Layer.prototype.up = function toFront() {
 		var _self = this;
-		if (newIndex === undefined) {
-			newIndex = _self.layerAttribute.zIndex;
-		}
-		var _selfIndex = _self.layerAttribute.zIndex = newIndex - 1.5,
-			lis = require("layerManage").instances.slice();
-		lis.sort(function(a, b) {
-			return a.layerAttribute.zIndex - b.layerAttribute.zIndex;
-		});
-		lis.forEach(function(layerInstance, index) {
-			console.log(layerInstance)
-			layerInstance.layerAttribute.zIndex = index
-			console.log(layerInstance.layerAttribute.zIndex);
-			layerInstance.img.toFront();
-			layerInstance.layerControllerSet.toFront();
-		});
+		_self.layIndex(1);
+	
+	};
+	Layer.prototype.down = function toBack() {
+		var _self = this;
+		_self.layIndex(-1);
 	};
 	require("ControllerSet")(Layer);
 	require("AttributePlane")(Layer);

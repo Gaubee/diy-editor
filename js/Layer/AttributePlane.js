@@ -14,9 +14,9 @@ define("AttributePlane", [], function(require, exports, module) {
 			].join("\n"));
 			_editArea.on("change", "input", function(e) {
 				callback(this)
-			}).on("blur", "input",function(e){
+			}).on("blur", "input", function(e) {
 				callback(this)
-			}).on("keyup","input",function(e){
+			}).on("keyup", "input", function(e) {
 				if (e.which === 13) {
 					callback(this)
 				}
@@ -26,7 +26,7 @@ define("AttributePlane", [], function(require, exports, module) {
 		}
 		_editArea.find("input").val(content);
 		console.log(el._textAreas)
-		el._textAreas.forEach(function(textElment){
+		el._textAreas.forEach(function(textElment) {
 			el.removeChild(textElment)
 		});
 		el.appendChild(_editArea[0]);
@@ -34,12 +34,13 @@ define("AttributePlane", [], function(require, exports, module) {
 	var initAttributePlane = function() {
 		var _self = this,
 			attrViewInstance = _self.attrVI = ViewParser.modules["aside"](_self.layerAttribute).append($aside[0]),
-			$nodeTree = $("#attribute_plane_" + _self.id);
+			$nodeTree = $("#attribute_plane_" + _self.id),
+			$buttons = $nodeTree.find("button");
 		$nodeTree.on("click", ".control-label", function() {
 			var labelElement = this,
 				attrName = labelElement.getAttribute("attr-name");
 			if (!labelElement._status) {
-				_canEditAble(labelElement,function(inputElement){
+				_canEditAble(labelElement, function(inputElement) {
 
 					var value = parseInt(inputElement.value);
 					if (isNaN(value)) {
@@ -51,7 +52,7 @@ define("AttributePlane", [], function(require, exports, module) {
 
 					var el = labelElement;
 					el.removeChild(el._$editArea[0]);
-					el._textAreas.forEach(function(textElment){
+					el._textAreas.forEach(function(textElment) {
 						el.appendChild(textElment)
 					});
 
@@ -60,6 +61,79 @@ define("AttributePlane", [], function(require, exports, module) {
 				labelElement._status = true;
 			}
 		});
+		var buttonEvents = {
+			"left": function(e) {
+				_self.layerAttribute.x-=5;
+				_self.reInit()
+			},
+			"up": function(e) {
+				_self.layerAttribute.y-=5;
+				_self.reInit()
+			},
+			"down": function(e) {
+				_self.layerAttribute.y+=5;
+				_self.reInit()
+			},
+			"right": function(e) {
+				_self.layerAttribute.x+=5;
+				_self.reInit()
+			},
+			"rotate": function(e) {
+				_self.layerAttribute.rotate+=15;
+				_self.reInit()
+			},
+			"float": function(e) {
+				_self.up();
+			},
+			"sink": function(e) {
+				_self.down();
+			},
+			"out": function(e) {
+				var sW = _self.layerAttribute.width,
+					nW = sW*=0.1,
+					sH =_self.layerAttribute.height,
+					nH = sH*=0.1;
+				_self.layerAttribute.width -= nW
+				_self.layerAttribute.height -= nH
+				_self.layerAttribute.x+=(nW)/2;
+				_self.layerAttribute.y+=(nH)/2;
+				_self.reInit()
+			},
+			"in": function(e) {
+				var sW = _self.layerAttribute.width,
+					nW = sW*=0.1,
+					sH =_self.layerAttribute.height,
+					nH = sH*=0.1;
+				_self.layerAttribute.width += nW
+				_self.layerAttribute.height += nH
+				_self.layerAttribute.x-=(nW)/2;
+				_self.layerAttribute.y-=(nH)/2;
+				_self.reInit()
+			},
+			"fullscreen": function(e) {
+				_self.layerAttribute.width = _self.skechpad.width;
+				_self.layerAttribute.height = _self.skechpad.height;
+				_self.layerAttribute.x = 0;
+				_self.layerAttribute.y = 0;
+				_self.layerAttribute.rotate = 0;
+				_self.reInit()
+				_self.layIndex(-1000);
+			},
+			"cut": function(e) {
+
+			},
+			"filter": function(e) {
+
+			}
+		}
+		$buttons.tooltip();
+		Array.prototype.forEach.call($buttons, function(buttonElement) {
+			var type = buttonElement.getAttribute("attr-event");
+				buttonEvent = buttonEvents[type]
+			if (buttonEvent) {
+				$(buttonElement).on("click",buttonEvent);
+			}
+		})
 	};
 	return function(LayerConstructor) {
 		LayerConstructor.prototype.initAttributePlane = initAttributePlane;
