@@ -31,7 +31,8 @@ define("main", ["sketchpadManage", "templates"], function(require, exports, modu
 			y: 40,
 			"font-size": 42,
 			"font-family": "华文行楷",
-			lock: false
+			lock: false,
+			color:"#ad1717"
 		}
 	}, {
 		attr: {
@@ -48,6 +49,7 @@ define("main", ["sketchpadManage", "templates"], function(require, exports, modu
 				title: "艺术字",
 				mterials: [{
 					imgSrc: "../img/宋体.jpg",
+					title: "宋体",
 					layerAttr: {
 						type: "font",
 						width: 200,
@@ -115,6 +117,7 @@ define("main", ["sketchpadManage", "templates"], function(require, exports, modu
 					}
 				},{
 					imgSrc: "../img/flower.jpg",
+					title:"I'm In China",
 					layerAttr: {
 						type: "template",
 						src: "tem2"

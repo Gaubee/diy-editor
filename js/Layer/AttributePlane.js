@@ -138,10 +138,14 @@ define("AttributePlane", [], function(require, exports, module) {
 				_self.reInit()
 			},
 			"cut": function(e) {
-
+				var cutLayer = $('#cutLayer');
+				cutLayer.modal();
 			},
 			"filter": function(e) {
+				var filterLayer = $('#filterLayer'),
+					img = filterLayer.find(".modal-body .img");
 
+				filterLayer.modal();
 			},
 			"lock": function(e) {
 				_self.lock();

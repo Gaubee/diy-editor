@@ -81,8 +81,9 @@
 			font-family: '微软雅黑';
 		}
 		.mterial-panel .content{
-			max-height: 295px;
+			max-height: 265px;
 			overflow-y: scroll;
+			overflow-x:hidden;
 		}
 		.mterial-panel .content img{
 			width: 80%;
@@ -137,13 +138,15 @@
 			opacity: 0;
 			/*border: 1px #000 solid;*/
 		}
+		.img{
+			/*min-width: 100%;
+			max-height:100%;*/
+		}
 	</style>
 </head>
 <body class="row">
-	<header id="header">
-	</header>
-	<nav id="nav">
-	</nav>
+	<header id="header"></header>
+	<nav id="nav"></nav>
 	<article id="plane" class="span13">
 		<nav id="mterial" class="span3">
 			<h2>素材面板</h2>
@@ -153,9 +156,12 @@
 					<li class="nav-header title">{(title)}</li>
 					<li class="content" style="display: list-item;">
 						{#each( {(mterials)} )}
-						<img src="{(imgSrc)}" data-type="{(layerAttr.type)}" data-width="{(layerAttr.width)}" data-height="{(layerAttr.height)}" data-src="{(layerAttr.src)}" draggable="true">
+						{#if({(imgSrc)})}
+						<img src="{(imgSrc)}" data-type="{(layerAttr.type)}" data-width="{(layerAttr.width)}" data-height="{(layerAttr.height)}" data-src="{(layerAttr.src)}" draggable="true"/>
+						{/if()}
+						<a>{(title)}</a>
 						{/each()}
-					</li>
+						</li>
 					<li class="divider"></li>
 					{/each()}
 				</ul>
@@ -169,8 +175,7 @@
 				<ul id="layer" class="nav nav-list">
 					{#each( {(layers)} )}
 					<li data-index="{(id)}" class="{#if({(active)})}active{/if()}">
-						<a href="#attribute_plane_{(id)}">
-							<i class="icon-chevron-right"></i>
+						<a href="#attribute_plane_{(id)}"> <i class="icon-chevron-right"></i>
 							{(name)}
 						</a>
 					</li>
@@ -184,91 +189,60 @@
 				<fieldset id="attribute_plane_{(id)}" class="layer-attribute-plane row">
 					<div class="span3">
 						<legend class="title span3">
-							<h3>
-								坐标-Coordinate
-							</h3>
+							<h3>坐标-Coordinate</h3>
 						</legend>
 						<article class="coordinate control-group span3" style="height: 6em;">
-							<label attr-name="x" class="control-label">
-								X:{(x)}
-							</label>
-							<label attr-name="y" class="control-label">
-								Y:{(y)}
-							</label>
+							<label attr-name="x" class="control-label">X:{(x)}</label>
+							<label attr-name="y" class="control-label">Y:{(y)}</label>
 						</article>
 					</div>
 					<div class="span3">
 						<legend class="title span3">
-							<h3>
-								大小-Size
-							</h3>
+							<h3>大小-Size</h3>
 						</legend>
 						<article class="size control-group span3" style="height: 6em;">
-							<label attr-name="width" class="control-label">
-								Width:{(width)}
-							</label>
-							<label attr-name="height" class="control-label">
-								Height:{(height)}
-							</label>
+							<label attr-name="width" class="control-label">Width:{(width)}</label>
+							<label attr-name="height" class="control-label">Height:{(height)}</label>
 						</article>
 					</div>
 					<div class="span3">
 						<legend class="title span3">
-							<h3>
-								角度-Angle
-							</h3>
+							<h3>角度-Angle</h3>
 						</legend>
 						<article class="angle control-group span3" style="height: 3em;">
-							<label attr-name="rotate" class="control-label">
-								Rotate:{(rotate)}
-							</label>
+							<label attr-name="rotate" class="control-label">Rotate:{(rotate)}</label>
 						</article>
 					</div>
 					<div class="btn-group span8">
-						<button disabled="{(lock)}" attr-event="left" data-toggle="tooltip" title="Coordinate left" class="btn">
-							<i class="icon-arrow-left"> </i> <!--Coordinate left--> 
-						</button>
+						<button disabled="{(lock)}" attr-event="left" data-toggle="tooltip" title="Coordinate left" class="btn"> <i class="icon-arrow-left"></i> <!--Coordinate left--> </button>
 						<button disabled="{(lock)}" attr-event="up" data-toggle="tooltip" title="Coordinate up" class="btn">
-							<i class="icon-arrow-up"> </i> <!--Coordinate up--> 
-						</button>
+							<i class="icon-arrow-up"></i> <!--Coordinate up--> </button>
 						<button disabled="{(lock)}" attr-event="down" data-toggle="tooltip" title="Coordinate down" class="btn">
-							<i class="icon-arrow-down"> </i> <!--Coordinate down--> 
-						</button>
+							<i class="icon-arrow-down"></i> <!--Coordinate down--> </button>
 						<button disabled="{(lock)}" attr-event="right" data-toggle="tooltip" title="Coordinate right" class="btn">
-							<i class="icon-arrow-right"> </i> <!--Coordinate right--> 
-						</button>
+							<i class="icon-arrow-right"></i> <!--Coordinate right--> </button>
 						<button disabled="{(lock)}" attr-event="rotate" data-toggle="tooltip" title="Rotate" class="btn">
-							<i class="icon-repeat"> </i> <!--Rotate--> 
-						</button>
+							<i class="icon-repeat"></i> <!--Rotate--> </button>
 						<button disabled="{(lock)}" attr-event="float" data-toggle="tooltip" title="Layer Index up" class="btn">
-							<i class="icon-chevron-up"> </i> <!--Layer Index up--> 
-						</button>
+							<i class="icon-chevron-up"></i> <!--Layer Index up--> </button>
 						<button disabled="{(lock)}" attr-event="sink" data-toggle="tooltip" title="Layer Index down" class="btn">
-							<i class="icon-chevron-down"> </i> <!--Layer Index down--> 
-						</button>
+							<i class="icon-chevron-down"></i> <!--Layer Index down--> </button>
 						<button disabled="{(lock)}" attr-event="out" data-toggle="tooltip" title="Zoom Out" class="btn">
-							<i class="icon-zoom-out"> </i> <!--Zoom Out--> 
-						</button>
+							<i class="icon-zoom-out"></i> <!--Zoom Out--> </button>
 						<button disabled="{(lock)}" attr-event="in" data-toggle="tooltip" title="Zoom In" class="btn">
-							<i class="icon-zoom-in"> </i> <!--Zoom In--> 
-						</button>
+							<i class="icon-zoom-in"></i> <!--Zoom In--> </button>
 						<button disabled="{(lock)}" attr-event="fullscreen" data-toggle="tooltip" title="To Background" class="btn">
-							<i class="icon-fullscreen"> </i> <!--To Background--> 
-						</button>
+							<i class="icon-fullscreen"></i> <!--To Background--> </button>
 						<button disabled="{(lock)}" attr-event="cut" data-toggle="tooltip" title="Cut out" class="btn">
-							<i class="icon-cut"> </i> <!--Cut out--> 
-						</button>
+							<i class="icon-cut"></i> <!--Cut out--> </button>
 						<button disabled="{(lock)}" attr-event="filter" data-toggle="tooltip" title="Filter" class="btn">
-							<i class="icon-picture"> </i> <!--Filter--> 
-						</button>
+							<i class="icon-picture"></i> <!--Filter--> </button>
 						{#if({(lock)})}
 						<button attr-event="unlock" data-toggle="tooltip" title="Unlock Layer" class="btn">
-							<i class="icon-unlock"> </i> <!--Unlock Layer--> 
-						</button>
+							<i class="icon-unlock"></i> <!--Unlock Layer--> </button>
 						{#else()}
 						<button attr-event="lock" data-toggle="tooltip" title="Lock Layer" class="btn">
-							<i class="icon-lock"> </i> <!--Lock Layer--> 
-						</button>
+							<i class="icon-lock"></i> <!--Lock Layer--> </button>
 						{/if()}
 					</div>
 				</fieldset>
@@ -277,94 +251,60 @@
 				<fieldset id="attribute_plane_{(id)}" class="layer-attribute-plane row">
 					<div class="span3">
 						<legend class="title span3">
-							<h3>
-								坐标-Coordinate
-							</h3>
+							<h3>坐标-Coordinate</h3>
 						</legend>
 						<article class="coordinate control-group span3" style="height: 6em;">
-							<label attr-name="x" class="control-label">
-								X:{(x)}
-							</label>
-							<label attr-name="y" class="control-label">
-								Y:{(y)}
-							</label>
+							<label attr-name="x" class="control-label">X:{(x)}</label>
+							<label attr-name="y" class="control-label">Y:{(y)}</label>
 						</article>
 					</div>
 					<div class="span3">
 						<legend class="title span3">
-							<h3>
-								文本-Text
-							</h3>
+							<h3>文本-Text</h3>
 						</legend>
 						<article class="size control-group span3" style="height: 6em;">
-							<label attr-name="font-size" class="control-label">
-								Font Size:{(font-size)}
-							</label>
-							<label attr-name="text" class="control-label">
-								Text:{(text)}
-							</label>
-							<label attr-name="color" class="control-label color">
-								Color:{(color)}
-							</label>
+							<label attr-name="font-size" class="control-label">Font Size:{(font-size)}</label>
+							<label attr-name="text" class="control-label">Text:{(text)}</label>
+							<label attr-name="color" class="control-label color">Color:{(color)}</label>
 						</article>
 					</div>
 					<div class="span3">
 						<legend class="title span3">
-							<h3>
-								角度-Angle
-							</h3>
+							<h3>角度-Angle</h3>
 						</legend>
 						<article class="angle control-group span3" style="height: 3em;">
-							<label attr-name="rotate" class="control-label">
-								Rotate:{(rotate)}
-							</label>
+							<label attr-name="rotate" class="control-label">Rotate:{(rotate)}</label>
 						</article>
 					</div>
 					<div class="btn-group span8">
 						<button disabled="{(lock)}" attr-event="left" data-toggle="tooltip" title="Coordinate left" class="btn">
-							<i class="icon-arrow-left"> </i> <!--Coordinate left--> 
-						</button>
+							<i class="icon-arrow-left"></i> <!--Coordinate left--> </button>
 						<button disabled="{(lock)}" attr-event="up" data-toggle="tooltip" title="Coordinate up" class="btn">
-							<i class="icon-arrow-up"> </i> <!--Coordinate up--> 
-						</button>
+							<i class="icon-arrow-up"></i> <!--Coordinate up--> </button>
 						<button disabled="{(lock)}" attr-event="down" data-toggle="tooltip" title="Coordinate down" class="btn">
-							<i class="icon-arrow-down"> </i> <!--Coordinate down--> 
-						</button>
+							<i class="icon-arrow-down"></i> <!--Coordinate down--> </button>
 						<button disabled="{(lock)}" attr-event="right" data-toggle="tooltip" title="Coordinate right" class="btn">
-							<i class="icon-arrow-right"> </i> <!--Coordinate right--> 
-						</button>
+							<i class="icon-arrow-right"></i> <!--Coordinate right--> </button>
 						<button disabled="{(lock)}" attr-event="rotate" data-toggle="tooltip" title="Rotate" class="btn">
-							<i class="icon-repeat"> </i> <!--Rotate--> 
-						</button>
+							<i class="icon-repeat"></i> <!--Rotate--> </button>
 						<button disabled="{(lock)}" attr-event="float" data-toggle="tooltip" title="Layer Index up" class="btn">
-							<i class="icon-chevron-up"> </i> <!--Layer Index up--> 
-						</button>
+							<i class="icon-chevron-up"></i> <!--Layer Index up--> </button>
 						<button disabled="{(lock)}" attr-event="sink" data-toggle="tooltip" title="Layer Index down" class="btn">
-							<i class="icon-chevron-down"> </i> <!--Layer Index down--> 
-						</button>
+							<i class="icon-chevron-down"></i> <!--Layer Index down--> </button>
 						<button disabled="{(lock)}" attr-event="out" data-toggle="tooltip" title="Zoom Out" class="btn">
-							<i class="icon-zoom-out"> </i> <!--Zoom Out--> 
-						</button>
+							<i class="icon-zoom-out"></i> <!--Zoom Out--> </button>
 						<button disabled="{(lock)}" attr-event="in" data-toggle="tooltip" title="Zoom In" class="btn">
-							<i class="icon-zoom-in"> </i> <!--Zoom In--> 
-						</button>
+							<i class="icon-zoom-in"></i> <!--Zoom In--> </button>
 						<button disabled="{(lock)}" attr-event="fullscreen" data-toggle="tooltip" title="To Background" class="btn">
-							<i class="icon-fullscreen"> </i> <!--To Background--> 
-						</button>
-						<button disabled="{(lock)}" attr-event="cut" data-toggle="tooltip" title="Cut out" class="btn">
-							<i class="icon-cut"> </i> <!--Cut out--> 
-						</button>
-						<button disabled="{(lock)}" attr-event="filter" data-toggle="tooltip" title="Filter" class="btn">
-							<i class="icon-picture"> </i> <!--Filter--> 
-						</button>
+							<i class="icon-fullscreen"></i> <!--To Background--> </button>
+						<button disabled="{(lock)}" attr-event="font_to_img" data-toggle="tooltip" title="Transforme into img layer" class="btn">
+							<i class="icon-picture"></i> <!--Transforme into img layer--> </button>
 						{#if({(lock)})}
 						<button attr-event="unlock" data-toggle="tooltip" title="Unlock Layer" class="btn">
-							<i class="icon-unlock"> </i> <!--Unlock Layer--> 
-						</button>
+							<i class="icon-unlock"></i> <!--Unlock Layer--> </button>
 						{#else()}
 						<button attr-event="lock" data-toggle="tooltip" title="Lock Layer" class="btn">
-							<i class="icon-lock"> </i> <!--Lock Layer--> 
-						</button>
+							<i class="icon-lock"></i> <!--Lock Layer--> </button>
 						{/if()}
 					</div>
 				</fieldset>
@@ -372,21 +312,47 @@
 		</section>
 	</article>
 	<footer id="footer"></footer>
+	<div id="cutLayer" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">裁剪图层</h3>
+		</div>
+		<div class="modal-body">
+			<p></p>
+			<img src="">
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+			<button class="btn btn-primary">确定裁剪</button>
+		</div>
+	</div>
+	<div id="filterLayer" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">图层滤镜</h3>
+		</div>
+		<div class="modal-body">
+			<p></p>
+			<img class="img" src="">
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+			<button class="btn btn-primary">应用滤镜</button>
+		</div>
+	</div>
 </body>
 </html>
 <script type="text/javascript" src="../js/lib/raphael-min.js"></script>
 <script type="text/javascript" src="../js/lib/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="../js/lib/pixastic.custom.js"></script>
 <script type="text/javascript" src="../js/lib/HTML-ViewParse.min.js"></script>
-<script type="text/javascript">
-	ViewParser.scans();
-</script>
+<script type="text/javascript">ViewParser.scans();</script>
 <script type="text/javascript" src="../js/lib/sea.js" id="seajsnode"></script>
-<!-- <script type="text/javascript" src="../js/lib/seajs-text.js"></script> -->
+<!-- <script type="text/javascript" src="../js/lib/seajs-text.js"></script>
+-->
 <script type="text/javascript" src="../js/sea.config.js"></script>
 
-<script type="text/javascript">
-	seajs.use("main");//import main.js
-</script>
+<script type="text/javascript">seajs.use("main");//import main.js</script>
 <script type="text/javascript" src="js/bootstrap.js"></script>
 <script type="text/javascript" src="js/bootstrap-colorpicker.js"></script>
 <script type="text/javascript">

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>index page</title>
+	<link rel="stylesheet" type="text/css" href="../page/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../page/css/colorpicker.css">
+	<link rel="stylesheet" type="text/css" href="../page/css/font-awesome.min.css"></head>
+	<style type="text/css">
+	#filter-studio{
+		width: 0px;
+		height: 0px;
+		overflow: scroll;		
+	}
+	#filter-studio .img{
+		min-width: 100%;
+	}
+	</style>
+<body class="row">
+	<div id="filterLayer" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">图层滤镜</h3>
+		</div>
+		<div class="modal-body">
+			<div id="filter-studio">
+				<img class="img" src="">
+			</div>
+			<img class="img" src="">
+			<div class="btn-group filter" style="text-align:center">
+				<button data-toggle="tooltip" title="Blur" data-filter="Blur" class="btn">模糊</button>
+				<button data-toggle="tooltip" title="Desaturate" data-filter="Desaturate" class="btn">黑白</button>
+				<button data-toggle="tooltip" title="Sepia" data-filter="Sepia" class="btn">复古</button>
+				<button data-toggle="tooltip" title="Emboss" data-filter="Emboss" class="btn">浮雕</button>
+				<button data-toggle="tooltip" title="Mosaic" data-filter="Mosaic" class="btn">马赛克</button>
+				<button data-toggle="tooltip" title="Glow" data-filter="Glow" class="btn">加亮</button>
+				<button data-toggle="tooltip" title="Invert" data-filter="Invert" class="btn">反相</button>
+				<button data-toggle="tooltip" title="Remove Noise" data-filter="Remove Noise" class="btn">降噪</button>
+			</div>
+			<button data-toggle="tooltip" title="Undo" class="btn undo"> <i class="icon-undo"></i>
+			</button>
+			<button data-toggle="tooltip" title="Reset" class="btn reset"> <i class="icon-refresh"></i>
+			</button>
+
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+			<button class="btn btn-primary">应用滤镜</button>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="../js/lib/raphael-min.js"></script>
+<script type="text/javascript" src="../js/lib/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="../js/lib/pixastic.custom.js"></script>
+<script type="text/javascript" src="../page/js/bootstrap.js"></script>
+<script type="text/javascript">
+	var filterLayer = $('#filterLayer'),
+		img = filterLayer.find(".modal-body .img");
+		img.attr({
+			src:"../img/flower.jpg"
+		}),
+		baseImg = new Image();
+	baseImg.src = "../img/flower.jpg";
+	var session = [];
+	filterLayer.find("button").tooltip();
+	filterLayer.modal();
+	var filterHandles = {
+		temp:{
+			Mosaic_blockSize:5
+		},
+		"Blur":function(e,callback){Pixastic.process(img[0],"blur",null,callback)},
+		"Desaturate":function(e,callback){Pixastic.process(img[0],"desaturate",null,callback)},
+		"Sepia":function(e,callback){Pixastic.process(img[0],"sepia",null,callback)},
+		"Emboss":function(e,callback){Pixastic.process(img[0],"emboss",null,callback)},
+		"Mosaic":function(e,callback){Pixastic.process(baseImg,"mosaic",{blockSize:filterHandles.temp.Mosaic_blockSize++},callback)},
+		"Glow":function(e,callback){Pixastic.process(img[0],"glow",{amount:0.1,radius:0.5},callback)},
+		"Invert":function(e,callback){Pixastic.process(img[0],"invert",null,callback)},
+		"Remove Noise":function(e,callback){Pixastic.process(img[0],"removenoise",null,callback)}
+	};
+	filterLayer.on("click",".filter button",function (e) {
+		console.log($(this).data("filter"))
+		var filter_handle = filterHandles[$(this).data("filter")];
+		if(filter_handle){
+			var $buttons = filterLayer.find(".filter button").prop("disabled",true);
+			filter_handle.call(this,e,function(canvas){
+				var src = canvas.toDataURL();
+				session.push(img[1].src);
+				img[0].src=img[1].src=src;
+				$buttons.prop("disabled",false);
+			});
+		}
+	}).on("click",".undo",function(e){
+		img[0].src=img[1].src=session.pop();
+	}).on("click",".reset",function(e){
+		if (session.length) {
+			img[0].src=img[1].src = session[0];
+			session=[]
+		}
+	});
+</script>
