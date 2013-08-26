@@ -329,7 +329,7 @@ define("ControllerSet", [], function(require, exports, module) {
 			_self._reInit();
 
 			if (layerAttribute.lock) {
-				return;
+				return _self;
 			}
 
 			var j = 0;
@@ -361,6 +361,7 @@ define("ControllerSet", [], function(require, exports, module) {
 				// transform: ["r" + layerAttribute.rotate, layerAttribute.x + layerAttribute.width / 2, layerAttribute.y + layerAttribute.height / 2]
 				transform: transform_R
 			});
+			return _self;
 		}
 		LayerConstructor.initQueue.push({
 			name: "initHanlder",

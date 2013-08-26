@@ -3,6 +3,7 @@
 <head>
 	<title>index page</title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/colorpicker.css">
 	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
 	<style type="text/css">
 		h1, h2, h3, .masthead p, .subhead p, .marketing h2, .lead
@@ -61,6 +62,7 @@
 		}
 		#mterial .nav-header{
 			cursor: pointer;
+			min-width: 187px;
 		}
 		.mterial-panel{
 			max-height: 433px;
@@ -301,6 +303,9 @@
 							<label attr-name="text" class="control-label">
 								Text:{(text)}
 							</label>
+							<label attr-name="color" class="control-label color">
+								Color:{(color)}
+							</label>
 						</article>
 					</div>
 					<div class="span3">
@@ -383,6 +388,7 @@
 	seajs.use("main");//import main.js
 </script>
 <script type="text/javascript" src="js/bootstrap.js"></script>
+<script type="text/javascript" src="js/bootstrap-colorpicker.js"></script>
 <script type="text/javascript">
 	$("#mterial").on("click",".nav-header",function (e) {
 		Array.prototype.forEach.call($("#mterial .nav-header"),function(navHeader){
@@ -397,11 +403,11 @@
 		// var scrollTop=document.documentElement.scrollTop||document.body.scrollTop;  //获取上下滚动条
 		// var scrollLeft=document.documentElement.scrollLeft||document.body.scrollLeft;  //获取左右滚动条
 		// var oUl=document.getElementById('ul1');  //获取UL
-		
+
 		// oUl.style.display='block';
 		// oUl.style.left=oEvent.clientX+scrollLeft+'px';  //设置X轴的位置
 		// oUl.style.top=oEvent.clientY+scrollTop+'px';    //设置Y轴的位置
-		
+
 		return false;  //阻止浏览器默认事件
 	};
 </script>

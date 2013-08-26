@@ -1,6 +1,7 @@
-define("sketchpadManage", ["sketchpad", "materialPanel"], function(require, exports, module) {
+define("sketchpadManage", ["sketchpad", "materialPanel","templates"], function(require, exports, module) {
 	var Sketchpad = require("sketchpad");
 	var materialDrag = require("materialPanel");
+	var templates = require("templates");
 	var sketchpads = [];
 	var $layer = require("layerManage").$layer || $(".layer"),
 		layerOffSet = $layer.offset();
@@ -46,10 +47,11 @@ define("sketchpadManage", ["sketchpad", "materialPanel"], function(require, expo
 									break;
 								case "background":
 									newSketchpad.createLayer({
+										type: "background",
 										src: fileItem.getAttribute("data-src"),
 										RC_x: sketchpadContainer.offsetLeft,
 										RC_y: sketchpadContainer.offsetTop
-									}).toMax().lock();
+									});
 									break;
 								case "font":
 									newSketchpad.createLayer({
@@ -61,6 +63,18 @@ define("sketchpadManage", ["sketchpad", "materialPanel"], function(require, expo
 										RC_y: sketchpadContainer.offsetTop
 									});
 									break;
+								case "template":
+									var template = templates.get(fileItem.getAttribute("data-src"));
+									var rc = {
+										RC_x: sketchpadContainer.offsetLeft,
+										RC_y: sketchpadContainer.offsetTop
+									}
+									template&&template.forEach(function(layerConfig){
+										console.log($.extend({},rc,layerConfig.attr))
+										var newLayer = newSketchpad.createLayer($.extend({},rc,layerConfig.attr));
+										layerConfig.callback&&layerConfig.callback(newLayer);
+									});
+									break
 							}
 						}
 					}
@@ -80,7 +94,8 @@ define("sketchpadManage", ["sketchpad", "materialPanel"], function(require, expo
 		},
 		createMaterialPanel: function createMaterialPanel(opction) {
 			var M = ViewParser.modules["mterial"](opction.data);
-			M.append((opction.container || $("body"))[0])
+			M.append((opction.container || $("body"))[0]);
+			opction.container.find(".nav-header").first().click();
 			Array.prototype.forEach.call($("[draggable='true']"), function(imgElement) {
 				materialDrag.registeredStartingpoints(imgElement, {
 					end: function(session, e) {

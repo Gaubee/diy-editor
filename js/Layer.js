@@ -43,7 +43,7 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 		lock: false,
 		//font
 		text: "Hello world",
-		color: "#EEEEEE",
+		color: "#333",
 		"font-size": 16,
 		cacheSize: 16,
 		"font-family": "sans-serif",
@@ -72,6 +72,26 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 
 	};
 	Layer.initQueue = [{
+		name:"initLock",
+		handle:function(layerInstance){
+			if (layerInstance.layerAttribute.lock) {
+				layerInstance.layerAttribute.lock = false;
+				setTimeout(function(){
+					layerInstance.lock().reInit().blur();
+				},24);
+			}
+		}
+	},{
+		name:"initBackground",
+		handle:function(layerInstance){
+			if (layerInstance.layerAttribute.type==="background") {
+				layerInstance.layerAttribute.type="img";
+				setTimeout(function(){
+					layerInstance.toMax().lock().reInit();
+				});
+			}
+		}
+	},{
 		name: "initImg",
 		handle: function(layerInstance) {
 			var paper = layerInstance.skechpad,
@@ -176,7 +196,7 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 			layerAttribute = _self.layerAttribute;
 		_self.checkAttribute();
 		if (layerAttribute.lock) {
-			return;
+			return _self;
 		}
 
 		// transform_R = "r" + layerAttribute.rotate, (layerAttribute.x - layerAttribute.RC_x) + layerAttribute.width / 2, (layerAttribute.y - layerAttribute.RC_y) + layerAttribute.height / 2
@@ -211,7 +231,7 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 			layerAttribute = _self.layerAttribute;
 		_self.checkAttribute();
 		if (layerAttribute.lock) {
-			return;
+			return _self;
 		}
 
 		// transform_R = "r" + layerAttribute.rotate, (layerAttribute.x - layerAttribute.RC_x) + layerAttribute.width / 2, (layerAttribute.y - layerAttribute.RC_y) + layerAttribute.height / 2
@@ -242,7 +262,7 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 			layerAttribute.cacheSize = layerAttribute["font-size"]; // = ~~layerAttribute["font-size"];
 			// _self.reInit();
 			_self.reInit();
-			return
+			return _self;
 		}
 		// layerAttribute.width = __s.width() + 20;
 		// layerAttribute.height = __s.height() + 10;
@@ -255,6 +275,7 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 			"font-weight": layerAttribute["font-weight"],
 			"font-size": layerAttribute["font-size"],
 			text: layerAttribute.text,
+			fill:layerAttribute.color,
 			// transform: ["r" + layerAttribute.rotate, layerAttribute.x + layerAttribute.width / 2, layerAttribute.y + layerAttribute.height / 2]
 			transform: transform_R
 		});

@@ -25,7 +25,6 @@ define("AttributePlane", [], function(require, exports, module) {
 			el._textAreas = Array.prototype.slice.call(el.childNodes);
 		}
 		_editArea.find("input").val(content);
-		console.log(el._textAreas)
 		el._textAreas.forEach(function(textElment) {
 			el.removeChild(textElment)
 		});
@@ -40,7 +39,7 @@ define("AttributePlane", [], function(require, exports, module) {
 		$nodeTree.on("click", ".control-label", function(e) {
 			var labelElement = this,
 				attrName = labelElement.getAttribute("attr-name");
-			if (!labelElement._status&&!layerAttribute.lock) {
+			if (!labelElement._status && !layerAttribute.lock) {
 				_canEditAble(labelElement, function(inputElement) {
 					if (labelElement._status) {
 						labelElement._status = false;
@@ -64,6 +63,11 @@ define("AttributePlane", [], function(require, exports, module) {
 				});
 				labelElement._status = true;
 			}
+		}).on("click", ".color", function(e) {
+			$(this).find("input").colorpicker().on('changeColor', function(ev) {
+				_self.layerAttribute.color = ev.color.toHex();
+				_self.reInit();
+			});
 		});
 		$nodeTree.on("mouseenter", function(e) {
 			_self.focus();
@@ -101,9 +105,9 @@ define("AttributePlane", [], function(require, exports, module) {
 			},
 			"out": function(e) {
 				var sW = _self.layerAttribute.width,
-					nW = ~~(sW *= 0.1),
+					nW = ~~ (sW *= 0.1),
 					sH = _self.layerAttribute.height,
-					nH = ~~(sH *= 0.1);
+					nH = ~~ (sH *= 0.1);
 				_self.layerAttribute.width -= nW
 				_self.layerAttribute.height -= nH
 				_self.layerAttribute.x += (nW) / 2;
@@ -112,9 +116,9 @@ define("AttributePlane", [], function(require, exports, module) {
 			},
 			"in": function(e) {
 				var sW = _self.layerAttribute.width,
-					nW = ~~(sW *= 0.1),
+					nW = ~~ (sW *= 0.1),
 					sH = _self.layerAttribute.height,
-					nH = ~~(sH *= 0.1);
+					nH = ~~ (sH *= 0.1);
 				_self.layerAttribute.width += nW
 				_self.layerAttribute.height += nH
 				_self.layerAttribute.x -= (nW) / 2;
@@ -174,7 +178,8 @@ define("AttributePlane", [], function(require, exports, module) {
 				layerAttribute = _self.layerAttribute,
 				attrViewInstance = _self.attrVI;
 			_LayerReInit.call(_self);
-			attrViewInstance.set(layerAttribute)
+			attrViewInstance.set(layerAttribute);
+			return _self;
 		}
 		LayerConstructor.initQueue.push({
 			name: "initAttributePlane",

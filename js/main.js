@@ -1,5 +1,6 @@
-define("main", ["sketchpadManage"], function(require, exports, module) {
-	var sketchpadManage = require("sketchpadManage");
+define("main", ["sketchpadManage", "templates"], function(require, exports, module) {
+	var sketchpadManage = require("sketchpadManage"),
+		templates = require("templates");
 	var $header = $("#header"),
 		$nav = $("#nav"),
 		$plane = $("#plane"),
@@ -7,7 +8,39 @@ define("main", ["sketchpadManage"], function(require, exports, module) {
 		$aside = $("#aside"),
 		$footer = $("#footer");
 
-
+	templates.set("tem1", [{
+		attr: {
+			type: "background",
+			src: "../img/earth.png"
+		}
+	}, {
+		attr: {
+			type: "font",
+			text: "Hello world!!",
+			x: 10,
+			y: 12,
+			"font-size": 24,
+			"font-family": "华文行楷",
+			lock: true
+		}
+	}]).set("tem2", [{
+		attr: {
+			type: "font",
+			text: "I'm In China",
+			x: 180,
+			y: 40,
+			"font-size": 42,
+			"font-family": "华文行楷",
+			lock: false
+		}
+	}, {
+		attr: {
+			src:"../img/flower.jpg",
+			x: 230,
+			y: 80,
+			lock: true
+		}
+	}]);
 
 	var mterialPanel = sketchpadManage.createMaterialPanel({
 		data: {
@@ -70,6 +103,21 @@ define("main", ["sketchpadManage"], function(require, exports, module) {
 					layerAttr: {
 						type: "background",
 						src: "../img/earth.png"
+					}
+				}]
+			}, {
+				title: "模板",
+				mterials: [{
+					imgSrc: "../img/earth.png",
+					layerAttr: {
+						type: "template",
+						src: "tem1"
+					}
+				},{
+					imgSrc: "../img/flower.jpg",
+					layerAttr: {
+						type: "template",
+						src: "tem2"
 					}
 				}]
 			}]
