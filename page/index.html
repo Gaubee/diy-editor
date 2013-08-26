@@ -141,6 +141,14 @@
 		.img{
 			/*min-width: 100%;
 			max-height:100%;*/
+		}	
+		#filter-studio{
+			width: 0px;
+			height: 0px;
+			overflow: scroll;		
+		}
+		#filter-studio .img{
+			min-width: 100%;
 		}
 	</style>
 </head>
@@ -214,6 +222,7 @@
 						</article>
 					</div>
 					<div class="btn-group span8">
+						<button attr-event="remove" data-toggle="tooltip" title="Remove Layer" class="btn span1" style="margin-left: 10px;"> <i class="icon-trash"></i> <!--Remove Layer--> </button>
 						<button disabled="{(lock)}" attr-event="left" data-toggle="tooltip" title="Coordinate left" class="btn"> <i class="icon-arrow-left"></i> <!--Coordinate left--> </button>
 						<button disabled="{(lock)}" attr-event="up" data-toggle="tooltip" title="Coordinate up" class="btn">
 							<i class="icon-arrow-up"></i> <!--Coordinate up--> </button>
@@ -277,6 +286,7 @@
 						</article>
 					</div>
 					<div class="btn-group span8">
+						<button attr-event="remove" data-toggle="tooltip" title="Remove Layer" class="btn span1" style="margin-left: 10px;"> <i class="icon-trash"></i> <!--Remove Layer--> </button>
 						<button disabled="{(lock)}" attr-event="left" data-toggle="tooltip" title="Coordinate left" class="btn">
 							<i class="icon-arrow-left"></i> <!--Coordinate left--> </button>
 						<button disabled="{(lock)}" attr-event="up" data-toggle="tooltip" title="Coordinate up" class="btn">
@@ -297,8 +307,8 @@
 							<i class="icon-zoom-in"></i> <!--Zoom In--> </button>
 						<button disabled="{(lock)}" attr-event="fullscreen" data-toggle="tooltip" title="To Background" class="btn">
 							<i class="icon-fullscreen"></i> <!--To Background--> </button>
-						<button disabled="{(lock)}" attr-event="font_to_img" data-toggle="tooltip" title="Transforme into img layer" class="btn">
-							<i class="icon-picture"></i> <!--Transforme into img layer--> </button>
+						<!--<button disabled="{(lock)}" attr-event="font_to_img" data-toggle="tooltip" title="Transforme into img layer" class="btn">
+							<i class="icon-picture"></i> <!--Transforme into img layer--> </button>-->
 						{#if({(lock)})}
 						<button attr-event="unlock" data-toggle="tooltip" title="Unlock Layer" class="btn">
 							<i class="icon-unlock"></i> <!--Unlock Layer--> </button>
@@ -312,15 +322,27 @@
 		</section>
 	</article>
 	<footer id="footer"></footer>
+	<div id="confirmLayer" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3>提示！</h3>
+		</div>
+		<div class="modal-body">	
+			<p class="confirmText"></p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn no">取消</button>
+			<button class="btn btn-primary yes">确认</button>
+		</div>
+	</div>
 	<div id="cutLayer" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h3 id="myModalLabel">裁剪图层</h3>
+			<h3>裁剪图层</h3>
 		</div>
 		<div class="modal-body">
 			<p></p>
-			<img src="">
-		</div>
+			<img src=""></div>
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
 			<button class="btn btn-primary">确定裁剪</button>
@@ -329,15 +351,33 @@
 	<div id="filterLayer" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h3 id="myModalLabel">图层滤镜</h3>
+			<h3>图层滤镜</h3>
 		</div>
 		<div class="modal-body">
-			<p></p>
+			<div id="filter-studio">
+				<img class="img" src=""></div>
 			<img class="img" src="">
+			<div class="btn-group filter" style="text-align:center">
+				<button data-toggle="tooltip" title="Blur" data-filter="Blur" class="btn">模糊</button>
+				<button data-toggle="tooltip" title="Desaturate" data-filter="Desaturate" class="btn">黑白</button>
+				<button data-toggle="tooltip" title="Sepia" data-filter="Sepia" class="btn">复古</button>
+				<button data-toggle="tooltip" title="Emboss" data-filter="Emboss" class="btn">浮雕</button>
+				<button data-toggle="tooltip" title="Mosaic" data-filter="Mosaic" class="btn">马赛克</button>
+				<button data-toggle="tooltip" title="Glow" data-filter="Glow" class="btn">加亮</button>
+				<button data-toggle="tooltip" title="Invert" data-filter="Invert" class="btn">反相</button>
+				<button data-toggle="tooltip" title="Remove Noise" data-filter="Remove Noise" class="btn">降噪</button>
+			</div>
+			<button data-toggle="tooltip" title="Undo" class="btn undo">
+				<i class="icon-undo"></i>
+			</button>
+			<button data-toggle="tooltip" title="Reset" class="btn reset">
+				<i class="icon-refresh"></i>
+			</button>
+
 		</div>
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-			<button class="btn btn-primary">应用滤镜</button>
+			<button id="filter-set" class="btn btn-primary">应用滤镜</button>
 		</div>
 	</div>
 </body>

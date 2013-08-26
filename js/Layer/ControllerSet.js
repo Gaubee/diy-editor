@@ -76,6 +76,7 @@ define("ControllerSet", [], function(require, exports, module) {
 				layerControllerSet = _self.layerControllerSet;
 			handle.data("cursor", "n-resize");
 			handle.drag(function onmove(dx, dy, x, y, e) {
+				if (layerAttribute.lock) {return;}
 				layerAttribute.height -= (dy - layerAttribute.cacheH);
 				layerAttribute.y += (dy - layerAttribute.cacheH);
 				layerAttribute.cacheH = dy;
@@ -94,6 +95,7 @@ define("ControllerSet", [], function(require, exports, module) {
 				layerControllerSet = _self.layerControllerSet;
 			handle.data("cursor", "w-resize");
 			handle.drag(function onmove(dx, dy, x, y, e) {
+				if (layerAttribute.lock) {return;}
 				layerAttribute.width -= (dx - layerAttribute.cacheW);
 				layerAttribute.x += (dx - layerAttribute.cacheW);
 				layerAttribute.cacheW = dx;
@@ -112,6 +114,7 @@ define("ControllerSet", [], function(require, exports, module) {
 				layerControllerSet = _self.layerControllerSet;
 			handle.data("cursor", "s-resize");
 			handle.drag(function onmove(dx, dy, x, y, e) {
+				if (layerAttribute.lock) {return;}
 				layerAttribute.height += (dy - layerAttribute.cacheH);
 				layerAttribute.cacheH = dy;
 				_self.reInit();
@@ -129,6 +132,7 @@ define("ControllerSet", [], function(require, exports, module) {
 				layerControllerSet = _self.layerControllerSet;
 			handle.data("cursor", "e-resize");
 			handle.drag(function onmove(dx, dy, x, y, e) {
+				if (layerAttribute.lock) {return;}
 				layerAttribute.width += (dx - layerAttribute.cacheW);
 				layerAttribute.cacheW = dx;
 				_self.reInit();
@@ -146,6 +150,7 @@ define("ControllerSet", [], function(require, exports, module) {
 				layerControllerSet = _self.layerControllerSet;
 			handle.data("cursor", "nw-resize");
 			handle.drag(function onmove(dx, dy, x, y, e) {
+				if (layerAttribute.lock) {return;}
 				layerAttribute.width -= (dx - layerAttribute.cacheW);
 				layerAttribute.x += (dx - layerAttribute.cacheW);
 				layerAttribute.cacheW = dx;
@@ -168,6 +173,7 @@ define("ControllerSet", [], function(require, exports, module) {
 				layerControllerSet = _self.layerControllerSet;
 			handle.data("cursor", "sw-resize");
 			handle.drag(function onmove(dx, dy, x, y, e) {
+				if (layerAttribute.lock) {return;}
 				layerAttribute.width -= (dx - layerAttribute.cacheW);
 				layerAttribute.x += (dx - layerAttribute.cacheW);
 				layerAttribute.cacheW = dx;
@@ -189,6 +195,7 @@ define("ControllerSet", [], function(require, exports, module) {
 				layerControllerSet = _self.layerControllerSet;
 			handle.data("cursor", "se-resize");
 			handle.drag(function onmove(dx, dy, x, y, e) {
+				if (layerAttribute.lock) {return;}
 				layerAttribute.width += (dx - layerAttribute.cacheW);
 				layerAttribute.cacheW = dx;
 				layerAttribute.height += (dy - layerAttribute.cacheH);
@@ -209,6 +216,7 @@ define("ControllerSet", [], function(require, exports, module) {
 				layerControllerSet = _self.layerControllerSet;
 			handle.data("cursor", "ne-resize");
 			handle.drag(function onmove(dx, dy, x, y, e) {
+				if (layerAttribute.lock) {return;}
 				layerAttribute.width += (dx - layerAttribute.cacheW);
 				layerAttribute.cacheW = dx;
 				layerAttribute.height -= (dy - layerAttribute.cacheH);
@@ -230,6 +238,7 @@ define("ControllerSet", [], function(require, exports, module) {
 				layerControllerSet = _self.layerControllerSet;
 			handle.data("cursor", "move");
 			handle.drag(function onmove(dx, dy, x, y, e) {
+				if (layerAttribute.lock) {return;}
 				// console.log("onmove")
 				x -= layerAttribute.RC_x;
 				y -= layerAttribute.RC_y;

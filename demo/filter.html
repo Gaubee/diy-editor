@@ -66,7 +66,7 @@
 	filterLayer.modal();
 	var filterHandles = {
 		temp:{
-			Mosaic_blockSize:5
+			Mosaic_blockSize:3
 		},
 		"Blur":function(e,callback){Pixastic.process(img[0],"blur",null,callback)},
 		"Desaturate":function(e,callback){Pixastic.process(img[0],"desaturate",null,callback)},
@@ -94,6 +94,7 @@
 	}).on("click",".reset",function(e){
 		if (session.length) {
 			img[0].src=img[1].src = session[0];
+			filterHandles.temp.Mosaic_blockSize=3;
 			session=[]
 		}
 	});

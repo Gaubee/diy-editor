@@ -1,5 +1,5 @@
-define("AttributePlane", [], function(require, exports, module) {
-
+define("AttributePlane", ["filter"], function(require, exports, module) {
+	var filter = require("filter");
 	var $aside = $("#aside");
 	var _canEditAble = function(el, callback) {
 		var _editArea = el._editArea,
@@ -126,13 +126,6 @@ define("AttributePlane", [], function(require, exports, module) {
 				_self.reInit()
 			},
 			"fullscreen": function(e) {
-				// _self.layerAttribute.width = _self.skechpad.width;
-				// _self.layerAttribute.height = _self.skechpad.height;
-				// _self.layerAttribute.x = 0;
-				// _self.layerAttribute.y = 0;
-				// _self.layerAttribute.rotate = 0;
-				// _self.reInit()
-				// _self.layIndex(-1000);
 				_self.toMax();
 				_self.lock();
 				_self.reInit()
@@ -142,10 +135,9 @@ define("AttributePlane", [], function(require, exports, module) {
 				cutLayer.modal();
 			},
 			"filter": function(e) {
-				var filterLayer = $('#filterLayer'),
-					img = filterLayer.find(".modal-body .img");
-
-				filterLayer.modal();
+				filter.show(_self.img.node.href.baseVal,function(newSrc){
+					_self.img.node.href.baseVal = newSrc;
+				})
 			},
 			"lock": function(e) {
 				_self.lock();
@@ -155,16 +147,16 @@ define("AttributePlane", [], function(require, exports, module) {
 				console.log("unlock")
 				_self.unlock();
 				_self.reInit()
+			},
+			"remove":function(e){
+				require("confirm")("确定要删除 "+_self.layerAttribute.name+" 吗？",function(arg){
+					if (arg) {
+						console.log("remove!!!!")
+					}
+				})
 			}
 		}
 		$buttons.tooltip();
-		// Array.prototype.forEach.call($buttons, function(buttonElement) {
-		// 	var type = buttonElement.getAttribute("attr-event");
-		// 		buttonEvent = buttonEvents[type]
-		// 	if (buttonEvent) {
-		// 		$(buttonElement).on("click",buttonEvent);
-		// 	}
-		// })
 		$nodeTree.on("click", "button", function(e) {
 			var buttonElement = this,
 				type = buttonElement.getAttribute("attr-event"),
