@@ -45,6 +45,7 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 		text: "Hello world",
 		color: "#EEEEEE",
 		"font-size": 16,
+		cacheSize: 16,
 		"font-family": "sans-serif",
 		"font-weight": 200
 	};
@@ -94,10 +95,10 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 				img = paper.text(layerAttribute.x, layerAttribute.y, layerAttribute.text);
 				layerInstance._reInit = _reInitFont;
 				layerInstance.initImgHandle(img);
-				setTimeout(function(){
+				setTimeout(function() {
 					layerInstance.reInit();
 					layerInstance.reInit();
-				},0)
+				}, 0)
 			}
 		}
 	}]
@@ -109,17 +110,18 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 			img = _self.skechpad.image(img, layerAttribute.x, layerAttribute.y, layerAttribute.width, layerAttribute.height);
 		}
 		_self.img = img;
-
 		img.drag(function onmove(dx, dy, x, y, e) { //init img
 			// console.log("onmove",dx,dy,x,y,e);
-			layerAttribute.x = dx - layerAttribute.cacheX + layerAttribute.x;
-			layerAttribute.y = dy - layerAttribute.cacheY + layerAttribute.y;
-			layerAttribute.cacheX = dx;
-			layerAttribute.cacheY = dy;
-
-			_self.reInit();
+			if (!layerAttribute.lock) {
+				layerAttribute.x = dx - layerAttribute.cacheX + layerAttribute.x;
+				layerAttribute.y = dy - layerAttribute.cacheY + layerAttribute.y;
+				layerAttribute.cacheX = dx;
+				layerAttribute.cacheY = dy;
+				_self.reInit();
+			}
 		}, function onstart(x, y, e) {
 			// console.log("onstart",x,y,e);
+			_self._clickEvent && _self._clickEvent(e);
 			// layerControllerSet.animate({
 			// 	opacity: 0
 			// }, 200);
@@ -133,13 +135,15 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 			// 	opacity: 1
 			// }, 200);
 			_self.reInit();
-		}).mouseover(function mouseover(e) {
+		});
+		/*.mouseover(function mouseover(e) {
 			// layerAttribute.active = true;
 			_self.delayReInit();
 		}).mouseout(function mouseout(e) {
 			// layerAttribute.active = false;
 			_self.delayReInit();
 		});
+		*/
 		// img.click(function(e){
 		// 	_self.focus();
 		// });
@@ -154,6 +158,9 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 		}
 		if (layerAttribute.height < 0) {
 			layerAttribute.height = 0
+		}
+		if (layerAttribute["font-size"] < 1) {
+			layerAttribute["font-size"] = layerAttribute.cacheSize = 1
 		}
 		// if (layerAttribute.x < 0) {
 		// 	layerAttribute.x = 0
@@ -208,33 +215,46 @@ define("Layer", ["Layer/AttributePlane", "Layer/ControllerSet", "Layer/cursor"],
 		}
 
 		// transform_R = "r" + layerAttribute.rotate, (layerAttribute.x - layerAttribute.RC_x) + layerAttribute.width / 2, (layerAttribute.y - layerAttribute.RC_y) + layerAttribute.height / 2
-		var transform_R = ["r" + layerAttribute.rotate, layerAttribute.x , layerAttribute.y,
-							"T"+layerAttribute.width/2,layerAttribute.height/2]
+		var transform_R = ["r" + layerAttribute.rotate, layerAttribute.x, layerAttribute.y,
+			"T" + layerAttribute.width / 2, layerAttribute.height / 2
+		]
 		__s.css({
-			"color": layerAttribute.color,
 			"fontSize": layerAttribute["font-size"],
 			"fontFamily": layerAttribute["font-family"],
 			"fontWeight": layerAttribute["font-weight"]
 		});
 		__s.html(layerAttribute.text)
-		var proportion = __s.width()/__s.height();
+		var _swidth = __s.width(),
+			_sheight = __s.height(),
+			proportion = _swidth / _sheight,
+			_size = layerAttribute["font-size"];
 		// console.log(proportion)
-		if (layerAttribute.width/proportion>layerAttribute.height) {
-			layerAttribute["font-size"] = layerAttribute.height;
-		}else{
-			layerAttribute["font-size"] = layerAttribute.width/proportion;
+		if (layerAttribute.cacheSize === _size) {
+			if (layerAttribute.width / proportion > layerAttribute.height) {
+				layerAttribute["font-size"] = layerAttribute.height * (_size / _sheight);
+			} else {
+				layerAttribute["font-size"] = layerAttribute.width * (_size / _swidth);
+			}
+			layerAttribute.cacheSize = layerAttribute["font-size"] = ~~layerAttribute["font-size"];;
+		} else {
+			layerAttribute.height = _sheight;
+			layerAttribute.width = _swidth;
+			layerAttribute.cacheSize = layerAttribute["font-size"]; // = ~~layerAttribute["font-size"];
+			// _self.reInit();
+			_self.reInit();
+			return
 		}
 		// layerAttribute.width = __s.width() + 20;
 		// layerAttribute.height = __s.height() + 10;
 		img.attr({
 			width: layerAttribute.width,
 			height: layerAttribute.height,
-			x: layerAttribute.x,// + layerAttribute.width / 2,
-			y: layerAttribute.y,// + layerAttribute.height/2,
+			x: layerAttribute.x, // + layerAttribute.width / 2,
+			y: layerAttribute.y, // + layerAttribute.height/2,
 			"font-family": layerAttribute["font-family"],
 			"font-weight": layerAttribute["font-weight"],
 			"font-size": layerAttribute["font-size"],
-			text:layerAttribute.text,
+			text: layerAttribute.text,
 			// transform: ["r" + layerAttribute.rotate, layerAttribute.x + layerAttribute.width / 2, layerAttribute.y + layerAttribute.height / 2]
 			transform: transform_R
 		});

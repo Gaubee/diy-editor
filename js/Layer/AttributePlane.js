@@ -33,7 +33,8 @@ define("AttributePlane", [], function(require, exports, module) {
 	}
 	var initAttributePlane = function() {
 		var _self = this,
-			attrViewInstance = _self.attrVI = ViewParser.modules["aside"](_self.layerAttribute).append($aside[0]),
+			layerAttribute = _self.layerAttribute,
+			attrViewInstance = _self.attrVI = (layerAttribute.type === "font" ? ViewParser.modules["aside_font"] : ViewParser.modules["aside"])(_self.layerAttribute).append($aside[0]),
 			$nodeTree = $("#attribute_plane_" + _self.id),
 			$buttons = $nodeTree.find("button");
 		$nodeTree.on("click", ".control-label", function(e) {
@@ -43,10 +44,15 @@ define("AttributePlane", [], function(require, exports, module) {
 				_canEditAble(labelElement, function(inputElement) {
 					if (labelElement._status) {
 						labelElement._status = false;
-						var value = parseInt(inputElement.value);
-						console.log(value)
-						if (!isNaN(value)) {
-							_self.layerAttribute[attrName] = value;
+						var value = inputElement.value
+						if (typeof layerAttribute[attrName] === "number") {
+							var value = parseInt(value);
+							if (!isNaN(value)) {
+								layerAttribute[attrName] = value;
+								_self.reInit();
+							}
+						} else {
+							layerAttribute[attrName] = value;
 							_self.reInit();
 						}
 
@@ -59,10 +65,10 @@ define("AttributePlane", [], function(require, exports, module) {
 				labelElement._status = true;
 			}
 		});
-		$nodeTree.on("mouseenter",function(e){
+		$nodeTree.on("mouseenter", function(e) {
 			_self.focus();
 			require("sketchpadManage").refreshLayerManager();
-		}).on("mouseleave",function(e){
+		}).on("mouseleave", function(e) {
 			_self.blur();
 			require("sketchpadManage").refreshLayerManager();
 		});

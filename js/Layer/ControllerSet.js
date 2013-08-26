@@ -290,11 +290,11 @@ define("ControllerSet", [], function(require, exports, module) {
 							cursor: "url(" + cursorData + ") 16 16"
 						})
 					}
-					layerAttribute.handleActive = true;
-					_self.delayReInit();
+					// layerAttribute.handleActive = true;
+					// _self.delayReInit();
 				}, function f_out() {
-					layerAttribute.handleActive = false;
-					_self.delayReInit();
+					// layerAttribute.handleActive = false;
+					// _self.delayReInit();
 				});
 			}
 		});

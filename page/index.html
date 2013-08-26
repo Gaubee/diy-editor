@@ -131,7 +131,9 @@
 		}
 		#__s__{
 			white-space:nowrap;
+			padding: 0px;
 			opacity: 0;
+			/*border: 1px #000 solid;*/
 		}
 	</style>
 </head>
@@ -205,6 +207,99 @@
 							</label>
 							<label attr-name="height" class="control-label">
 								Height:{(height)}
+							</label>
+						</article>
+					</div>
+					<div class="span3">
+						<legend class="title span3">
+							<h3>
+								角度-Angle
+							</h3>
+						</legend>
+						<article class="angle control-group span3" style="height: 3em;">
+							<label attr-name="rotate" class="control-label">
+								Rotate:{(rotate)}
+							</label>
+						</article>
+					</div>
+					<div class="btn-group span8">
+						<button disabled="{(lock)}" attr-event="left" data-toggle="tooltip" title="Coordinate left" class="btn">
+							<i class="icon-arrow-left"> </i> <!--Coordinate left--> 
+						</button>
+						<button disabled="{(lock)}" attr-event="up" data-toggle="tooltip" title="Coordinate up" class="btn">
+							<i class="icon-arrow-up"> </i> <!--Coordinate up--> 
+						</button>
+						<button disabled="{(lock)}" attr-event="down" data-toggle="tooltip" title="Coordinate down" class="btn">
+							<i class="icon-arrow-down"> </i> <!--Coordinate down--> 
+						</button>
+						<button disabled="{(lock)}" attr-event="right" data-toggle="tooltip" title="Coordinate right" class="btn">
+							<i class="icon-arrow-right"> </i> <!--Coordinate right--> 
+						</button>
+						<button disabled="{(lock)}" attr-event="rotate" data-toggle="tooltip" title="Rotate" class="btn">
+							<i class="icon-repeat"> </i> <!--Rotate--> 
+						</button>
+						<button disabled="{(lock)}" attr-event="float" data-toggle="tooltip" title="Layer Index up" class="btn">
+							<i class="icon-chevron-up"> </i> <!--Layer Index up--> 
+						</button>
+						<button disabled="{(lock)}" attr-event="sink" data-toggle="tooltip" title="Layer Index down" class="btn">
+							<i class="icon-chevron-down"> </i> <!--Layer Index down--> 
+						</button>
+						<button disabled="{(lock)}" attr-event="out" data-toggle="tooltip" title="Zoom Out" class="btn">
+							<i class="icon-zoom-out"> </i> <!--Zoom Out--> 
+						</button>
+						<button disabled="{(lock)}" attr-event="in" data-toggle="tooltip" title="Zoom In" class="btn">
+							<i class="icon-zoom-in"> </i> <!--Zoom In--> 
+						</button>
+						<button disabled="{(lock)}" attr-event="fullscreen" data-toggle="tooltip" title="To Background" class="btn">
+							<i class="icon-fullscreen"> </i> <!--To Background--> 
+						</button>
+						<button disabled="{(lock)}" attr-event="cut" data-toggle="tooltip" title="Cut out" class="btn">
+							<i class="icon-cut"> </i> <!--Cut out--> 
+						</button>
+						<button disabled="{(lock)}" attr-event="filter" data-toggle="tooltip" title="Filter" class="btn">
+							<i class="icon-picture"> </i> <!--Filter--> 
+						</button>
+						{#if({(lock)})}
+						<button attr-event="unlock" data-toggle="tooltip" title="Unlock Layer" class="btn">
+							<i class="icon-unlock"> </i> <!--Unlock Layer--> 
+						</button>
+						{#else()}
+						<button attr-event="lock" data-toggle="tooltip" title="Lock Layer" class="btn">
+							<i class="icon-lock"> </i> <!--Lock Layer--> 
+						</button>
+						{/if()}
+					</div>
+				</fieldset>
+			</script>
+			<script type="text/template" name="aside_font">
+				<fieldset id="attribute_plane_{(id)}" class="layer-attribute-plane row">
+					<div class="span3">
+						<legend class="title span3">
+							<h3>
+								坐标-Coordinate
+							</h3>
+						</legend>
+						<article class="coordinate control-group span3" style="height: 6em;">
+							<label attr-name="x" class="control-label">
+								X:{(x)}
+							</label>
+							<label attr-name="y" class="control-label">
+								Y:{(y)}
+							</label>
+						</article>
+					</div>
+					<div class="span3">
+						<legend class="title span3">
+							<h3>
+								文本-Text
+							</h3>
+						</legend>
+						<article class="size control-group span3" style="height: 6em;">
+							<label attr-name="font-size" class="control-label">
+								Font Size:{(font-size)}
+							</label>
+							<label attr-name="text" class="control-label">
+								Text:{(text)}
 							</label>
 						</article>
 					</div>

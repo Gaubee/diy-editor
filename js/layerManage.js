@@ -26,7 +26,9 @@ define("layerManage", ["Layer"],function(require, exports, module) {
 				_self.focus();
 				require("sketchpadManage").createLayerManager();
 			};
-			newLayer.img.click(imgClick);
+			console.log(newLayer.img)
+			// newLayer.img.click(imgClick);
+			newLayer._clickEvent = imgClick;
 			imgClick();
 			require("sketchpadManage").createLayerManager()
 			$("#aside").scrollspy('refresh')
