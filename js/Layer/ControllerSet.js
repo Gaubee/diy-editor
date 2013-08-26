@@ -268,10 +268,11 @@ define("ControllerSet", [], function(require, exports, module) {
 				layerHandler[i].call(_self, item);
 			}
 		}
-		(932906715 * Math.random() / 1000000).toString(36).substring(2, 8)
+		// (999999 * Math.random() / 1000000).toString().substring(2, 8)
+		// (932906715 * Math.random() / 932906715).toString(16).substring(3, 9)
 		layerControllerSet.attr({
 			// "stroke": "#276419",
-			"stroke": "#" + (932906715 * Math.random() / 932906715).toString(16).substring(3, 9),
+			"stroke": "#" + (999999 * Math.random() / 1000000).toString().substring(3, 9),
 			"stroke-opacity": 0.8,
 			"stroke-width": 3
 		});

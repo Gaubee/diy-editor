@@ -391,4 +391,17 @@
 		$(this).next().toggle(120);
 	});
 	// $('#layer').scrollspy()
+	document.oncontextmenu=function(ev)  //oncontextmenu事件为鼠标右键
+	{
+		var oEvent=ev||event;
+		// var scrollTop=document.documentElement.scrollTop||document.body.scrollTop;  //获取上下滚动条
+		// var scrollLeft=document.documentElement.scrollLeft||document.body.scrollLeft;  //获取左右滚动条
+		// var oUl=document.getElementById('ul1');  //获取UL
+		
+		// oUl.style.display='block';
+		// oUl.style.left=oEvent.clientX+scrollLeft+'px';  //设置X轴的位置
+		// oUl.style.top=oEvent.clientY+scrollTop+'px';    //设置Y轴的位置
+		
+		return false;  //阻止浏览器默认事件
+	};
 </script>
