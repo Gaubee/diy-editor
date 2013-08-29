@@ -1,4 +1,4 @@
-define("main", ["sketchpadManage", "templates","filter","confirm"], function(require, exports, module) {
+define("main", ["sketchpadManage", "templates","filter"], function(require, exports, module) {
 	var sketchpadManage = require("sketchpadManage"),
 		templates = require("templates");
 	var $header = $("#header"),

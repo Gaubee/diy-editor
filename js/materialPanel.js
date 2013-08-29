@@ -130,7 +130,7 @@ define("materialPanel", [], function(require, exports, module) {
 	}
 	module.exports = {
 		registeredEndpoints: registeredEndpoints,
-		registeredStartingpoints: registeredStartingpoints,
-		toDragAble: toDragAble
+		registeredStartingpoints: registeredStartingpoints/*,
+		toDragAble: toDragAble*/
 	};
 });

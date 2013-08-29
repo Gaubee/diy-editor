@@ -1,4 +1,4 @@
-define("sketchpad", ["layerManage","eventStackManage","Raphael"], function(require, exports, module) {
+define("sketchpad", ["layerManage","eventStackManage"/*,"Raphael"*/], function(require, exports, module) {
 	var layerManage = require("layerManage");
 	var eventStack = require("eventStackManage");
 	// console.log(Layer);

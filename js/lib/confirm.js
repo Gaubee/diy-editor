@@ -1,4 +1,4 @@
-define("confirm", [], function(require, exports, module) {
+!(function(require, exports, module) {
 	var confirmLayer = $("#confirmLayer"),
 		confirmText = confirmLayer.find(".confirmText"),
 		yesButton = confirmLayer.find(".modal-footer .yes"),
@@ -12,9 +12,10 @@ define("confirm", [], function(require, exports, module) {
 		_callback&&_callback(false);
 		confirmLayer.modal('toggle');
 	});
-	return function(text,callback){
+	window.confirm = window._confirm;
+	window.confirm = function(text,callback){
 		confirmText.html(text);
 		_callback = callback;
 		confirmLayer.modal();
 	}
-});
+})();

@@ -149,11 +149,11 @@ define("AttributePlane", ["filter"], function(require, exports, module) {
 				_self.reInit()
 			},
 			"remove":function(e){
-				require("confirm")("确定要删除 "+_self.layerAttribute.name+" 吗？",function(arg){
+				confirm("确定要删除 "+_self.layerAttribute.name+" 吗？",function(arg){
 					if (arg) {
 						console.log("remove!!!!")
 					}
-				})
+				});
 			}
 		}
 		$buttons.tooltip();

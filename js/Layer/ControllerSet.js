@@ -1,4 +1,4 @@
-define("ControllerSet", [], function(require, exports, module) {
+define("ControllerSet", ["Layer/cursor"], function(require, exports, module) {
 	var cursor = require("cursor");
 	var handleOpction = {
 		length: 12,
