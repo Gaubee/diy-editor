@@ -5,155 +5,109 @@
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/colorpicker.css">
 	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
-	<style type="text/css">
-		h1, h2, h3, .masthead p, .subhead p, .marketing h2, .lead
-		{
-			font-family: "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei UI", "Microsoft YaHei", SimHei, "\5B8B\4F53", simsun, sans-serif;
-			font-weight: normal;
-		}
-		::-webkit-scrollbar {
-			width: 12px;
-		}
-		::-webkit-scrollbar-track {
-			-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-			-webkit-border-radius: 10px;
-			border-radius: 10px;
-		}
-		::-webkit-scrollbar-thumb {
-			-webkit-border-radius: 10px;
-			border-radius: 10px;
-			background: rgba(238,238,238,0.8);
-			-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
-		}
-		::-webkit-scrollbar-thumb:window-inactive {
-			background: rgba(255,255,255,0.4);
-		}
-
-	</style>
-	<style type="text/css">
-		body{
-			-moz-user-select: none; 
-			-khtml-user-select: none; 
-			-webkit-user-select: none; 
-			-o-user-select: none; 
-			min-width:960px;
-		} 
-		h2{
-			text-align: center;
-			border: 1px solid #ddd;
-			-webkit-border-radius: 4px;
-			-moz-border-radius: 4px;
-			border-radius: 4px;
-			background-color: #EEEEEE;
-		}
-		.sketchpad{
-			margin: 10px;
-			border: 1px solid #ddd;
-			-webkit-border-radius: 4px;
-			-moz-border-radius: 4px;
-			border-radius: 4px;
-			background-color: #EEEEEE;
-			/*width: 50%;*/
-			float: left;
-			/*min-width: 640px;*/
-		}
-		#mterial{
-			max-height: 485px;
-		}
-		#mterial .nav-header{
-			cursor: pointer;
-			min-width: 187px;
-		}
-		.mterial-panel{
-			max-height: 433px;
-			overflow: hidden;
-			/*border: 2px solid #666666;*/
-			border: 1px solid #ddd;
-			-webkit-border-radius: 4px;
-			-moz-border-radius: 4px;
-			border-radius: 4px;
-			background-color: #EEEEEE;
-			text-align: center;
-			float: left;
-		}
-		.mterial-panel .title{
-			font-size: 15px;
-			font-family: '微软雅黑';
-		}
-		.mterial-panel .content{
-			max-height: 265px;
-			overflow-y: scroll;
-			overflow-x:hidden;
-		}
-		.mterial-panel .content img{
-			width: 80%;
-			margin: 8px auto;
-			/*height: 369px;
-			overflow-y: scroll;*/
-		}
-		#layer{
-			border: 1px solid #ddd;
-			-webkit-border-radius: 4px;
-			-moz-border-radius: 4px;
-			border-radius: 4px;
-			background-color: #EEEEEE;
-			padding-top:10px;
-			max-height: 179px;
-			overflow-y: scroll;
-		}
-		#aside{
-			border: 1px solid #ddd;
-			-webkit-border-radius: 4px;
-			-moz-border-radius: 4px;
-			border-radius: 4px;
-			background-color: #EEEEEE;
-			max-height: 240px;
-			overflow-y:scroll;
-			margin: 10px;
-			position: relative;
-			/*padding-bottom: 16px;*/
-		}
-		#aside h2{
-			/*padding-left: 2em;*/
-		}
-		.layer-attribute-plane .span3{
-			width: 200px;
-		}
-		.layer-attribute-plane .control-group{
-			margin: 10px;
-		}
-		.layer-attribute-plane .btn-group{
-			margin-top: 10px;
-			margin-bottom: 10px;
-			text-align: center;
-		}
-		.__s__{
-			width: 0px;
-			height: 0px;
-			overflow: scroll;
-		}
-		#__s__{
-			white-space:nowrap;
-			padding: 0px;
-			opacity: 0;
-			/*border: 1px #000 solid;*/
-		}
-		.img{
-			/*min-width: 100%;
-			max-height:100%;*/
-		}	
-		#filter-studio{
-			width: 0px;
-			height: 0px;
-			overflow: scroll;		
-		}
-		#filter-studio .img{
-			min-width: 100%;
-		}
-	</style>
-</head>
+	<link rel="stylesheet" type="text/css" href="css/base.css">
+	<link rel="stylesheet" type="text/css" href="css/index.css"></head>
 <body class="row">
-	<header id="header"></header>
+	<header id="header">
+		<div class="navbar navbar-inverse" style="position: static;">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</a>
+					<a class="brand" href="index.html"> DIY 设计编辑器</a>
+					<div class="nav-collapse collapse navbar-inverse-collapse">
+						<ul class="nav">
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									文件 <b class="caret"></b>
+								</a>
+								<ul class="dropdown-menu">
+									<li>
+										<a href="#">新建</a>
+									</li>
+									<li>
+										<a href="#">打开</a>
+									</li>
+									<li>
+										<a id="file_save" href="#">提交图像（导出）</a>
+									</li>
+									<li class="divider"></li>
+									<li class="nav-header">增强功能</li>
+									<li>
+										<a href="#">上传图片素材</a>
+									</li>
+									<li>
+										<a href="#">导出XML文件</a>
+									</li>
+									<li>
+										<a href="#">导入XML文件</a>
+									</li>
+								</ul>
+							</li>
+							<!-- <li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									编辑 <b class="caret"></b>
+								</a>
+								<ul class="dropdown-menu">
+									<li>
+										<a href="#">Action</a>
+									</li>
+									<li>
+										<a href="#">Another action</a>
+									</li>
+									<li>
+										<a href="#">Something else here</a>
+									</li>
+									<li class="divider"></li>
+									<li class="nav-header">Nav header</li>
+									<li>
+										<a href="#">Separated link</a>
+									</li>
+									<li>
+										<a href="#">One more separated link</a>
+									</li>
+								</ul>
+							</li> -->
+							<li title="分享"><a href="#share"><i class="icon-share"></i></a></li>
+						</ul>
+						<form class="navbar-search pull-left" action="">
+							<input type="text" class="search-query span2" placeholder="搜索素材"></form>
+						<ul class="nav pull-right">
+							<li>
+								<a href="#">XXXX 的用户中心</a>
+							</li>
+							<li class="divider-vertical"></li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									帮助中心 <b class="caret"></b>
+								</a>
+								<ul class="dropdown-menu">
+									<li>
+										<a href="#">基本操作</a>
+									</li>
+									<li>
+										<a href="#">Another action</a>
+									</li>
+									<li>
+										<a href="#">Something else here</a>
+									</li>
+									<li class="divider"></li>
+									<li>
+										<a href="#">Separated link</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<!-- /.nav-collapse -->
+				</div>
+			</div>
+			<!-- /navbar-inner -->
+		</div>
+	</header>
 	<nav id="nav"></nav>
 	<article id="plane" class="span13">
 		<nav id="mterial" class="span3">
@@ -327,7 +281,7 @@
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 			<h3>提示！</h3>
 		</div>
-		<div class="modal-body">	
+		<div class="modal-body">
 			<p class="confirmText"></p>
 		</div>
 		<div class="modal-footer">
@@ -383,6 +337,8 @@
 </body>
 </html>
 <script type="text/javascript" src="../js/lib/raphael-min.js"></script>
+<script type="text/javascript" src="../js/lib/canvg.js"></script>
+<script type="text/javascript" src="../js/lib/rgbcolor.js"></script>
 <script type="text/javascript" src="../js/lib/jquery-2.0.3.min.js"></script>
 <script type="text/javascript" src="../js/lib/confirm.js"></script>
 <script type="text/javascript" src="../js/lib/pixastic.custom.js"></script>

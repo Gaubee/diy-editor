@@ -1,4 +1,4 @@
-define("main", ["sketchpadManage", "templates","filter"], function(require, exports, module) {
+define("main", ["sketchpadManage", "templates","filter","fileController"], function(require, exports, module) {
 	var sketchpadManage = require("sketchpadManage"),
 		templates = require("templates");
 	var $header = $("#header"),
@@ -10,6 +10,7 @@ define("main", ["sketchpadManage", "templates","filter"], function(require, expo
 
 	templates.set("tem1", [{
 		attr: {
+			name:"????",
 			type: "background",
 			src: "../img/earth.png"
 		}
@@ -132,5 +133,7 @@ define("main", ["sketchpadManage", "templates","filter"], function(require, expo
 		width: 700,
 		container: $plane
 	});
+
+	require("fileController");
 });
 require = seajs.require;
