@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta content = "text/html; charset=UTF-8 " />
 	<title>index page</title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/colorpicker.css">
@@ -17,7 +18,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</a>
-					<a class="brand" href="index.html"> DIY 设计编辑器</a>
+					<a class="brand" href="index.html">DIY 设计编辑器</a>
 					<div class="nav-collapse collapse navbar-inverse-collapse">
 						<ul class="nav">
 							<li class="dropdown">
@@ -48,71 +49,76 @@
 								</ul>
 							</li>
 							<!-- <li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-									编辑 <b class="caret"></b>
-								</a>
-								<ul class="dropdown-menu">
-									<li>
-										<a href="#">Action</a>
-									</li>
-									<li>
-										<a href="#">Another action</a>
-									</li>
-									<li>
-										<a href="#">Something else here</a>
-									</li>
-									<li class="divider"></li>
-									<li class="nav-header">Nav header</li>
-									<li>
-										<a href="#">Separated link</a>
-									</li>
-									<li>
-										<a href="#">One more separated link</a>
-									</li>
-								</ul>
-							</li> -->
-							<li title="分享"><a href="#share"><i class="icon-share"></i></a></li>
-						</ul>
-						<form class="navbar-search pull-left" action="">
-							<input type="text" class="search-query span2" placeholder="搜索素材"></form>
-						<ul class="nav pull-right">
-							<li>
-								<a href="#">XXXX 的用户中心</a>
-							</li>
-							<li class="divider-vertical"></li>
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-									帮助中心 <b class="caret"></b>
-								</a>
-								<ul class="dropdown-menu">
-									<li>
-										<a href="#">基本操作</a>
-									</li>
-									<li>
-										<a href="#">Another action</a>
-									</li>
-									<li>
-										<a href="#">Something else here</a>
-									</li>
-									<li class="divider"></li>
-									<li>
-										<a href="#">Separated link</a>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</div>
-					<!-- /.nav-collapse -->
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								编辑 <b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#">Action</a>
+								</li>
+								<li>
+									<a href="#">Another action</a>
+								</li>
+								<li>
+									<a href="#">Something else here</a>
+								</li>
+								<li class="divider"></li>
+								<li class="nav-header">Nav header</li>
+								<li>
+									<a href="#">Separated link</a>
+								</li>
+								<li>
+									<a href="#">One more separated link</a>
+								</li>
+							</ul>
+						</li>
+						-->
+						<li title="分享">
+							<a href="#share"> <i class="icon-share"></i>
+							</a>
+						</li>
+					</ul>
+					<form class="navbar-search pull-left" action="">
+						<input type="text" class="search-query span2" placeholder="搜索素材"></form>
+					<ul class="nav pull-right">
+						<li>
+							<a href="#">XXXX 的用户中心</a>
+						</li>
+						<li class="divider-vertical"></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								帮助中心
+								<b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#">基本操作</a>
+								</li>
+								<li>
+									<a href="#">Another action</a>
+								</li>
+								<li>
+									<a href="#">Something else here</a>
+								</li>
+								<li class="divider"></li>
+								<li>
+									<a href="#">Separated link</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
 				</div>
+				<!-- /.nav-collapse -->
 			</div>
-			<!-- /navbar-inner -->
 		</div>
-	</header>
-	<nav id="nav"></nav>
-	<article id="plane" class="span13">
-		<nav id="mterial" class="span3">
-			<h2>素材面板</h2>
-			<script type="text/template" name="mterial">
+		<!-- /navbar-inner -->
+	</div>
+</header>
+<nav id="nav"></nav>
+<article id="plane" class="span13">
+	<nav id="mterial" class="span3">
+		<h2>素材面板</h2>
+		<script type="text/template" name="mterial">
 				<ul class="mterial-panel nav nav-list">
 					{#each( {(lists)} )}
 					<li class="nav-header title">{(title)}</li>
@@ -128,12 +134,12 @@
 					{/each()}
 				</ul>
 			</script>
-		</nav>
-	</article>
-	<article class="span13">
-		<nav class="span3 layer">
-			<h2>图层属性</h2>
-			<script type="text/template" name="layer">
+	</nav>
+</article>
+<article class="span13">
+	<nav class="span3 layer">
+		<h2>图层属性</h2>
+		<script type="text/template" name="layer">
 				<ul id="layer" class="nav nav-list">
 					{#each( {(layers)} )}
 					<li data-index="{(id)}" class="{#if({(active)})}active{/if()}">
@@ -145,9 +151,9 @@
 					{/each()}
 				</ul>
 			</script>
-		</nav>
-		<section id="aside" data-spy="scroll" data-target=".layer" class="span9">
-			<script type="text/template" name="aside">
+	</nav>
+	<section id="aside" data-spy="scroll" data-target=".layer" class="span9">
+		<script type="text/template" name="aside">
 				<fieldset id="attribute_plane_{(id)}" class="layer-attribute-plane row">
 					<div class="span3">
 						<legend class="title span3">
@@ -210,7 +216,7 @@
 					</div>
 				</fieldset>
 			</script>
-			<script type="text/template" name="aside_font">
+		<script type="text/template" name="aside_font">
 				<fieldset id="attribute_plane_{(id)}" class="layer-attribute-plane row">
 					<div class="span3">
 						<legend class="title span3">
@@ -273,67 +279,67 @@
 					</div>
 				</fieldset>
 			</script>
-		</section>
-	</article>
-	<footer id="footer"></footer>
-	<div id="confirmLayer" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h3>提示！</h3>
-		</div>
-		<div class="modal-body">
-			<p class="confirmText"></p>
-		</div>
-		<div class="modal-footer">
-			<button class="btn no">取消</button>
-			<button class="btn btn-primary yes">确认</button>
-		</div>
+	</section>
+</article>
+<footer id="footer"></footer>
+<div id="confirmLayer" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3>提示！</h3>
 	</div>
-	<div id="cutLayer" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h3>裁剪图层</h3>
-		</div>
-		<div class="modal-body">
-			<p></p>
-			<img src=""></div>
-		<div class="modal-footer">
-			<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-			<button class="btn btn-primary">确定裁剪</button>
-		</div>
+	<div class="modal-body">
+		<p class="confirmText"></p>
 	</div>
-	<div id="filterLayer" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h3>图层滤镜</h3>
+	<div class="modal-footer">
+		<button class="btn no">取消</button>
+		<button class="btn btn-primary yes">确认</button>
+	</div>
+</div>
+<div id="cutLayer" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3>裁剪图层</h3>
+	</div>
+	<div class="modal-body">
+		<p></p>
+		<img src=""></div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+		<button class="btn btn-primary">确定裁剪</button>
+	</div>
+</div>
+<div id="filterLayer" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3>图层滤镜</h3>
+	</div>
+	<div class="modal-body">
+		<div id="filter-studio">
+			<img class="img" src=""></div>
+		<img class="img" src="">
+		<div class="btn-group filter" style="text-align:center">
+			<button data-toggle="tooltip" title="Blur" data-filter="Blur" class="btn">模糊</button>
+			<button data-toggle="tooltip" title="Desaturate" data-filter="Desaturate" class="btn">黑白</button>
+			<button data-toggle="tooltip" title="Sepia" data-filter="Sepia" class="btn">复古</button>
+			<button data-toggle="tooltip" title="Emboss" data-filter="Emboss" class="btn">浮雕</button>
+			<button data-toggle="tooltip" title="Mosaic" data-filter="Mosaic" class="btn">马赛克</button>
+			<button data-toggle="tooltip" title="Glow" data-filter="Glow" class="btn">加亮</button>
+			<button data-toggle="tooltip" title="Invert" data-filter="Invert" class="btn">反相</button>
+			<button data-toggle="tooltip" title="Remove Noise" data-filter="Remove Noise" class="btn">降噪</button>
 		</div>
-		<div class="modal-body">
-			<div id="filter-studio">
-				<img class="img" src=""></div>
-			<img class="img" src="">
-			<div class="btn-group filter" style="text-align:center">
-				<button data-toggle="tooltip" title="Blur" data-filter="Blur" class="btn">模糊</button>
-				<button data-toggle="tooltip" title="Desaturate" data-filter="Desaturate" class="btn">黑白</button>
-				<button data-toggle="tooltip" title="Sepia" data-filter="Sepia" class="btn">复古</button>
-				<button data-toggle="tooltip" title="Emboss" data-filter="Emboss" class="btn">浮雕</button>
-				<button data-toggle="tooltip" title="Mosaic" data-filter="Mosaic" class="btn">马赛克</button>
-				<button data-toggle="tooltip" title="Glow" data-filter="Glow" class="btn">加亮</button>
-				<button data-toggle="tooltip" title="Invert" data-filter="Invert" class="btn">反相</button>
-				<button data-toggle="tooltip" title="Remove Noise" data-filter="Remove Noise" class="btn">降噪</button>
-			</div>
-			<button data-toggle="tooltip" title="Undo" class="btn undo">
-				<i class="icon-undo"></i>
-			</button>
-			<button data-toggle="tooltip" title="Reset" class="btn reset">
-				<i class="icon-refresh"></i>
-			</button>
+		<button data-toggle="tooltip" title="Undo" class="btn undo">
+			<i class="icon-undo"></i>
+		</button>
+		<button data-toggle="tooltip" title="Reset" class="btn reset">
+			<i class="icon-refresh"></i>
+		</button>
 
-		</div>
-		<div class="modal-footer">
-			<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-			<button id="filter-set" class="btn btn-primary">应用滤镜</button>
-		</div>
 	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+		<button id="filter-set" class="btn btn-primary">应用滤镜</button>
+	</div>
+</div>
 </body>
 </html>
 <script type="text/javascript" src="../js/lib/raphael-min.js"></script>
