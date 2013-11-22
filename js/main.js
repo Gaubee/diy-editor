@@ -42,6 +42,13 @@ define("main", ["sketchpadManage", "templates","filter","fileController"], funct
 			y: 80,
 			lock: true
 		}
+	}, {
+		attr: {
+			src:"../img/flower.jpg",
+			x: 430,
+			y: 80,
+			lock: true
+		}
 	}]);
 
 	var mterialPanel = sketchpadManage.createMaterialPanel({
@@ -123,14 +130,22 @@ define("main", ["sketchpadManage", "templates","filter","fileController"], funct
 						type: "template",
 						src: "tem2"
 					}
+				},{
+					imgSrc: "../img/flower.jpg",
+					title:"I'm In China",
+					layerAttr: {
+						type: "template",
+						src: "tem2"
+					}
 				}]
 			}]
 		},
 		container: $mterial
 	});
 	var sketchpad = sketchpadManage.create({
-		className: "span9",
-		width: 700,
+		className: "",
+		width: 900,
+		height:200,
 		container: $plane
 	});
 
