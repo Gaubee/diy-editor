@@ -4,7 +4,7 @@ define("filter", [], function(require, exports, module) {
 		img = filterLayer.find(".modal-body .img"),
 		baseImg = new Image();
 	var session = [];
-	filterLayer.find("button").tooltip();
+	// filterLayer.find("button").tooltip();
 	var filterHandles = {
 		temp: {
 			Mosaic_blockSize: 5

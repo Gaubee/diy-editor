@@ -6,7 +6,7 @@ define("fileController", ["sketchpadManage"], function(require, exports, module)
 		extendImg = new Image;
 	window.extendImg = extendImg;
 	canvas.id = "xx"
-	document.body.appendChild(canvas);
+	// document.body.appendChild(canvas);
 	// document.body.appendChild(extendImg);
 	canvas.renderCallback = function() {};
 
@@ -22,13 +22,21 @@ define("fileController", ["sketchpadManage"], function(require, exports, module)
 				ignoreMouse: true,
 				renderCallback: function() {
 					canvas.renderCallback();
+					var confirmContent = $("<div>");
+					confirmContent.append("<p>时候保存并上传您DIY的最后结果？</p><hr/>");
+					confirmContent.append(extendImg);
+					confirm(confirmContent,function(arg){
+						if (arg) {
+							console.log("POST img data",extendImg.src)
+						}
+					});
 				},
 				ignoreAnimation: true
 			});
 		});
 	});
 	//-------<a id="extend3D" href="#">展示效果</a>----
-	var $extend3D = $("#extend3D");
+/*	var $extend3D = $("#extend3D");
 
 	(function threejs_show() {
 
@@ -107,5 +115,9 @@ define("fileController", ["sketchpadManage"], function(require, exports, module)
 		$extend3D.on("click", function() {
 			$file_save.click();
 		})
-	})();
+	})();*/
+
+		canvas.renderCallback = function() {
+			extendImg.src = canvas.toDataURL();
+		};
 });

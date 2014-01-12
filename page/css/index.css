@@ -25,15 +25,15 @@ h2{
 	float: left;
 	/*min-width: 640px;*/
 }
-#mterial{
+/*#mterial{
 	max-height: 485px;
-}
+}*/
 #mterial .nav-header{
 	cursor: pointer;
 	min-width: 187px;
 }
 .mterial-panel{
-	max-height: 433px;
+	/*max-height: 433px;*/
 	overflow: hidden;
 	/*border: 2px solid #666666;*/
 	border: 1px solid #ddd;
@@ -50,7 +50,7 @@ h2{
 }
 .mterial-panel .content{
 	max-height: 265px;
-	overflow-y: scroll;
+	overflow-y: auto;
 	overflow-x:hidden;
 }
 .mterial-panel .content img{
@@ -70,16 +70,18 @@ h2{
 	overflow-y: scroll;
 }
 #aside{
-	border: 1px solid #ddd;
+	/*border: 1px solid #ddd;*/
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
-	background-color: #EEEEEE;
-	max-height: 240px;
-	overflow-y:scroll;
+	/*background-color: #EEEEEE;*/
+	max-height: 30px;
+	overflow:hidden;
 	margin: 10px;
-	position: relative;
+	position: absolute;
+	left:300px;
 	/*padding-bottom: 16px;*/
+	z-index: 1;
 }
 #aside h2{
 	/*padding-left: 2em;*/

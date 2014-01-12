@@ -12,10 +12,23 @@
 		_callback&&_callback(false);
 		confirmLayer.modal('toggle');
 	});
-	window.confirm = window._confirm;
+	window._confirm = window.confirm;
 	window.confirm = function(text,callback){
 		confirmText.html(text);
 		_callback = callback;
 		confirmLayer.modal();
+	}
+	window._prompt = window.prompt;
+	var prompt_window_pro = $("<input class='span4' id='prompt_window_pro'>");
+	window.prompt = function (text,placeholder,callback) {
+		var promptText = $("<div>"+text+"</div>");
+		var id = "prompt_window_pro";
+		promptText.append("<br>");
+		promptText.append(prompt_window_pro);
+		prompt_window_pro.val(placeholder);
+		confirm(promptText,function(e){
+			callback&&callback(prompt_window_pro.val());
+			prompt_window_pro.val("");
+		})
 	}
 })();
