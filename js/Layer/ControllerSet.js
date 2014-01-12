@@ -78,7 +78,11 @@ define("ControllerSet", ["Layer/cursor"], function(require, exports, module) {
 			handle.drag(function onmove(dx, dy, x, y, e) {
 				if (layerAttribute.lock) {return;}
 				layerAttribute.height -= (dy - layerAttribute.cacheH);
-				layerAttribute.y += (dy - layerAttribute.cacheH);
+				layerAttribute.y += dy - layerAttribute.cacheH;
+
+				// layerAttribute.x -= Math.sin(layerAttribute.rotate)*(dy- layerAttribute.cacheH);
+				// layerAttribute.y += Math.cos(layerAttribute.rotate)*(dy- layerAttribute.cacheH);
+
 				layerAttribute.cacheH = dy;
 				_self.reInit();
 			}, function onstart(x, y, e) {
@@ -297,7 +301,7 @@ define("ControllerSet", ["Layer/cursor"], function(require, exports, module) {
 						var cursorData = cursor[item.data("cursor")](layerAttribute.rotate);
 						this.data("cursorData", cursorData);
 						this.attr({
-							cursor: "url(" + cursorData + ") 16 16"
+							cursor: "url(" + cursorData + ") 16 16,"+item.data("cursor")
 						})
 					}
 					// layerAttribute.handleActive = true;
