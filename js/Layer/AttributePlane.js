@@ -143,6 +143,7 @@ define("AttributePlane", ["filter"], function(require, exports, module) {
             "filter": function(e) {
                 filter.show(_self.img.node.href.baseVal, function(newSrc) {
                     _self.img.node.href.baseVal = newSrc;
+                    _self.layerAttribute.src = newSrc.replace(location.href.replace(location.pathname+"#"+location.hash,""),"");
                 })
             },
             "lock": function(e) {

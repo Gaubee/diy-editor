@@ -150,18 +150,99 @@ define("main", ["sketchpadManage", "templates", "filter", "fileController"], fun
         container: $plane
     };
     //计算内容区高度
-    var contentHeight =  opction.height - $mterial.find(".mterial-panel").height() - 47/*标题高度*/;
+    var contentHeight = opction.height - $mterial.find(".mterial-panel").height() - 47 /*标题高度*/ ;
     $mterial.find(".mterial-panel").height(opction.height - 47);
-    $mterial.find(".content").css("maxHeight",contentHeight);
+    $mterial.find(".content").css("maxHeight", contentHeight);
 
     var sketchpad = sketchpadManage.create(opction);
 
-    $plane.on("mouseenter",function (e) {
-    	$aside.stop().show(200);
-    }).on("mouseleave",function  (e) {
-    	$aside.stop().hide(200);
+    $plane.on("mouseenter", function(e) {
+        $aside.stop().show(200);
+    }).on("mouseleave", function(e) {
+        $aside.stop().hide(200);
     }).append($aside);
 
     require("fileController");
+
+
+    $("#exportJson").click(function(argument) {
+        var layers = require("layerManage").instances;
+        if (!layers.length) {
+            return;
+        }
+        var JSONResult = [];
+        $.each(layers, function(index, layerInstance) {
+            JSONResult.push(JSON.stringify(layerInstance.layerAttribute));
+        });
+        JSONResult = "[" + JSONResult.join(",") + "]";
+        console.log(JSONResult);
+        //保存文件
+        var BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
+        var URL = window.URL || window.webkitURL || window;
+
+        function saveAs(blob, filename) {
+            var type = blob.type;
+            var force_saveable_type = 'application/octet-stream';
+            if (type && type != force_saveable_type) { // 强制下载，而非在浏览器中打开
+                var slice = blob.slice || blob.webkitSlice || blob.mozSlice;
+                blob = slice.call(blob, 0, blob.size, force_saveable_type);
+            }
+
+            var url = URL.createObjectURL(blob);
+            var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+            save_link.href = url;
+            save_link.download = filename;
+
+            var event = document.createEvent('MouseEvents');
+            event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            save_link.dispatchEvent(event);
+            URL.revokeObjectURL(url);
+        }
+
+        var mimeString = 'text/plain;charset=utf-8';
+        if (BlobBuilder) {
+
+            var bb = new BlobBuilder;
+            bb.append(JSONResult);
+            var result = bb.getBlob(mimeString);
+        } else {
+            result = new Blob([JSONResult], {
+                type: mimeString
+            });
+        }
+
+        var d = new Date;
+        saveAs(result, 'DIY编辑器_' + d.toLocaleString() + '.json');
+    });
+
+    $("#importJson_file").on("change", function(e) {
+        var files = this.files;
+
+        if (files.length) {
+
+            var file = files[0];
+            var reader = new FileReader();
+            console.log(file.type, file.name);
+            var fileInfo = file.name.split(".")
+            if (fileInfo[fileInfo.length - 1].toLowerCase() === "json") {
+                reader.onload = function() {
+                    try {
+                        var layers = JSON.parse(this.result).reverse();
+                        var sketchpad = require("sketchpadManage").instances[0];
+                        var layerManage = require("layerManage");
+                        $.each(layers, function(index, layerAttribute) {
+                            layerManage.create(sketchpad, layerAttribute);
+                        });
+                    } catch (e) {
+                        alert("文件解析失败。");
+                    }
+                }
+                reader.readAsText(file);
+            } else {
+                alert("文件类型错误")
+            }
+        }
+
+    });
 });
 require = seajs.require;

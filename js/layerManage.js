@@ -10,7 +10,9 @@ define("layerManage", ["Layer"], function(require, exports, module) {
         instances: container,
         create: function createLayer(sketchpad, layerConfig) {
             var i = container.length;
-            layerConfig.zIndex = i;
+            if (!("zIndex" in layerConfig)) {
+                layerConfig.zIndex = i;
+            }
             console.log(layerConfig)
             var newLayer = Layer(sketchpad, layerConfig);
             container.push(newLayer);
